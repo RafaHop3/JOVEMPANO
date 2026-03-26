@@ -58,7 +58,7 @@ Acesse o portal em `http://localhost:5173`.
 ### 4. Credenciais Administrativas
 Para acessar o painel editorial em `/admin`:
 - **Usuário:** `admin`
-- **Senha:** `admin` (ou configurada via `ADMIN_PASSWORD` no `.env`)
+- **Senha:** `****` (ou configurada via `ADMIN_PASSWORD` no `.env`)
 
 ---
 
