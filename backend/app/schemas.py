@@ -1,28 +1,16 @@
-from pydantic import BaseModel, HttpUrl
-from typing import Optional
+from pydantic import BaseModel
 from datetime import datetime
 
-class RawNewsBase(BaseModel):
-    source: str
+class NewsBase(BaseModel):
     title: str
-    url: HttpUrl
     content: str
-    author: Optional[str] = None
-    published_at: Optional[datetime] = None
-
-class RawNewsCreate(RawNewsBase):
+    
+class NewsCreate(NewsBase):
     pass
 
-class RawNews(RawNewsBase):
+class NewsOut(NewsBase):
     id: int
-    collected_at: datetime
-
+    created_at: datetime
+    
     class Config:
         orm_mode = True
-
-class GeneratedArticleSchema(BaseModel):
-    title: str
-    subtitle: str
-    content: str
-    tags: list[str]
-    sources: list[str]

@@ -1,56 +1,36 @@
-# 📰 JOVEMPANO
+# 📰 JOVEMPANO (Versão Essencial)
 
-**JOVEMPANO** é uma plataforma automatizada e inteligente de curadoria e geração de notícias. Alimentada por Inteligência Artificial (LLMs) e técnicas avançadas de scraping (Spiders/RSS), construída no modelo Monorepo para separar o motor robusto da vitrine visual.
+**JOVEMPANO** é uma plataforma minimalista de curadoria e criação de notícias. Refatorada para focar no que importa: estabilidade extrema, manutenção limpa e escrita manual livre sob a arquitetura SQLite local.
 
-## 🚀 Arquitetura do Monorepo
+## 🚀 Arquitetura (Modo KISS)
 
-O projeto está dividido nestas frentes principais:
+O projeto foi podado sob o princípio *Keep It Simple, Stupid*, eliminando dependências paralisantes (bancos de dados em nuvem via Docker, workers assíncronos) e resultando nesta infraestrutura perfeitamente enxuta:
 
-1. **/backend**: O "Motor". Construído em **Python** (FastAPI).
-   - Coleta de dados via RSS e Celery Workers.
-   - Processamento de texto e integração estrita com LLMs (OpenAI via Structured Outputs).
-   - Banco de Dados PostgreSQL (com SQLAlchemy Async).
-2. **/frontend**: A "Vitrine". Construído em **Astro**.
-   - SSG (Static Site Generation) para tempo de carregamento absoluto em milissegundos.
-   - Desenho focado em legibilidade e tipografia (estilo Premium News).
-   - Imune a quebras na borda, projetado para viver atrás do WAF da Cloudflare.
+1. **/backend**: O Motor (Python + FastAPI).
+   - CRUD simplório para postagem e leitura de matérias.
+   - Ponto de Segurança com **JWT** protegendo a criação (`/admin`).
+   - Banco de Dados de arquivo único em **SQLite**.
+2. **/frontend**: A Vitrine (Node.js + Vue 3).
+   - Single Page App (SPA) desenhada com Vite/Tailwind.
+   - **`/admin`**: Painel protegido para administradores digitarem com foco e postarem as notícias.
+   - **`/`**: Feed belo estilizado para leitura veloz, livre de distrações javascript.
 
-## 🛠️ Tecnologias Utilizadas
-- **Backend**: FastAPI, SQLAlchemy, Pydantic, Celery, Redis, PostgreSQL.
-- **Frontend**: Astro, HTML/CSS (Vanilla Moderno).
-- **IA**: OpenAI API (Garantia anti-alucinação por JSON Output).
-- **Gerenciamento**: Git, monorepo, infraestrutura via Docker Compose na raiz.
+## ⚙️ Como Executar e Trabalhar
 
-## ⚙️ Como Executar Localmente
-
-### 1. Subindo a infraestrutura (Banco e Fila)
-Na raiz do projeto (`/JOVEMPANO`):
-```bash
-docker-compose up -d
-```
-
-### 2. Rodando o Backend (FastAPI + Celery)
+**1. Levantando o Backend**
 ```bash
 cd backend
 python -m venv venv
-# Ative o venv (Windows: venv\Scripts\activate)
+# ative o venv (Windows: venv\Scripts\activate)
 pip install -r requirements.txt
-# Subir API
 uvicorn app.main:app --reload
-# Subir Worker (novo terminal)
-celery -A app.worker.celery_app worker --loglevel=info -P solo
 ```
+A API desperta na porta `:8000`. (*Dica: O superusuário nasce na primeira linha com as credenciais padrão de ambiente: usuário: admin, senha: admin*).
 
-### 3. Rodando o Frontend (Astro)
+**2. Levantando o Frontend**
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-
-## 🛡️ Políticas de Segurança e Contribuição
-Visando as melhores práticas do fluxo GitFlow e Extreme Safety:
-- **`main`**: Branch sagrada. Destinada apenas a código homologado e de produção. **Proibido commit direto.**
-- **`dev`**: Branch base para sincronização do time.
-- Toda contribuição nasce de divisões da `dev` com prefixos organizacionais (ex: `feature/nova_coleta`, `bugfix/erro_llm`).
-- O `.gitignore` enraizado protege vazamentos de senhas e arquivos `.env`. Nunca faça bypass nessas regras de segurança.
+Navegue logo para `http://localhost:5173`. O motor estelar e limpo do JOVEMPANO estará operante.

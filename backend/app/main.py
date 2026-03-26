@@ -1,22 +1,38 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.database import engine, Base
-# Import models to ensure tables are created when calling create_all
+from app.database import engine, Base, SessionLocal
 from app import models
-from app.routers import news, tasks_router, generator_router
-
+from app.core.security import get_password_hash
+from app.routers import auth, news
 app = FastAPI(title=settings.PROJECT_NAME)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(auth.router)
 app.include_router(news.router)
-app.include_router(tasks_router.router)
-app.include_router(generator_router.router)
 
 @app.on_event("startup")
-async def startup_event():
-    # Note: In production, consider using Alembic for migrations instead of create_all.
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+def startup_event():
+    Base.metadata.create_all(bind=engine)
+    
+    # Create default admin if it doesn't exist
+    db = SessionLocal()
+    try:
+        admin = db.query(models.User).filter(models.User.username == "admin").first()
+        if not admin:
+            hashed = get_password_hash(settings.ADMIN_PASSWORD)
+            db.add(models.User(username="admin", hashed_password=hashed, role="admin"))
+            db.commit()
+    finally:
+        db.close()
 
 @app.get("/")
-async def root():
+def root():
     return {"message": f"Welcome to {settings.PROJECT_NAME} API"}

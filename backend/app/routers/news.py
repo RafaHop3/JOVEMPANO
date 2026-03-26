@@ -1,13 +1,20 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models import RawNews
-from app.schemas import RawNews as RawNewsSchema
+from app.models import News, User
+from app.schemas import NewsCreate, NewsOut
+from app.core.security import get_current_user
 
 router = APIRouter(prefix="/news", tags=["News"])
 
-@router.get("/", response_model=list[RawNewsSchema])
-async def get_news(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(RawNews).offset(skip).limit(limit))
-    return result.scalars().all()
+@router.post("/", response_model=NewsOut)
+def create_news(news: NewsCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db_news = News(title=news.title, content=news.content)
+    db.add(db_news)
+    db.commit()
+    db.refresh(db_news)
+    return db_news
+
+@router.get("/", response_model=list[NewsOut])
+def get_news(db: Session = Depends(get_db)):
+    return db.query(News).order_by(News.id.desc()).all()
