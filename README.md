@@ -2,7 +2,6 @@
 
 > **Minimalismo. Performance. Curadoria Humana.**
 
-O **JOVEMPANO** abandonou a complexidade de automações por IA para se tornar uma plataforma de notícias essencial, focada na experiência do leitor e na agilidade do redator. Baseado no princípio **KISS (Keep It Simple, Stupid)**, o projeto utiliza uma arquitetura moderna que elimina containers pesados e dependências desnecessárias.
 
 ![Layout StormGamer](https://raw.githubusercontent.com/RafaHop3/JOVEMPANO/main/frontend/public/banner-demo.png) *(Imagem Ilustrativa)*
 
