@@ -38,17 +38,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useHead } from '@unhead/vue'
 import NewsCard from '../components/NewsCard.vue'
 import SidebarWidget from '../components/SidebarWidget.vue'
-
-// SEO
-useHead({
-  title: 'JOVEMPANO - Feed em Tempo Real',
-  meta: [
-    { name: 'description', content: 'Notícias exclusivas e curadoria humana sem filtros.' }
-  ]
-})
 
 const news = ref([])
 const loading = ref(true)
