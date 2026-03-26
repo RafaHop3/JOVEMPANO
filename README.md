@@ -2,13 +2,13 @@
 
 > **Minimalismo. Performance. Curadoria Humana.**
 
-O **JOVEMPANO** abandonou a complexidade de automações por IA para se tornar uma plataforma de notícias essencial, focada na experiência do leitor e na agilidade do redator. Baseado no princípio **KISS (Keep It Simple, Stupid)**, o projeto utiliza uma arquitetura moderna que elimina containers pesados e dependências desnecessárias.
+O **JOVEMPANO** é uma plataforma de notícias minimalista, desenvolvida para oferecer uma experiência de leitura limpa e uma gestão editorial ágil e intuitiva. O projeto utiliza uma arquitetura moderna e eficiente, eliminando complexidades desnecessárias.
 
 ![Layout StormGamer](https://raw.githubusercontent.com/RafaHop3/JOVEMPANO/main/frontend/public/banner-demo.png) *(Imagem Ilustrativa)*
 
 ---
 
-## ✨ Diferenciais (Arquitetura StormGamer)
+## ✨ Funcionalidades do Portal
 
 - **Layout Split 70/30**: Grade de leitura focada (70%) com Sidebar informativa (30%) para máxima imersão.
 - **Dark/Light Mode Nativo**: Alternância de tema instantânea com persistência de preferência.
