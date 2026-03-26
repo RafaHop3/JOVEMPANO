@@ -14,10 +14,10 @@
         <span class="w-1.5 h-4 bg-rose-600 rounded"></span> Em Alta
       </h4>
       <ul class="flex flex-col gap-4">
-        <li class="border-b border-light-200 dark:border-slate-800 pb-3 last:border-0 last:pb-0">
+        <li class="border-b border-slate-200 dark:border-slate-800 pb-3 last:border-0 last:pb-0">
           <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-rose-500 transition-colors text-sm font-medium line-clamp-2">Governo vota novo arcabouço fiscal que impactará importações este ano.</a>
         </li>
-        <li class="border-b border-light-200 dark:border-slate-800 pb-3 last:border-0 last:pb-0">
+        <li class="border-b border-slate-200 dark:border-slate-800 pb-3 last:border-0 last:pb-0">
           <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-rose-500 transition-colors text-sm font-medium line-clamp-2">Tecnologia: Vue 3 se consolida como escolha número 1 em SPAs de portais.</a>
         </li>
       </ul>
