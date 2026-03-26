@@ -14,5 +14,5 @@ feedparser
 beautifulsoup4
 requests
 openai
-bcrypt
+bcrypt<=4.0.1
 httpx

@@ -1,63 +1,70 @@
-<div align="center">
-  <img src="https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D" alt="Vue.js" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
+# JOVEMPANO - Portal de Notícias Minimalista 🗞️
 
-  <h1 align="center">📰 JOVEMPANO (Versão Essencial Premium)</h1>
-  <p align="center">
-    O portal editorial mais elegante, ágil e blindado do mercado. 
-    Esculpido com o Padrão de Design <b>StormGamer</b> e enraizado na cartilha <i>Keep It Simple, Stupid (KISS)</i>.
-  </p>
-</div>
+> **Minimalismo. Performance. Curadoria Humana.**
+
+O **JOVEMPANO** abandonou a complexidade de automações por IA para se tornar uma plataforma de notícias essencial, focada na experiência do leitor e na agilidade do redator. Baseado no princípio **KISS (Keep It Simple, Stupid)**, o projeto utiliza uma arquitetura moderna que elimina containers pesados e dependências desnecessárias.
+
+![Layout StormGamer](https://raw.githubusercontent.com/RafaHop3/JOVEMPANO/main/frontend/public/banner-demo.png) *(Imagem Ilustrativa)*
 
 ---
 
-## 🚀 Filosofia Mestra
-O **JOVEMPANO** passou pela purificação cirúrgica máxima. Removemos a gordura de tecnologias em nuvem, automações complexas (Workers/Celery) e dependências severas. O projeto respira leve: uma **API Síncrona Imbatível** de manutenção barata acoplada a um **Frontend SPA Absurdamente Veloz**, com sistema SEO dinâmico (`@unhead/vue`) pronto para estourar no Google e WhatsApp.
+## ✨ Diferenciais (Arquitetura StormGamer)
 
-## 🏗️ Arquitetura Atômica
-
-| Camada | Stack Base | Impacto Visual/Funcional |
-| :--- | :--- | :--- |
-| **O Banco & Motor (Backend)** | **FastAPI / SQLite** | Rotas limpas para ler e postar matérias. Tão enxuto que o Banco de Dados inteiro reside em `jovempano.db`. Zero dependência de Docker. Plugar e brincar na hora! |
-| **A Vitrine Premium (Frontend)** | **Vue 3 / TailwindCSS** | O Feed desenhado no **Layout Grid 70/30 (Padrão StormGamer)**. Sidebar fixada, alternador mágico de Dark/Light mode e meta-tags OpenGraph de alto rankeamento embutidas na alma das views. |
-| **O Cofre Central (Admin)**| **Vue / JWT bcrypt** | Acesso secreto (`/admin`) banido dos menus públicos (Segurança por Ofuscação). Fechado por hash salteado barrando qualquer hacker e concedendo aos revisores a caneta pra publicar na hora. |
+- **Layout Split 70/30**: Grade de leitura focada (70%) com Sidebar informativa (30%) para máxima imersão.
+- **Dark/Light Mode Nativo**: Alternância de tema instantânea com persistência de preferência.
+- **SEO Dinâmico**: Integração com `@unhead/vue` para Meta Tags e OpenGraph perfeitos em cada notícia.
+- **Painel Admin Blindado**: Área editorial protegida por JWT para publicações em tempo real.
+- **Performance de Elite**: SPA construída com **Vue 3** e **Tailwind v4**, servida de forma ultraleve pelo Vite.
+- **Backend Zero-Config**: Baseado em **FastAPI** e **SQLite**, pronto para rodar em qualquer VPS sem Docker.
 
 ---
 
-## ⚙️ Instalação Mágica (Plugar & Usar)
+## 🛠️ Stack Tecnológica
 
-Inicie as turbinas dessa máquina na sua hospedagem ou computador sem depender de nuvens externas:
+| Camada | Tecnologia |
+| :--- | :--- |
+| **Frontend** | Vue 3, Vite, Tailwind CSS v4, Vue Router |
+| **Backend** | Python 3.10+, FastAPI, SQLAlchemy |
+| **Banco de Dados** | SQLite (Arquivo local `jovempano.db`) |
+| **Segurança** | JWT (JSON Web Tokens), Bcrypt Hashing |
+| **SEO** | @unhead/vue |
 
-### 1. Injetando Vida no Backend
+---
+
+## 🚀 Como Rodar Localmente
+
+### 1. Requisitos
+- Python 3.10+
+- Node.js 18+
+
+### 2. Configuração do Motor (Backend)
 ```bash
-git clone https://github.com/RafaHop3/JOVEMPANO.git
-cd JOVEMPANO/backend
-
-# Isolando o ambiente de Python com segurança
+cd backend
 python -m venv venv
-venv\Scripts\activate # (No Linux/Mac use: source venv/bin/activate)
-
+.\venv\Scripts\activate
 pip install -r requirements.txt
-
-# Girando a chave
 uvicorn app.main:app --reload
 ```
-A API acorda na porta `:8000`. O super-admin será moldado no banco de dados com a permissão:
-🔐 **Credenciais do Escritório**: `admin` / `admin` (*Pode e DEVE ser alterado via `.env` em deploy*).
+A API estará disponível em `http://localhost:8000/docs`.
 
-### 2. Ativando a SPA Premium (Vitrine Frontend)
-Abra outra ponta de console e corra:
+### 3. Configuração da Vitrine (Frontend)
+Em outro terminal:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Navegue logo para `http://localhost:5173`. Prove a fluidez instantânea clicando no ícone do solêmio/lua pra trocar os climas de DarkMode.
+Acesse o portal em `http://localhost:5173`.
+
+### 4. Credenciais Administrativas
+Para acessar o painel editorial em `/admin`:
+- **Usuário:** `admin`
+- **Senha:** `admin` (ou configurada via `ADMIN_PASSWORD` no `.env`)
 
 ---
 
-## 🛡️ Cyber-Segurança Final
-Para hospedagem verdadeira debaixo de Domínios públicos (Vercel/Render):
-> Não suba o portal cru! Force a injeção da sua senha complexa criando a variável ambiente `ADMIN_PASSWORD="MinhaSenhaCabulosa54"` no servidor provedor e o JOVEMPANO blindará sua chave primária com `bcrypt` no minuto do Start. O CORS já está travado contra cross-scripting hostil!
+## 📄 Licença
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
+
+---
+**Desenvolvido com foco em velocidade e simplicidade por Antigravity.**
