@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+sqlalchemy
+asyncpg
+pydantic
+pydantic-settings
+alembic
+passlib
+python-multipart
+python-jose[cryptography]
+celery
+redis
+feedparser
+beautifulsoup4
+requests
+openai

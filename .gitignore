@@ -1,0 +1,10 @@
+# .gitignore raiz
+.env
+.env.local
+venv/
+__pycache__/
+node_modules/
+*.log
+.DS_Store
+dist/
+.astro/

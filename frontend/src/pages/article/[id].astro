@@ -1,0 +1,85 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+    let articles = [];
+    try {
+        const response = await fetch('http://localhost:8000/articles/');
+        if (response.ok) {
+            articles = await response.json();
+        }
+    } catch(e) {
+        console.error(e);
+    }
+    
+    // In SSG, we return all the paths (the IDs) that Astro needs to generate as static HTML
+    return articles.map((article: any) => ({
+        params: { id: article.id.toString() },
+        props: { article },
+    }));
+}
+
+const { article } = Astro.props;
+const htmlContent = marked.parse(article.content);
+---
+
+<Layout title={`${article.title} - JovemPano`}>
+    <article class="news-article">
+        <header>
+            <div class="meta">
+                <span>{new Date(article.generated_at).toLocaleDateString('pt-BR')}</span>
+            </div>
+            <h1>{article.title}</h1>
+        </header>
+        
+        <div class="content" set:html={htmlContent}></div>
+        
+        <a href="/" class="back-link">&larr; Voltar para a Início</a>
+    </article>
+</Layout>
+
+<style>
+    .news-article {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 2.5rem;
+    }
+    .meta {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    h1 {
+        font-size: 2.5rem;
+        line-height: 1.2;
+        margin-bottom: 2rem;
+        color: #fff;
+        letter-spacing: -0.5px;
+    }
+    .content {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: var(--text-main);
+    }
+    :global(.content p) {
+        margin-bottom: 1.5rem;
+    }
+    :global(.content strong) {
+        color: #fff;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 3rem;
+        font-weight: bold;
+        color: var(--accent);
+        text-decoration: none;
+    }
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
