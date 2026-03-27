@@ -6,7 +6,21 @@
     ]"
   >
     <!-- Border Accent -->
-    <div :class="['absolute top-0 left-0 w-1.5 h-full transition-colors duration-500', isExpanded ? 'bg-rose-600' : 'bg-slate-300 dark:bg-slate-800 group-hover:bg-rose-500']"></div>
+    <div :class="['absolute top-0 left-0 w-1.5 h-full transition-colors duration-500 z-10', isExpanded ? 'bg-rose-600' : 'bg-slate-300 dark:bg-slate-800 group-hover:bg-rose-500']"></div>
+    
+    <!-- News Image -->
+    <div v-if="article.image_url" class="relative overflow-hidden" :class="isExpanded ? 'h-72' : 'h-48'">
+      <img 
+        :src="article.image_url" 
+        :alt="article.title"
+        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+      <!-- Date badge over image -->
+      <span class="absolute bottom-3 left-6 text-xs text-white/80 font-mono tracking-wider">
+        {{ new Date(article.created_at).toLocaleString('pt-BR') }}
+      </span>
+    </div>
     
     <div class="p-6">
       <div class="flex justify-between items-start mb-2">
@@ -15,7 +29,7 @@
         </h3>
         <button 
           @click="$emit('toggle')" 
-          :class="['p-2 rounded-full transition-colors', isExpanded ? 'bg-rose-600 text-white' : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800']"
+          :class="['p-2 rounded-full transition-colors flex-shrink-0 ml-4', isExpanded ? 'bg-rose-600 text-white' : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800']"
         >
           <svg class="w-5 h-5 transition-transform duration-500" :class="{ 'rotate-45': isExpanded }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -23,7 +37,8 @@
         </button>
       </div>
 
-      <p class="text-xs text-rose-600 font-mono tracking-wider mb-4">
+      <!-- Date when no image -->
+      <p v-if="!article.image_url" class="text-xs text-rose-600 font-mono tracking-wider mb-4">
         {{ new Date(article.created_at).toLocaleString('pt-BR') }}
       </p>
       

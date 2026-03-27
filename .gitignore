@@ -8,3 +8,7 @@ node_modules/
 .DS_Store
 dist/
 .astro/
+# Database (gerado automaticamente na inicialização)
+*.db
+*.sqlite
+*.sqlite3

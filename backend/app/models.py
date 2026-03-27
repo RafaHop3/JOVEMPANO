@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Text, TIMESTAMP, Boolean
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -14,4 +14,15 @@ class News(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
+    image_url = Column(String(512), nullable=True)
+    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+
+class HeroBanner(Base):
+    __tablename__ = "hero_banners"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(255), nullable=False)
+    subtitle = Column(String(512), nullable=True)
+    image_url = Column(String(512), nullable=False)
+    link_url = Column(String(512), nullable=True)
+    is_active = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
