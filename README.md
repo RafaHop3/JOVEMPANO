@@ -1,8 +1,8 @@
 # JovemPano 🗞️
 
-> **Minimalismo. Performance. Curadoria Humana.**
+> **Informação sem filtro, com a velocidade que o Brasil exige.**
 
-Portal de notícias moderno com painel editorial protegido por JWT, carrossel de banners destaque e feed de notícias com imagem de capa. Arquitetura Vue 3 + FastAPI + SQLite, sem Docker, pronto para rodar em qualquer VPS.
+Portal de notícias moderno com identidade visual azul & dourado, animação de fundo estilo água-viva, carrossel de banners destaque e navegação por categorias. Arquitetura Vue 3 + FastAPI + SQLite.
 
 ---
 
@@ -10,12 +10,13 @@ Portal de notícias moderno com painel editorial protegido por JWT, carrossel de
 
 | Feature | Descrição |
 | :--- | :--- |
-| 🖼️ **Banner Destaque** | Carrossel full-width com balão glassmorphism, auto-play e navegação por dots/setas |
+| 🖼️ **Banner Destaque** | Carrossel full-width com balão glassmorphism, auto-play e navegação por setas |
 | 📰 **Feed com Imagens** | Notícias com foto de capa, zoom no hover e expansão inline |
-| 🌗 **Dark / Light Mode** | Alternância nativa com persistência de preferência |
+| 🧭 **Navegação por Categorias** | 7 seções: Início, Política, Economia, Esportes, Tecnologia, Entretenimento, Mundo |
+| 🪼 **Animação de Fundo** | Águas-vivas douradas pulsando suavemente em Canvas (quase invisível, elegante) |
+| ✨ **Decorações Laterais** | Ornamentos geométricos dourados nas laterais em telas grandes |
 | 🔒 **Admin Protegido** | Painel editorial em abas com autenticação JWT |
 | 🛡️ **Gestão de Banners** | Criar, ativar/desativar e excluir banners sem sair do painel |
-| ⚡ **Performance de Elite** | SPA Vue 3 + Vite, backend FastAPI + SQLite, zero overhead |
 
 ---
 
@@ -23,7 +24,7 @@ Portal de notícias moderno com painel editorial protegido por JWT, carrossel de
 
 | Camada | Tecnologia |
 | :--- | :--- |
-| **Frontend** | Vue 3, Vite, Tailwind CSS v4, Vue Router |
+| **Frontend** | Vue 3, Vite, Tailwind CSS v4, Vue Router, Canvas API |
 | **Backend** | Python 3.10+, FastAPI, SQLAlchemy, Pydantic v2 |
 | **Banco de Dados** | SQLite (criado automaticamente na 1ª inicialização) |
 | **Segurança** | JWT (HS256), Bcrypt |
@@ -52,12 +53,11 @@ pip install -r requirements.txt
 **Configurar variáveis de ambiente:**
 
 ```bash
-# Copie o exemplo e edite com seus valores
 cp .env.example .env
+# Edite o arquivo .env com seus valores
 ```
 
 ```env
-# backend/.env
 SECRET_KEY=troque-por-uma-chave-segura-e-longa
 ADMIN_PASSWORD=troque-por-uma-senha-forte
 DATABASE_URL=sqlite:///./jovempano.db
@@ -68,11 +68,9 @@ DATABASE_URL=sqlite:///./jovempano.db
 uvicorn app.main:app --reload
 ```
 
-A API e documentação estarão em `http://localhost:8000/docs`.
+API + docs em `http://localhost:8000/docs`
 
 ### 2. Frontend
-
-Em outro terminal:
 
 ```bash
 cd frontend
@@ -80,61 +78,57 @@ npm install
 npm run dev
 ```
 
-Acesse o portal em `http://localhost:5173`.
+Portal em `http://localhost:5173`
 
-> **Nota:** O banco de dados e o usuário `admin` são criados automaticamente na primeira inicialização do backend.
-
----
-
-## 🖼️ Imagens de Exemplo
-
-O projeto inclui 4 imagens geradas com IA prontas para usar no painel admin (disponíveis em `frontend/public/images/`):
-
-| Arquivo | Uso sugerido |
-| :--- | :--- |
-| `hero_banner.png` | Fundo do banner destaque principal |
-| `news_politica.png` | Imagem de capa para matérias de política |
-| `news_economia.png` | Imagem de capa para matérias de economia |
-| `news_esportes.png` | Imagem de capa para matérias de esportes |
+> O banco de dados e o usuário admin são criados automaticamente na primeira inicialização.
 
 ---
 
-## 🔑 Painel Administrativo
+## 🧭 Categorias
 
-Acesse `/admin` no navegador. As credenciais são definidas via variáveis de ambiente (`.env`). **Não use as senhas padrão em produção.**
-
-No painel você pode:
-- **Aba Notícias** — Publicar matérias com título, imagem e corpo; excluir matérias existentes
-- **Aba Banners Destaque** — Criar banners com preview em tempo real, ativar/desativar e excluir
+| Rota | Categoria | Cor |
+| :--- | :--- | :--- |
+| `/` | Início | Azul |
+| `/politica` | Política | Vermelho |
+| `/economia` | Economia | Âmbar |
+| `/esportes` | Esportes | Esmeralda |
+| `/tecnologia` | Tecnologia | Violeta |
+| `/entretenimento` | Entretenimento | Rosa |
+| `/mundo` | Mundo | Céu |
 
 ---
 
-## 📁 Estrutura do Projeto
+## 🔑 Painel Admin
+
+Acesse `/admin` no navegador. As credenciais são definidas via `.env`. **Nunca use senhas padrão em produção.**
+
+---
+
+## 📁 Estrutura
 
 ```
 JOVEMPANO/
 ├── backend/
 │   ├── app/
 │   │   ├── core/         # Segurança, configuração
-│   │   ├── routers/      # Endpoints: news, banners, auth
-│   │   ├── models.py     # SQLAlchemy models
-│   │   ├── schemas.py    # Pydantic schemas
-│   │   └── main.py       # Entry point FastAPI
-│   ├── .env.example
-│   └── requirements.txt
+│   │   ├── routers/      # news, banners, auth
+│   │   ├── models.py     # SQLAlchemy
+│   │   ├── schemas.py    # Pydantic
+│   │   └── main.py       # Entry point
+│   └── .env.example
 └── frontend/
-    ├── public/images/    # Imagens estáticas (capas, banners)
+    ├── public/images/    # Logo, capas, banners
     └── src/
-        ├── components/   # NewsCard, HeroBanner, SidebarWidget
-        └── views/        # Home, Admin
+        ├── components/   # NewsCard, HeroBanner, JellyfishBg, SidebarWidget
+        └── views/        # Home, Admin, Politica, Economia, Esportes, Tecnologia, Entretenimento, Mundo
 ```
 
 ---
 
 ## 📄 Licença
 
-MIT — Distribuído sob a licença MIT.
+MIT
 
 ---
 
-*Desenvolvido com foco em velocidade e simplicidade.*
+*Desenvolvido com foco em velocidade e elegância.*

@@ -8,7 +8,7 @@
       <section>
         <div class="flex justify-between items-center mb-8 border-b border-slate-200 dark:border-slate-800 pb-4">
           <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Últimas Publicações</h2>
-          <span class="text-xs font-bold text-rose-600 px-3 py-1 bg-rose-600/10 rounded-full uppercase">Ao Vivo</span>
+          <span class="text-xs font-bold text-amber-600 px-3 py-1 bg-amber-500/10 rounded-full uppercase">Ao Vivo</span>
         </div>
         
         <div v-if="loading" class="space-y-6">

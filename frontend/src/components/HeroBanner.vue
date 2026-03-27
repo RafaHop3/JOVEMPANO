@@ -20,7 +20,7 @@
           style="min-height: 380px;"
         />
         <!-- Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
         
         <!-- Content Balloon -->
         <div class="absolute inset-0 flex items-end p-8 lg:p-12">
@@ -31,7 +31,7 @@
               <span class="text-xs font-bold tracking-widest text-rose-400 uppercase">Destaque</span>
             </div>
             <!-- Title Balloon -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-xl">
+            <div class="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-xl">
               <h2 class="text-2xl lg:text-4xl font-extrabold text-white leading-tight mb-3 drop-shadow-lg">
                 {{ banner.title }}
               </h2>
