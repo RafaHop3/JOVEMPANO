@@ -57,6 +57,21 @@
             <div v-if="newsForm.image_url" class="mt-3 rounded-lg overflow-hidden border border-slate-200 h-40">
               <img :src="newsForm.image_url" alt="Preview" class="w-full h-full object-cover" @error="newsForm.image_url = ''" />
             </div>
+            
+            <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-bold text-slate-600 mb-2">Categoria*</label>
+                <select v-model="newsForm.category" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500">
+                  <option value="Geral">Geral</option>
+                  <option value="Política">Política</option>
+                  <option value="Economia">Economia</option>
+                  <option value="Esportes">Esportes</option>
+                  <option value="Tecnologia">Tecnologia</option>
+                  <option value="Entretenimento">Entretenimento</option>
+                  <option value="Mundo">Mundo</option>
+                </select>
+              </div>
+            </div>
             <!-- Quick pick: built-in images -->
             <div class="mt-3">
               <p class="text-xs text-slate-400 mb-2 font-mono">Imagens disponíveis (clique para usar):</p>
@@ -78,7 +93,8 @@
 
           <div>
             <label class="block text-sm font-bold text-slate-600 mb-2">Corpo da Matéria*</label>
-            <textarea v-model="newsForm.content" rows="10" placeholder="Escreva o conteúdo completo aqui..." required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 font-mono"></textarea>
+            <!-- Quill Editor Container -->
+            <div id="editor-container" class="bg-white h-80 rounded-b-lg border-slate-200"></div>
           </div>
 
           <div v-if="newsMsg" :class="['p-4 rounded-lg font-bold text-sm', newsSuccess ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-600 border border-rose-200']">
@@ -203,8 +219,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-
-const API_BASE = 'http://127.0.0.1:8000'
+import { API_BASE } from '../api.js'
 
 // Auth
 const token = ref('')
@@ -215,6 +230,10 @@ const loginLoading = ref(false)
 
 // Tabs
 const activeTab = ref('news')
+import { watch } from 'vue'
+watch(activeTab, (newTab) => {
+  if (newTab === 'news') initEditor()
+})
 const tabs = [
   { id: 'news', label: '📰 Notícias' },
   { id: 'banners', label: '🖼️ Banners Destaque' },
@@ -229,11 +248,35 @@ const builtinImages = [
 ]
 
 // News form
-const newsForm = ref({ title: '', content: '', image_url: '' })
+const newsForm = ref({ title: '', content: '', image_url: '', category: 'Geral' })
 const newsPosting = ref(false)
 const newsMsg = ref('')
 const newsSuccess = ref(false)
 const newsList = ref([])
+
+let quill = null
+const initEditor = () => {
+  if (quill) return
+  setTimeout(() => {
+    const container = document.getElementById('editor-container')
+    if (container) {
+      quill = new Quill('#editor-container', {
+        theme: 'snow',
+        placeholder: 'Escreva o conteúdo da notícia aqui...',
+        modules: {
+          toolbar: [
+            [{ 'header': [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['link', 'image'],
+            ['clean']
+          ]
+        }
+      })
+    }
+  }, 100)
+}
 
 // Banner form
 const bannerForm = ref({ title: '', subtitle: '', image_url: '', link_url: '', is_active: true })
@@ -249,6 +292,7 @@ onMounted(() => {
     token.value = saved
     loadNews()
     loadBanners()
+    if (activeTab.value === 'news') initEditor()
   }
 })
 
@@ -298,13 +342,20 @@ const createNews = async () => {
   newsPosting.value = true
   newsMsg.value = ''
   try {
-    const payload = { title: newsForm.value.title, content: newsForm.value.content, image_url: newsForm.value.image_url || null }
+    const content = quill ? quill.root.innerHTML : newsForm.value.content
+    const payload = { 
+      title: newsForm.value.title, 
+      content: content, 
+      image_url: newsForm.value.image_url || null,
+      category: newsForm.value.category
+    }
     const res = await fetch(`${API_BASE}/news/`, { method: 'POST', headers: authHeaders(), body: JSON.stringify(payload) })
     if (!checkAuth(res)) return
     if (!res.ok) throw new Error('Erro ao publicar.')
     newsSuccess.value = true
     newsMsg.value = '✅ Notícia publicada com sucesso!'
-    newsForm.value = { title: '', content: '', image_url: '' }
+    newsForm.value = { title: '', content: '', image_url: '', category: 'Geral' }
+    if (quill) quill.setContents([])
     await loadNews()
     setTimeout(() => newsMsg.value = '', 5000)
   } catch (err) {

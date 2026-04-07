@@ -15,6 +15,7 @@ class News(Base):
     title = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
     image_url = Column(String(512), nullable=True)
+    category = Column(String(50), nullable=True, default="Geral")
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
 class HeroBanner(Base):

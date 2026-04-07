@@ -38,3 +38,7 @@ def startup_event():
 @app.get("/")
 def root():
     return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
+
+@app.get("/ping")
+def ping():
+    return {"status": "ok", "message": "pong"}

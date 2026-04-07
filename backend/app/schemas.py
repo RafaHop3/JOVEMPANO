@@ -6,6 +6,7 @@ class NewsBase(BaseModel):
     title: str
     content: str
     image_url: Optional[str] = None
+    category: Optional[str] = "Geral"
 
 class NewsCreate(NewsBase):
     pass

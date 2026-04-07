@@ -46,6 +46,7 @@ import { ref, onMounted } from 'vue'
 import NewsCard from '../components/NewsCard.vue'
 import SidebarWidget from '../components/SidebarWidget.vue'
 import HeroBanner from '../components/HeroBanner.vue'
+import { API_BASE } from '../api.js'
 
 const news = ref([])
 const loading = ref(true)
@@ -61,11 +62,11 @@ const toggleExpand = (id) => {
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/news/')
-    if (!res.ok) throw new Error('Falha na conexão com o motor.')
+    const res = await fetch(`${API_BASE}/news/`)
+    if (!res.ok) throw new Error('Falha na conexão com o servidor de notícias.')
     news.value = await res.json()
   } catch (error) {
-    console.error(error)
+    console.error('Erro ao buscar notícias:', error)
   } finally {
     loading.value = false
   }

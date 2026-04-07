@@ -69,6 +69,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { API_BASE } from '../api.js'
 
 const banners = ref([])
 const current = ref(0)
@@ -85,7 +86,7 @@ const startAutoplay = () => {
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/banners/active')
+    const res = await fetch(`${API_BASE}/banners/active`)
     if (res.ok) banners.value = await res.json()
   } catch(e) {
     console.error('Banners fetch failed:', e)

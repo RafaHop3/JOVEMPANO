@@ -12,8 +12,23 @@ class Settings(BaseSettings):
         "http://localhost:5173", 
         "http://127.0.0.1:5173", 
         "http://localhost:5174", 
-        "http://localhost:5175"
+        "http://localhost:5175",
+        "https://jovem-pano.vercel.app",
+        "https://jovempano.vercel.app",
+        "https://jovempano.render.com",
+        "https://jovempano-backend.onrender.com"
     ]
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Permite adicionar origens via string separada por vírgula no ENV
+        extra_origins = os.getenv("EXTRA_CORS_ORIGINS", "")
+        if extra_origins:
+            self.CORS_ORIGINS.extend([origin.strip() for origin in extra_origins.split(",")])
+        
+        frontend_url = os.getenv("FRONTEND_URL", "")
+        if frontend_url and frontend_url not in self.CORS_ORIGINS:
+            self.CORS_ORIGINS.append(frontend_url)
     
     class Config:
         env_file = ".env"
