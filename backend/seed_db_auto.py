@@ -10,6 +10,31 @@ from app.database import SessionLocal, engine, Base
 from app import models
 from app.core.security import get_password_hash
 
+from sqlalchemy import text # Import para executar SQL puro
+
+def sync_schema(db: Session):
+    print("Sincronizando esquema do banco de dados...")
+    try:
+        # Verifica e adiciona colunas se faltarem (SQLite hack para MVP)
+        # 1. Coluna image_url
+        try:
+            db.execute(text("ALTER TABLE news ADD COLUMN image_url VARCHAR(512)"))
+            print("Coluna 'image_url' adicionada com sucesso.")
+        except Exception:
+            print("Coluna 'image_url' já existe ou falha ao adicionar.")
+
+        # 2. Coluna category
+        try:
+            db.execute(text("ALTER TABLE news ADD COLUMN category VARCHAR(50) DEFAULT 'Geral'"))
+            print("Coluna 'category' adicionada com sucesso.")
+        except Exception:
+            print("Coluna 'category' já existe ou falha ao adicionar.")
+        
+        db.commit()
+    except Exception as e:
+        print(f"Erro ao sincronizar esquema: {e}")
+        db.rollback()
+
 def seed():
     print("Iniciando semeadura automática do banco de dados...")
     
@@ -18,6 +43,9 @@ def seed():
     
     db = SessionLocal()
     try:
+        # Sincroniza esquema primeiro
+        sync_schema(db)
+        
         # 1. Criar Admin padrão
         admin_pass = os.getenv("ADMIN_PASSWORD", "admin123")
         admin = db.query(models.User).filter(models.User.username == "admin").first()
@@ -66,9 +94,9 @@ def seed():
             ))
 
         db.commit()
-        print("Semeadura concluída com sucesso!")
+        print("Sincronização e semeadura concluídas com sucesso!")
     except Exception as e:
-        print(f"Erro ao semear: {e}")
+        print(f"Erro fatal: {e}")
         db.rollback()
     finally:
         db.close()
