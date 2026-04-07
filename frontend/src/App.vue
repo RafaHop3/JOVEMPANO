@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white relative">
+  <div class="min-h-screen bg-white relative transition-colors duration-300">
     <!-- ═══════ HEADER ═══════ -->
     <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-50 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -42,17 +42,14 @@
     
     <!-- PHASE 2 NOTIFICATION -->
     <div v-if="debug" class="fixed bottom-4 right-4 bg-emerald-500 text-white p-4 rounded-xl shadow-xl z-50">
-      Phase 2: App Layout Restored
+      Phase 2: Restoration Complete
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-
-// Deprecated: Use entry.js instead.
-console.log('[DEPRECATED] main.js is no longer used.')
 
 const route = useRoute()
 const debug = ref(true)
@@ -61,6 +58,7 @@ const navButtons = [
   { path: '/',               label: 'Início',         activeBg: 'bg-blue-50',     activeText: 'text-blue-700' },
   { path: '/politica',       label: 'Política',       activeBg: 'bg-rose-50',     activeText: 'text-rose-700' },
   { path: '/economia',       label: 'Economia',       activeBg: 'bg-amber-50',    activeText: 'text-amber-700' },
+  { path: '/esportes',       label: 'Esportes',       activeBg: 'bg-emerald-50',  activeText: 'text-emerald-700' },
 ]
 
 const isActive = (path) => {

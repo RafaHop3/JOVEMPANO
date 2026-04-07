@@ -18,7 +18,6 @@ class NewsOut(NewsBase):
     class Config:
         orm_mode = True
 
-# --- Hero Banner ---
 class HeroBannerBase(BaseModel):
     title: str
     subtitle: Optional[str] = None

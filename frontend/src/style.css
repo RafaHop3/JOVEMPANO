@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Habilitar a classe manual do dark mode pra continuar usando os botoes no JS */
+@custom-variant dark (&:is(.dark *));
+
 body {
-  @apply bg-white text-slate-800 font-sans selection:bg-rose-500 selection:text-white;
+  @apply bg-slate-950 text-slate-300 font-sans selection:bg-rose-500 selection:text-white;
 }

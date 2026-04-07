@@ -35,10 +35,6 @@ banner_router = APIRouter(prefix="/banners", tags=["Banners"])
 def get_banners(db: Session = Depends(get_db)):
     return db.query(HeroBanner).order_by(HeroBanner.id.desc()).all()
 
-@banner_router.get("/active", response_model=List[HeroBannerOut])
-def get_active_banners(db: Session = Depends(get_db)):
-    return db.query(HeroBanner).filter(HeroBanner.is_active == True).order_by(HeroBanner.id.desc()).all()
-
 @banner_router.post("/", response_model=HeroBannerOut)
 def create_banner(banner: HeroBannerCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     db_banner = HeroBanner(**banner.dict())
@@ -46,21 +42,3 @@ def create_banner(banner: HeroBannerCreate, current_user: User = Depends(get_cur
     db.commit()
     db.refresh(db_banner)
     return db_banner
-
-@banner_router.patch("/{banner_id}/toggle", response_model=HeroBannerOut)
-def toggle_banner(banner_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    item = db.query(HeroBanner).filter(HeroBanner.id == banner_id).first()
-    if not item:
-        raise HTTPException(status_code=404, detail="Banner não encontrado.")
-    item.is_active = not item.is_active
-    db.commit()
-    db.refresh(item)
-    return item
-
-@banner_router.delete("/{banner_id}", status_code=204)
-def delete_banner(banner_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    item = db.query(HeroBanner).filter(HeroBanner.id == banner_id).first()
-    if not item:
-        raise HTTPException(status_code=404, detail="Banner não encontrado.")
-    db.delete(item)
-    db.commit()

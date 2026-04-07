@@ -5,7 +5,6 @@ from app.database import engine, Base, SessionLocal
 from app import models
 from app.core.security import get_password_hash
 from app.routers import auth, news
-from app.routers.news import banner_router
 app = FastAPI(title=settings.PROJECT_NAME)
 
 app.add_middleware(
@@ -18,7 +17,6 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(news.router)
-app.include_router(banner_router)
 
 @app.on_event("startup")
 def startup_event():
@@ -38,7 +36,3 @@ def startup_event():
 @app.get("/")
 def root():
     return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
-
-@app.get("/ping")
-def ping():
-    return {"status": "ok", "message": "pong"}

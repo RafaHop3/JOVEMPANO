@@ -1,134 +1,69 @@
-# JovemPano 🗞️
+# JOVEMPANO - Portal de Notícias Minimalista 🗞️
 
-> **Informação sem filtro, com a velocidade que o Brasil exige.**
+> **Minimalismo. Performance. Curadoria Humana.**
 
-Portal de notícias moderno com identidade visual azul & dourado, animação de fundo estilo água-viva, carrossel de banners destaque e navegação por categorias. Arquitetura Vue 3 + FastAPI + SQLite.
 
----
-
-## ✨ Funcionalidades
-
-| Feature | Descrição |
-| :--- | :--- |
-| 🖼️ **Banner Destaque** | Carrossel full-width com balão glassmorphism, auto-play e navegação por setas |
-| 📰 **Feed com Imagens** | Notícias com foto de capa, zoom no hover e expansão inline |
-| 🧭 **Navegação por Categorias** | 7 seções: Início, Política, Economia, Esportes, Tecnologia, Entretenimento, Mundo |
-| 🪼 **Animação de Fundo** | Águas-vivas douradas pulsando suavemente em Canvas (quase invisível, elegante) |
-| ✨ **Decorações Laterais** | Ornamentos geométricos dourados nas laterais em telas grandes |
-| 🔒 **Admin Protegido** | Painel editorial em abas com autenticação JWT |
-| 🛡️ **Gestão de Banners** | Criar, ativar/desativar e excluir banners sem sair do painel |
+![Layout StormGamer](https://raw.githubusercontent.com/RafaHop3/JOVEMPANO/main/frontend/public/banner-demo.png) *(Imagem Ilustrativa)*
 
 ---
 
-## 🛠️ Stack
+## ✨ Diferenciais (Arquitetura StormGamer)
+
+- **Layout Split 70/30**: Grade de leitura focada (70%) com Sidebar informativa (30%) para máxima imersão.
+- **Dark/Light Mode Nativo**: Alternância de tema instantânea com persistência de preferência.
+- **SEO Dinâmico**: Integração com `@unhead/vue` para Meta Tags e OpenGraph perfeitos em cada notícia.
+- **Painel Admin Blindado**: Área editorial protegida por JWT para publicações em tempo real.
+- **Performance de Elite**: SPA construída com **Vue 3** e **Tailwind v4**, servida de forma ultraleve pelo Vite.
+- **Backend Zero-Config**: Baseado em **FastAPI** e **SQLite**, pronto para rodar em qualquer VPS sem Docker.
+
+---
+
+## 🛠️ Stack Tecnológica
 
 | Camada | Tecnologia |
 | :--- | :--- |
-| **Frontend** | Vue 3, Vite, Tailwind CSS v4, Vue Router, Canvas API |
-| **Backend** | Python 3.10+, FastAPI, SQLAlchemy, Pydantic v2 |
-| **Banco de Dados** | SQLite (criado automaticamente na 1ª inicialização) |
-| **Segurança** | JWT (HS256), Bcrypt |
+| **Frontend** | Vue 3, Vite, Tailwind CSS v4, Vue Router |
+| **Backend** | Python 3.10+, FastAPI, SQLAlchemy |
+| **Banco de Dados** | SQLite (Arquivo local `jovempano.db`) |
+| **Segurança** | JWT (JSON Web Tokens), Bcrypt Hashing |
+| **SEO** | @unhead/vue |
 
 ---
 
 ## 🚀 Como Rodar Localmente
 
-### Pré-requisitos
+### 1. Requisitos
 - Python 3.10+
 - Node.js 18+
 
-### 1. Backend
-
+### 2. Configuração do Motor (Backend)
 ```bash
 cd backend
 python -m venv venv
-# Windows
 .\venv\Scripts\activate
-# Linux/macOS
-source venv/bin/activate
-
 pip install -r requirements.txt
-```
-
-**Configurar variáveis de ambiente:**
-
-```bash
-cp .env.example .env
-# Edite o arquivo .env com seus valores
-```
-
-```env
-SECRET_KEY=troque-por-uma-chave-segura-e-longa
-ADMIN_PASSWORD=troque-por-uma-senha-forte
-DATABASE_URL=sqlite:///./jovempano.db
-```
-
-**Iniciar:**
-```bash
 uvicorn app.main:app --reload
 ```
+A API estará disponível em `http://localhost:8000/docs`.
 
-API + docs em `http://localhost:8000/docs`
-
-### 2. Frontend
-
+### 3. Configuração da Vitrine (Frontend)
+Em outro terminal:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+Acesse o portal em `http://localhost:5173`.
 
-Portal em `http://localhost:5173`
-
-> O banco de dados e o usuário admin são criados automaticamente na primeira inicialização.
-
----
-
-## 🧭 Categorias
-
-| Rota | Categoria | Cor |
-| :--- | :--- | :--- |
-| `/` | Início | Azul |
-| `/politica` | Política | Vermelho |
-| `/economia` | Economia | Âmbar |
-| `/esportes` | Esportes | Esmeralda |
-| `/tecnologia` | Tecnologia | Violeta |
-| `/entretenimento` | Entretenimento | Rosa |
-| `/mundo` | Mundo | Céu |
-
----
-
-## 🔑 Painel Admin
-
-Acesse `/admin` no navegador. As credenciais são definidas via `.env`. **Nunca use senhas padrão em produção.**
-
----
-
-## 📁 Estrutura
-
-```
-JOVEMPANO/
-├── backend/
-│   ├── app/
-│   │   ├── core/         # Segurança, configuração
-│   │   ├── routers/      # news, banners, auth
-│   │   ├── models.py     # SQLAlchemy
-│   │   ├── schemas.py    # Pydantic
-│   │   └── main.py       # Entry point
-│   └── .env.example
-└── frontend/
-    ├── public/images/    # Logo, capas, banners
-    └── src/
-        ├── components/   # NewsCard, HeroBanner, JellyfishBg, SidebarWidget
-        └── views/        # Home, Admin, Politica, Economia, Esportes, Tecnologia, Entretenimento, Mundo
-```
+### 4. Credenciais Administrativas
+Para acessar o painel editorial em `/admin`:
+- **Usuário:** `admin`
+- **Senha:** `****` (ou configurada via `ADMIN_PASSWORD` no `.env`)
 
 ---
 
 ## 📄 Licença
-
-MIT
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 
 ---
-
-*Desenvolvido com foco em velocidade e elegância.*
+**Desenvolvido com foco em velocidade e simplicidade por Antigravity.**

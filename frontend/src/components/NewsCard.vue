@@ -1,85 +1,27 @@
 <template>
-  <article 
-    :class="[
-      'bg-white border transition-all duration-500 rounded-xl relative overflow-hidden group mb-6 shadow-sm hover:shadow-lg',
-      isExpanded ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-slate-200 hover:border-amber-400'
-    ]"
-  >
-    <!-- Border Accent -->
-    <div :class="['absolute top-0 left-0 w-1.5 h-full transition-colors duration-500 z-10', isExpanded ? 'bg-blue-600' : 'bg-slate-200 group-hover:bg-amber-400']"></div>
+  <article class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:border-rose-500/50 transition-colors shadow-sm dark:shadow-xl relative overflow-hidden group mb-6">
+    <div class="absolute top-0 left-0 w-1 h-full bg-rose-600 transition-colors"></div>
+    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2 leading-tight">{{ article.title }}</h3>
+    <p class="text-xs text-rose-600 font-mono tracking-wider mb-4">{{ new Date(article.created_at).toLocaleString('pt-BR') }}</p>
     
-    <!-- News Image -->
-    <div v-if="article.image_url" class="relative overflow-hidden" :class="isExpanded ? 'h-72' : 'h-48'">
-      <img 
-        :src="article.image_url" 
-        :alt="article.title"
-        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-      <!-- Date badge over image -->
-      <span class="absolute bottom-3 left-6 text-xs text-white/90 font-mono tracking-wider bg-black/30 px-2 py-0.5 rounded">
-        {{ new Date(article.created_at).toLocaleString('pt-BR') }}
-      </span>
-    </div>
+    <p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-6 line-clamp-3">{{ getSnippet(article.content) }}</p>
     
-    <div class="p-6">
-      <div class="flex justify-between items-start mb-2">
-        <h3 :class="['font-bold text-slate-900 leading-tight transition-all', isExpanded ? 'text-3xl mb-4' : 'text-xl']">
-          {{ article.title }}
-        </h3>
-        <button 
-          @click="$emit('toggle')" 
-          :class="['p-2 rounded-full transition-colors flex-shrink-0 ml-4', isExpanded ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-100']"
-        >
-          <svg class="w-5 h-5 transition-transform duration-500" :class="{ 'rotate-45': isExpanded }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
+    <div class="flex justify-between items-center mt-4">
+      <router-link :to="`/news/${article.id}`" class="text-rose-600 dark:text-rose-500 font-bold hover:underline">Leia Mais &rarr;</router-link>
+      <div class="flex gap-2">
+        <button class="text-slate-400 hover:text-rose-500 transition-colors" title="Compartilhar">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
         </button>
       </div>
-
-      <!-- Date when no image -->
-      <p v-if="!article.image_url" class="text-xs text-amber-600 font-mono tracking-wider mb-4">
-        {{ new Date(article.created_at).toLocaleString('pt-BR') }}
-      </p>
-      
-      <!-- Content Area -->
-      <transition 
-        enter-active-class="transition duration-300 ease-out"
-        enter-from-class="transform opacity-0 -translate-y-2"
-        enter-to-class="transform opacity-100 translate-y-0"
-        leave-active-class="transition duration-200 ease-in"
-        leave-from-class="transform opacity-100 translate-y-0"
-        leave-to-class="transform opacity-0 -translate-y-2"
-      >
-        <div v-if="isExpanded" class="mt-4 border-t border-slate-100 pt-6">
-          <div class="prose max-w-none text-slate-700 leading-loose whitespace-pre-wrap">
-            {{ article.content }}
-          </div>
-          <div class="mt-8 flex justify-end">
-            <button @click="$emit('toggle')" class="bg-slate-100 text-slate-600 font-bold py-2 px-6 rounded-lg hover:bg-blue-600 hover:text-white transition-all">
-              Fechar Notícia
-            </button>
-          </div>
-        </div>
-        <div v-else>
-          <p class="text-slate-500 leading-relaxed line-clamp-2 italic">
-            {{ getSnippet(article.content) }}
-          </p>
-          <button @click="$emit('toggle')" class="mt-4 text-blue-600 font-bold hover:underline flex items-center gap-1">
-            Ler notícia completa <span>&darr;</span>
-          </button>
-        </div>
-      </transition>
     </div>
   </article>
 </template>
 
 <script setup>
-const props = defineProps(['article', 'isExpanded'])
-const emit = defineEmits(['toggle'])
+const props = defineProps(['article'])
 
 const getSnippet = (text) => {
     if(!text) return ''
-    return text.replace(/[#*`_]/g, '').substring(0, 150) + '...'
+    return text.replace(/[#*`_]/g, '').substring(0, 180) + '...'
 }
 </script>
