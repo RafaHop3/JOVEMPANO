@@ -69,6 +69,8 @@ useHead({
 const allNews = ref([])
 const loading = ref(true)
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 const latestNews = computed(() => allNews.value.slice(0, 6))
 const politics = computed(() => allNews.value.filter(n => n.category === 'Política').slice(0, 5))
 const economy = computed(() => allNews.value.filter(n => n.category === 'Economia').slice(0, 5))
@@ -76,7 +78,7 @@ const worldAndTech = computed(() => allNews.value.filter(n => ['Mundo', 'Tecnolo
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://localhost:8000/news/')
+    const res = await fetch(`${API_BASE}/news/`)
     allNews.value = await res.json()
   } catch (error) {
     console.error("Failed to fetch news:", error)
