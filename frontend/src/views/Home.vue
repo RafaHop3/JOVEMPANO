@@ -1,50 +1,83 @@
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-8">
-    <!-- Left Column (70%) -->
+  <div class="flex flex-col gap-12">
+    <!-- Hero Section / Latest -->
     <section>
-      <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8 border-b border-slate-200 dark:border-slate-800 pb-4">Últimas Publicações</h2>
-      
-      <div v-if="loading" class="text-slate-500 animate-pulse text-lg font-medium">Buscando transmissões...</div>
-      
-      <div v-else-if="news.length === 0" class="text-slate-500 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-xl text-center shadow-lg">
-        <p class="text-xl font-bold text-slate-900 dark:text-white mb-2">Nada por aqui ainda.</p>
-        <p>A redação está dormindo ou o banco de dados está vazio.</p>
+      <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8 border-l-4 border-rose-600 pl-4">Destaques do Dia</h2>
+      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
+        <div v-for="i in 3" :key="i" class="h-64 bg-slate-100 dark:bg-slate-900 rounded-xl"></div>
       </div>
-      
-      <div v-else>
-        <NewsCard v-for="item in news" :key="item.id" :article="item" />
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <NewsCard v-for="item in latestNews" :key="item.id" :article="item" />
       </div>
     </section>
 
-    <!-- Right Column (30%) -->
-    <SidebarWidget />
+    <!-- Categorized Columns Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      
+      <!-- Politics Column -->
+      <section class="flex flex-col gap-6">
+        <div class="flex items-center gap-2 border-b-2 border-slate-100 dark:border-slate-800 pb-2">
+          <span class="text-xl">🏛️</span>
+          <h3 class="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Política</h3>
+        </div>
+        <div v-if="politics.length === 0" class="text-slate-400 text-sm py-4 italic">Nenhuma notícia de política no momento.</div>
+        <div v-else class="flex flex-col gap-4">
+          <NewsCard v-for="item in politics" :key="item.id" :article="item" variant="compact" />
+        </div>
+      </section>
+
+      <!-- Economy Column -->
+      <section class="flex flex-col gap-6">
+        <div class="flex items-center gap-2 border-b-2 border-slate-100 dark:border-slate-800 pb-2">
+          <span class="text-xl">📈</span>
+          <h3 class="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Economia</h3>
+        </div>
+        <div v-if="economy.length === 0" class="text-slate-400 text-sm py-4 italic">Nenhuma notícia de economia no momento.</div>
+        <div v-else class="flex flex-col gap-4">
+          <NewsCard v-for="item in economy" :key="item.id" :article="item" variant="compact" />
+        </div>
+      </section>
+
+      <!-- World/Tech Column -->
+      <section class="flex flex-col gap-6">
+        <div class="flex items-center gap-2 border-b-2 border-slate-100 dark:border-slate-800 pb-2">
+          <span class="text-xl">🌐</span>
+          <h3 class="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Mundo & Tech</h3>
+        </div>
+        <div v-if="worldAndTech.length === 0" class="text-slate-400 text-sm py-4 italic">Nenhuma notícia de mundo ou tech.</div>
+        <div v-else class="flex flex-col gap-4">
+          <NewsCard v-for="item in worldAndTech" :key="item.id" :article="item" variant="compact" />
+        </div>
+      </section>
+
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useHead } from '@unhead/vue'
 import NewsCard from '../components/NewsCard.vue'
-import SidebarWidget from '../components/SidebarWidget.vue'
 
-// Injeção de Tags de SEO via Unhead
 useHead({
-  title: 'JOVEMPANO - Notícias Essenciais',
+  title: 'JOVEMPANO - Notícias em Tempo Real',
   meta: [
-    { name: 'description', content: 'Acompanhe as notícias mais quentes, sem filtros e de forma ultra rápida.' },
-    { property: 'og:title', content: 'JOVEMPANO - Arquitetura Limpa' },
-    { property: 'og:description', content: 'O portal premium, super veloz e protegido, para a nova geração.' },
-    { name: 'twitter:card', content: 'summary_large_image' }
+    { name: 'description', content: 'Acompanhe as notícias mais quentes, sem filtros e de forma ultra rápida.' }
   ]
 })
 
-const news = ref([])
+const allNews = ref([])
 const loading = ref(true)
+
+const latestNews = computed(() => allNews.value.slice(0, 6))
+const politics = computed(() => allNews.value.filter(n => n.category === 'Política').slice(0, 5))
+const economy = computed(() => allNews.value.filter(n => n.category === 'Economia').slice(0, 5))
+const worldAndTech = computed(() => allNews.value.filter(n => ['Mundo', 'Tecnologia'].includes(n.category)).slice(0, 5))
 
 onMounted(async () => {
   try {
     const res = await fetch('http://localhost:8000/news/')
-    news.value = await res.json()
+    allNews.value = await res.json()
   } catch (error) {
     console.error("Failed to fetch news:", error)
   } finally {

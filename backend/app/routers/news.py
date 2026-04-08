@@ -28,6 +28,21 @@ def delete_news(news_id: int, current_user: User = Depends(get_current_user), db
     db.delete(item)
     db.commit()
 
+@router.put("/{news_id}", response_model=NewsOut)
+def update_news(news_id: int, news: NewsCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db_news = db.query(News).filter(News.id == news_id).first()
+    if not db_news:
+        raise HTTPException(status_code=404, detail="Notícia não encontrada.")
+    
+    db_news.title = news.title
+    db_news.content = news.content
+    db_news.image_url = news.image_url
+    db_news.category = news.category
+    
+    db.commit()
+    db.refresh(db_news)
+    return db_news
+
 # --- Hero Banners ---
 banner_router = APIRouter(prefix="/banners", tags=["Banners"])
 
