@@ -8,10 +8,11 @@ services:
     envVars:
       - key: SECRET_KEY
         generateValue: true
-      - key: ADMIN_PASSWORD
-        value: admin123
+      # ADMIN_PASSWORD: set manually in the Render dashboard — do NOT hardcode here.
+      # Default fallback is "admin123" if not set (change immediately after first deploy).
       - key: DATABASE_URL
-        value: sqlite:///./jovempano.db
+        # 4 slashes = absolute path, pointing inside the persistent disk mount
+        value: sqlite:////opt/render/project/src/jovempano.db
     disk:
       name: jovempano-db
       mountPath: /opt/render/project/src

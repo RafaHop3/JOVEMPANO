@@ -1,81 +1,157 @@
 <template>
   <div>
-    <!-- Login -->
-    <div v-if="!token" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg border border-slate-200 mt-12">
-      <h2 class="text-2xl font-bold mb-6 text-slate-900 text-center">Login Administrativo</h2>
+    <!-- ═══════ LOGIN ═══════ -->
+    <div
+      v-if="!token"
+      class="max-w-md mx-auto mt-12 p-8 rounded-2xl fade-up"
+      style="background: var(--bg-card); border: 1px solid var(--border);"
+    >
+      <div class="flex items-center gap-3 mb-8">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--brand);">
+          <span class="text-white font-black">JP</span>
+        </div>
+        <h2 class="text-xl font-bold" style="color: var(--text-primary);">Painel Editorial</h2>
+      </div>
+
       <form @submit.prevent="login" class="flex flex-col gap-4">
         <div>
-          <label class="block text-sm font-medium text-slate-500 mb-1">Usuário</label>
-          <input v-model="username" type="text" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-slate-900 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500" />
+          <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--text-muted);">Usuário</label>
+          <input
+            id="input-username"
+            v-model="username"
+            type="text"
+            required
+            autocomplete="username"
+            class="w-full rounded-lg px-4 py-3 text-sm outline-none transition-all"
+            style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary);"
+            @focus="e => e.target.style.borderColor = 'var(--brand)'"
+            @blur="e => e.target.style.borderColor = 'var(--border)'"
+          />
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-500 mb-1">Senha</label>
-          <input v-model="password" type="password" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-slate-900 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500" />
+          <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--text-muted);">Senha</label>
+          <input
+            id="input-password"
+            v-model="password"
+            type="password"
+            required
+            autocomplete="current-password"
+            class="w-full rounded-lg px-4 py-3 text-sm outline-none transition-all"
+            style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary);"
+            @focus="e => e.target.style.borderColor = 'var(--brand)'"
+            @blur="e => e.target.style.borderColor = 'var(--border)'"
+          />
         </div>
-        <div v-if="loginError" class="text-rose-500 text-sm font-bold">{{ loginError }}</div>
-        <button type="submit" class="mt-4 w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded transition-colors" :disabled="loginLoading">
+        <div v-if="loginError" class="text-sm font-bold px-4 py-3 rounded-lg" style="background: rgba(225,29,72,0.1); color: var(--brand);">
+          {{ loginError }}
+        </div>
+        <button
+          id="btn-login"
+          type="submit"
+          :disabled="loginLoading"
+          class="mt-2 w-full py-3 rounded-xl font-bold text-sm text-white transition-opacity disabled:opacity-50"
+          style="background: var(--brand);"
+        >
           {{ loginLoading ? 'Entrando...' : 'Entrar' }}
         </button>
       </form>
     </div>
 
-    <!-- Dashboard -->
-    <div v-else class="flex flex-col gap-10">
+    <!-- ═══════ DASHBOARD ═══════ -->
+    <div v-else class="flex flex-col gap-8">
+
       <!-- Header -->
-      <div class="flex justify-between items-center pb-4 border-b border-slate-200">
-        <h2 class="text-3xl font-bold text-slate-900 flex items-center gap-3">
-          <span class="w-3 h-8 bg-rose-600 rounded"></span>
-          Painel do Admin
-        </h2>
-        <button @click="logout" class="text-slate-400 font-medium hover:text-rose-600 transition-colors">Sair</button>
+      <div class="flex justify-between items-center pb-5 fade-up" style="border-bottom: 1px solid var(--border);">
+        <div class="flex items-center gap-3">
+          <div class="w-1.5 h-8 rounded-full" style="background: var(--brand);"></div>
+          <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Painel do Admin</h2>
+        </div>
+        <button
+          id="btn-logout"
+          @click="logout"
+          class="text-sm transition-colors hover:opacity-80"
+          style="color: var(--text-muted);"
+        >
+          Sair →
+        </button>
       </div>
 
-      <!-- TABS -->
-      <div class="flex gap-2 border-b border-slate-200">
-        <button 
-          v-for="tab in tabs" :key="tab.id"
+      <!-- Tabs -->
+      <div style="border-bottom: 1px solid var(--border);" class="flex gap-0">
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          :id="`admin-tab-${tab.id}`"
           @click="activeTab = tab.id"
-          :class="['px-5 py-2.5 text-sm font-bold rounded-t-lg transition-all', activeTab === tab.id ? 'bg-rose-600 text-white' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50']"
+          :class="['tab-btn', activeTab === tab.id ? 'active' : '']"
         >
           {{ tab.label }}
         </button>
       </div>
 
-      <!-- TAB: Gerenciar Notícias -->
-      <section v-if="activeTab === 'manage'" class="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
+      <!-- ── TAB: Gerenciar ── -->
+      <section
+        v-if="activeTab === 'manage'"
+        class="rounded-2xl p-6 fade-up"
+        style="background: var(--bg-card); border: 1px solid var(--border);"
+      >
         <div class="flex justify-between items-center mb-6">
-          <h3 class="text-xl font-bold text-slate-900">📋 Gerenciar Matérias</h3>
-          <button @click="activeTab = 'news'; resetForm()" class="bg-rose-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-rose-700 transition-all">+ Nova Notícia</button>
+          <h3 class="text-lg font-bold" style="color: var(--text-primary);">📋 Gerenciar Matérias</h3>
+          <button
+            id="btn-new-article"
+            @click="activeTab = 'news'; resetForm()"
+            class="text-sm font-bold px-4 py-2 rounded-xl text-white transition-opacity hover:opacity-90"
+            style="background: var(--brand);"
+          >
+            + Nova Notícia
+          </button>
         </div>
-        
-        <div v-if="newsLoading" class="animate-pulse flex flex-col gap-4">
-          <div v-for="i in 3" :key="i" class="h-16 bg-slate-100 rounded-lg"></div>
+
+        <div v-if="newsLoading" class="flex flex-col gap-3">
+          <div v-for="i in 4" :key="i" class="skeleton" style="height: 52px;"></div>
         </div>
-        <div v-else-if="allNews.length === 0" class="text-center py-10 text-slate-400">
-          Nenhuma notícia encontrada.
+        <div v-else-if="allNews.length === 0" class="text-center py-10" style="color: var(--text-muted);">
+          Nenhuma notícia publicada ainda.
         </div>
         <div v-else class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="border-b border-slate-100">
-                <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase">Título</th>
-                <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase">Categoria</th>
-                <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase">Data</th>
-                <th class="py-3 px-4 text-xs font-bold text-slate-400 uppercase text-right">Ações</th>
+              <tr style="border-bottom: 1px solid var(--border);">
+                <th class="py-3 px-4 text-xs font-bold uppercase tracking-wider" style="color: var(--text-muted);">Título</th>
+                <th class="py-3 px-4 text-xs font-bold uppercase tracking-wider" style="color: var(--text-muted);">Categoria</th>
+                <th class="py-3 px-4 text-xs font-bold uppercase tracking-wider" style="color: var(--text-muted);">Data</th>
+                <th class="py-3 px-4 text-xs font-bold uppercase tracking-wider text-right" style="color: var(--text-muted);">Ações</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in allNews" :key="item.id" class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                <td class="py-4 px-4 font-medium text-slate-800">{{ item.title }}</td>
-                <td class="py-4 px-4 text-sm text-slate-500">{{ item.category }}</td>
-                <td class="py-4 px-4 text-sm text-slate-400">{{ new Date(item.created_at).toLocaleDateString() }}</td>
-                <td class="py-4 px-4 text-right flex justify-end gap-2">
-                  <button @click="prepareEdit(item)" class="p-2 text-slate-400 hover:text-rose-600 transition-all" title="Editar">
-                    ✏️
-                  </button>
-                  <button @click="deleteNews(item.id)" class="p-2 text-slate-400 hover:text-rose-600 transition-all" title="Excluir">
-                    🗑️
-                  </button>
+              <tr
+                v-for="item in allNews"
+                :key="item.id"
+                class="transition-colors"
+                style="border-bottom: 1px solid var(--border);"
+                @mouseenter="e => e.currentTarget.style.background = 'var(--bg-card-hover)'"
+                @mouseleave="e => e.currentTarget.style.background = 'transparent'"
+              >
+                <td class="py-3 px-4 text-sm font-medium max-w-xs truncate" style="color: var(--text-primary);">{{ item.title }}</td>
+                <td class="py-3 px-4 text-xs" style="color: var(--text-secondary);">{{ item.category }}</td>
+                <td class="py-3 px-4 text-xs font-mono-jp" style="color: var(--text-muted);">{{ new Date(item.created_at).toLocaleDateString('pt-BR') }}</td>
+                <td class="py-3 px-4 text-right">
+                  <div class="flex justify-end gap-2">
+                    <button
+                      :id="`btn-edit-${item.id}`"
+                      @click="prepareEdit(item)"
+                      class="p-1.5 rounded-lg transition-colors text-base"
+                      style="color: var(--text-muted);"
+                      title="Editar"
+                    >✏️</button>
+                    <button
+                      :id="`btn-delete-${item.id}`"
+                      @click="deleteNews(item.id)"
+                      class="p-1.5 rounded-lg transition-colors text-base"
+                      style="color: var(--text-muted);"
+                      title="Excluir"
+                    >🗑️</button>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -83,33 +159,92 @@
         </div>
       </section>
 
-      <section v-if="activeTab === 'news'" class="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-xl font-bold text-slate-900">{{ isEditing ? '✏️ Editar Matéria' : '📰 Publicar Nova Matéria' }}</h3>
-          <div class="flex gap-2">
-            <button @click="applyTemplate('furo')" class="text-xs font-bold px-3 py-1 bg-amber-100 text-amber-700 rounded-full hover:bg-amber-200 transition-all">🚨 FURO</button>
-            <button @click="applyTemplate('opinion')" class="text-xs font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-all">✍️ OPINIÃO</button>
-            <button @click="applyTemplate('rapidinha')" class="text-xs font-bold px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full hover:bg-emerald-200 transition-all">⚡ RAPIDINHA</button>
+      <!-- ── TAB: Postar ── -->
+      <section
+        v-if="activeTab === 'news'"
+        class="rounded-2xl p-6 fade-up"
+        style="background: var(--bg-card); border: 1px solid var(--border);"
+      >
+        <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+          <h3 class="text-lg font-bold" style="color: var(--text-primary);">
+            {{ isEditing ? '✏️ Editar Matéria' : '📰 Nova Matéria' }}
+          </h3>
+          <!-- Templates -->
+          <div class="flex gap-2 flex-wrap">
+            <button
+              id="btn-template-furo"
+              @click="applyTemplate('furo')"
+              class="text-xs font-bold px-3 py-1.5 rounded-full transition-opacity hover:opacity-80"
+              style="background: rgba(249,115,22,0.15); color: #f97316;"
+            >🚨 FURO</button>
+            <button
+              id="btn-template-opinion"
+              @click="applyTemplate('opinion')"
+              class="text-xs font-bold px-3 py-1.5 rounded-full transition-opacity hover:opacity-80"
+              style="background: rgba(59,130,246,0.15); color: #3b82f6;"
+            >✍️ OPINIÃO</button>
+            <button
+              id="btn-template-rapida"
+              @click="applyTemplate('rapidinha')"
+              class="text-xs font-bold px-3 py-1.5 rounded-full transition-opacity hover:opacity-80"
+              style="background: rgba(16,185,129,0.15); color: #10b981;"
+            >⚡ RÁPIDA</button>
           </div>
         </div>
 
         <form @submit.prevent="createNews" class="flex flex-col gap-5">
-          <div class="relative">
-            <label class="block text-sm font-bold text-slate-600 mb-2">Manchete (Título)*</label>
+          <!-- Title + AI -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--text-muted);">Manchete*</label>
             <div class="flex gap-2">
-              <input v-model="newsForm.title" type="text" placeholder="Ex: Governo anuncia novas medidas..." required class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 text-lg focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500" />
-              <button type="button" @click="improveTitle" class="bg-slate-900 text-white px-4 rounded-lg text-sm font-bold hover:bg-slate-800 transition-all" title="Otimizar Título com IA">✨ IA</button>
+              <input
+                id="input-title"
+                v-model="newsForm.title"
+                type="text"
+                required
+                placeholder="Ex: Governo anuncia novas medidas..."
+                class="flex-1 rounded-xl px-4 py-3 text-sm outline-none transition-all"
+                style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary);"
+                @focus="e => e.target.style.borderColor = 'var(--brand)'"
+                @blur="e => e.target.style.borderColor = 'var(--border)'"
+              />
+              <button
+                id="btn-ai-title"
+                type="button"
+                @click="improveTitle"
+                class="px-4 rounded-xl text-xs font-bold transition-opacity hover:opacity-80 flex-shrink-0"
+                style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-secondary);"
+                title="Otimizar título"
+              >✨ IA</button>
             </div>
           </div>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Image + Category -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-bold text-slate-600 mb-2">URL da Imagem de Capa</label>
-              <input v-model="newsForm.image_url" type="url" placeholder="https://exemplo.com/imagem.jpg" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500" />
+              <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--text-muted);">URL da Imagem</label>
+              <input
+                id="input-image-url"
+                v-model="newsForm.image_url"
+                type="url"
+                placeholder="https://..."
+                class="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
+                style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary);"
+                @focus="e => e.target.style.borderColor = 'var(--brand)'"
+                @blur="e => e.target.style.borderColor = 'var(--border)'"
+              />
             </div>
             <div>
-              <label class="block text-sm font-bold text-slate-600 mb-2">Categoria*</label>
-              <select v-model="newsForm.category" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500">
+              <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--text-muted);">Categoria*</label>
+              <select
+                id="select-category"
+                v-model="newsForm.category"
+                required
+                class="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all"
+                style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary);"
+                @focus="e => e.target.style.borderColor = 'var(--brand)'"
+                @blur="e => e.target.style.borderColor = 'var(--border)'"
+              >
                 <option value="Geral">Geral</option>
                 <option value="Política">Política</option>
                 <option value="Economia">Economia</option>
@@ -121,145 +256,185 @@
             </div>
           </div>
 
+          <!-- Rich Text Editor -->
           <div>
-            <label class="block text-sm font-bold text-slate-600 mb-2">Corpo da Matéria*</label>
-            <div id="editor-container" class="bg-white h-80 rounded-b-lg border border-slate-200"></div>
+            <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--text-muted);">Conteúdo*</label>
+            <div id="editor-container" style="background: white; border-radius: 0 0 10px 10px; height: 320px;"></div>
           </div>
 
-          <div v-if="newsMsg" :class="['p-4 rounded-lg font-bold text-sm', newsSuccess ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-600 border border-rose-200']">
-            {{ newsMsg }}
-          </div>
+          <!-- Feedback message -->
+          <div v-if="newsMsg" class="px-4 py-3 rounded-xl text-sm font-bold"
+               :style="newsSuccess
+                 ? 'background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.2);'
+                 : 'background: rgba(225,29,72,0.1); color: var(--brand); border: 1px solid rgba(225,29,72,0.2);'"
+          >{{ newsMsg }}</div>
 
+          <!-- Actions -->
           <div class="flex gap-3">
-            <button type="submit" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-rose-500/20 transition-all" :disabled="newsPosting">
-              {{ newsPosting ? 'Processando...' : (isEditing ? '💾 Salvar Alterações' : '🚀 Publicar Agora') }}
+            <button
+              id="btn-submit-news"
+              type="submit"
+              :disabled="newsPosting"
+              class="font-bold py-3 px-8 rounded-xl text-white transition-opacity disabled:opacity-50"
+              style="background: var(--brand);"
+            >
+              {{ newsPosting ? 'Processando...' : (isEditing ? '💾 Salvar' : '🚀 Publicar') }}
             </button>
-            <button v-if="isEditing" type="button" @click="resetForm" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 px-8 rounded-lg transition-all">
-              Cancelar
-            </button>
+            <button
+              v-if="isEditing"
+              id="btn-cancel-edit"
+              type="button"
+              @click="resetForm"
+              class="font-bold py-3 px-8 rounded-xl transition-opacity hover:opacity-80"
+              style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-secondary);"
+            >Cancelar</button>
           </div>
         </form>
       </section>
 
-      <!-- TAB: Banners / Destaque -->
-      <section v-if="activeTab === 'banners'" class="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
-        <h3 class="text-xl font-bold text-slate-900 mb-6">🖼️ Gerenciar Banners de Destaque</h3>
-        <form @submit.prevent="createBanner" class="flex flex-col gap-5">
+      <!-- ── TAB: Banners ── -->
+      <section
+        v-if="activeTab === 'banners'"
+        class="rounded-2xl p-6 fade-up"
+        style="background: var(--bg-card); border: 1px solid var(--border);"
+      >
+        <h3 class="text-lg font-bold mb-6" style="color: var(--text-primary);">🖼️ Gerenciar Banners de Destaque</h3>
+        <form @submit.prevent="createBanner" class="flex flex-col gap-4 max-w-xl">
           <div>
-            <label class="block text-sm font-bold text-slate-600 mb-2">Título do Banner*</label>
-            <input v-model="bannerForm.title" type="text" placeholder="Ex: Eleições 2026..." required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500" />
+            <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--text-muted);">Título do Banner*</label>
+            <input
+              id="input-banner-title"
+              v-model="bannerForm.title"
+              type="text"
+              required
+              placeholder="Ex: Eleições 2026..."
+              class="w-full rounded-xl px-4 py-3 text-sm outline-none"
+              style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary);"
+            />
           </div>
           <div>
-            <label class="block text-sm font-bold text-slate-600 mb-2">URL da Imagem*</label>
-            <input v-model="bannerForm.image_url" type="text" placeholder="/images/hero_banner.png" required class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500" />
+            <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--text-muted);">URL da Imagem*</label>
+            <input
+              id="input-banner-image"
+              v-model="bannerForm.image_url"
+              type="text"
+              required
+              placeholder="/images/hero_banner.png"
+              class="w-full rounded-xl px-4 py-3 text-sm outline-none"
+              style="background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary);"
+            />
           </div>
-          <button type="submit" class="self-start bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 px-8 rounded-lg transition-all" :disabled="bannerPosting">
-            {{ bannerPosting ? 'Publicando...' : ' Adicionar Banner' }}
+          <button
+            id="btn-add-banner"
+            type="submit"
+            :disabled="bannerPosting"
+            class="self-start font-bold py-3 px-8 rounded-xl text-white transition-opacity disabled:opacity-50"
+            style="background: var(--brand);"
+          >
+            {{ bannerPosting ? 'Publicando...' : '+ Adicionar Banner' }}
           </button>
         </form>
       </section>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import Quill from 'quill'
+import 'quill/dist/quill.snow.css'
 
-// API
-// API
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-// Auth
-const token = ref('')
-const username = ref('')
-const password = ref('')
-const loginError = ref('')
+// ── Auth ──────────────────────────────────────────────────────────────────────
+const token        = ref('')
+const username     = ref('')
+const password     = ref('')
+const loginError   = ref('')
 const loginLoading = ref(false)
 
-// Tabs
+// ── Tabs ──────────────────────────────────────────────────────────────────────
 const activeTab = ref('manage')
 const tabs = [
-  { id: 'manage', label: '📋 Gerenciar' },
-  { id: 'news', label: '📰 Postar' },
+  { id: 'manage',  label: '📋 Gerenciar' },
+  { id: 'news',    label: '📰 Postar' },
   { id: 'banners', label: '🖼️ Banners' },
 ]
 
-// Data
-const allNews = ref([])
+// ── News data ─────────────────────────────────────────────────────────────────
+const allNews    = ref([])
 const newsLoading = ref(false)
-const isEditing = ref(false)
-const editingId = ref(null)
+const isEditing  = ref(false)
+const editingId  = ref(null)
 
-// Forms
-const newsForm = ref({ title: '', content: '', image_url: '', category: 'Geral' })
+// ── Forms ─────────────────────────────────────────────────────────────────────
+const newsForm    = ref({ title: '', content: '', image_url: '', category: 'Geral' })
 const newsPosting = ref(false)
-const newsMsg = ref('')
+const newsMsg     = ref('')
 const newsSuccess = ref(false)
 
-const bannerForm = ref({ title: '', subtitle: '', image_url: '', link_url: '', is_active: true })
+const bannerForm    = ref({ title: '', subtitle: '', image_url: '', link_url: '', is_active: true })
 const bannerPosting = ref(false)
 
+// ── Quill editor ──────────────────────────────────────────────────────────────
 let quill = null
+
 const initEditor = () => {
   if (quill) return
   setTimeout(() => {
     const container = document.getElementById('editor-container')
-    if (container) {
-      quill = new Quill('#editor-container', {
-        theme: 'snow',
-        placeholder: 'Escreva o conteúdo da notícia aqui...',
-        modules: {
-          toolbar: [
-            [{ 'header': [1, 2, 3, false] }],
-            ['bold', 'italic', 'underline'],
-            ['link', 'image'],
-            ['clean']
-          ]
-        }
-      })
-    }
-  }, 100)
+    if (!container) return
+    quill = new Quill('#editor-container', {
+      theme: 'snow',
+      placeholder: 'Escreva o conteúdo da notícia aqui...',
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline'],
+          ['link', 'image'],
+          ['clean'],
+        ],
+      },
+    })
+  }, 120)
 }
 
-const fetchAllNews = async () => {
-  newsLoading.value = true
-  try {
-    const res = await fetch(`${API_BASE}/news/`)
-    allNews.value = await res.json()
-  } catch (err) {
-    console.error(err)
-  } finally {
-    newsLoading.value = false
-  }
-}
-
-watch(activeTab, (newTab) => {
-  if (newTab === 'news') initEditor()
-  if (newTab === 'manage') fetchAllNews()
+// ── Watchers ──────────────────────────────────────────────────────────────────
+watch(activeTab, (tab) => {
+  if (tab === 'news')   initEditor()
+  if (tab === 'manage') fetchAllNews()
 })
 
+// ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(() => {
   const saved = localStorage.getItem('token')
   if (saved) {
     token.value = saved
-    if (activeTab.value === 'news') initEditor()
     if (activeTab.value === 'manage') fetchAllNews()
+    if (activeTab.value === 'news')   initEditor()
   }
 })
 
+// ── Auth handlers ─────────────────────────────────────────────────────────────
 const login = async () => {
   loginLoading.value = true
-  loginError.value = ''
+  loginError.value   = ''
   try {
     const form = new URLSearchParams()
     form.append('username', username.value)
     form.append('password', password.value)
-    const res = await fetch(`${API_BASE}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form })
-    if (!res.ok) throw new Error('Credenciais inválidas.')
+
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: form,
+    })
+    if (!res.ok) throw new Error('Usuário ou senha incorretos.')
     const data = await res.json()
     token.value = data.access_token
     localStorage.setItem('token', token.value)
-    if (activeTab.value === 'news') initEditor()
+    fetchAllNews()
   } catch (err) {
     loginError.value = err.message
   } finally {
@@ -272,35 +447,57 @@ const logout = () => {
   token.value = ''
 }
 
+/** Handle 401: session expired → auto-logout */
+const handleUnauthorized = () => {
+  logout()
+  loginError.value = 'Sessão expirada. Faça login novamente.'
+}
+
+// ── News CRUD ─────────────────────────────────────────────────────────────────
+const fetchAllNews = async () => {
+  newsLoading.value = true
+  try {
+    const res = await fetch(`${API_BASE}/news/`)
+    if (res.ok) allNews.value = await res.json()
+  } catch (err) {
+    console.error(err)
+  } finally {
+    newsLoading.value = false
+  }
+}
+
 const createNews = async () => {
   newsPosting.value = true
-  newsMsg.value = ''
+  newsMsg.value     = ''
   try {
     const content = quill ? quill.root.innerHTML : newsForm.value.content
     const payload = { ...newsForm.value, content }
-    
-    const url = isEditing.value ? `${API_BASE}/news/${editingId.value}` : `${API_BASE}/news/`
+
+    const url    = isEditing.value ? `${API_BASE}/news/${editingId.value}` : `${API_BASE}/news/`
     const method = isEditing.value ? 'PUT' : 'POST'
 
-    const res = await fetch(url, { 
-      method, 
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token.value}` }, 
-      body: JSON.stringify(payload) 
+    const res = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: JSON.stringify(payload),
     })
-    
+
+    if (res.status === 401) { handleUnauthorized(); return }
     if (!res.ok) throw new Error('Erro ao processar requisição.')
-    
+
     newsSuccess.value = true
-    newsMsg.value = isEditing.value ? '✅ Matéria atualizada!' : '✅ Notícia publicada!'
-    
+    newsMsg.value     = isEditing.value ? '✅ Matéria atualizada!' : '✅ Notícia publicada!'
+
     setTimeout(() => {
       resetForm()
       activeTab.value = 'manage'
       fetchAllNews()
     }, 1500)
-
   } catch (err) {
-    newsMsg.value = err.message
+    newsMsg.value     = err.message
     newsSuccess.value = false
   } finally {
     newsPosting.value = false
@@ -312,8 +509,9 @@ const deleteNews = async (id) => {
   try {
     const res = await fetch(`${API_BASE}/news/${id}`, {
       method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token.value}` }
+      headers: { Authorization: `Bearer ${token.value}` },
     })
+    if (res.status === 401) { handleUnauthorized(); return }
     if (!res.ok) throw new Error('Erro ao excluir.')
     fetchAllNews()
   } catch (err) {
@@ -324,62 +522,61 @@ const deleteNews = async (id) => {
 const prepareEdit = (item) => {
   isEditing.value = true
   editingId.value = item.id
-  newsForm.value = { 
-    title: item.title, 
-    image_url: item.image_url || '', 
-    category: item.category || 'Geral' 
+  newsForm.value  = {
+    title:     item.title,
+    image_url: item.image_url || '',
+    category:  item.category  || 'Geral',
+    content:   item.content   || '',
   }
   activeTab.value = 'news'
   setTimeout(() => {
     initEditor()
-    if (quill) quill.root.innerHTML = item.content
+    if (quill) quill.root.innerHTML = item.content || ''
   }, 200)
 }
 
 const resetForm = () => {
   isEditing.value = false
   editingId.value = null
-  newsForm.value = { title: '', content: '', image_url: '', category: 'Geral' }
+  newsForm.value  = { title: '', content: '', image_url: '', category: 'Geral' }
   if (quill) quill.setContents([])
-  newsMsg.value = ''
+  newsMsg.value   = ''
 }
 
+// ── Templates ─────────────────────────────────────────────────────────────────
 const applyTemplate = (type) => {
-  if (type === 'furo') {
-    newsForm.value.title = '🚨 [URGENTE] '
-    newsForm.value.category = 'Política'
-  } else if (type === 'opinion') {
-    newsForm.value.title = 'ANÁLISE: '
-    newsForm.value.category = 'Geral'
-  } else if (type === 'rapidinha') {
-    newsForm.value.category = 'Entretenimento'
-    newsForm.value.title = '⚡ '
-  }
+  if (type === 'furo')      { newsForm.value.title = '🚨 [URGENTE] ';  newsForm.value.category = 'Política' }
+  if (type === 'opinion')   { newsForm.value.title = 'ANÁLISE: ';       newsForm.value.category = 'Geral' }
+  if (type === 'rapidinha') { newsForm.value.title = '⚡ ';              newsForm.value.category = 'Entretenimento' }
 }
 
 const improveTitle = () => {
   if (!newsForm.value.title) return
-  // Simulação de IA para otimização de título
-  const titles = [
+  const options = [
     `BOMBA: ${newsForm.value.title}`,
-    `${newsForm.value.title} - Entenda o impacto`,
-    `EXCLUSIVO: Tudo sobre ${newsForm.value.title}`,
-    `${newsForm.value.title}: O que ninguém te contou`
+    `${newsForm.value.title} — Entenda o Impacto`,
+    `EXCLUSIVO: ${newsForm.value.title}`,
+    `${newsForm.value.title}: O que Ninguém Está Contando`,
   ]
-  newsForm.value.title = titles[Math.floor(Math.random() * titles.length)]
+  newsForm.value.title = options[Math.floor(Math.random() * options.length)]
 }
 
+// ── Banners ───────────────────────────────────────────────────────────────────
 const createBanner = async () => {
   bannerPosting.value = true
   try {
-    const res = await fetch(`${API_BASE}/banners/`, { 
-      method: 'POST', 
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token.value}` }, 
-      body: JSON.stringify(bannerForm.value) 
+    const res = await fetch(`${API_BASE}/banners/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: JSON.stringify(bannerForm.value),
     })
+    if (res.status === 401) { handleUnauthorized(); return }
     if (!res.ok) throw new Error('Erro ao criar banner.')
     bannerForm.value = { title: '', subtitle: '', image_url: '', link_url: '', is_active: true }
-    alert('Banner adicionado!')
+    alert('Banner adicionado com sucesso!')
   } catch (err) {
     alert(err.message)
   } finally {

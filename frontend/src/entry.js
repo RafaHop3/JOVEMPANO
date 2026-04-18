@@ -1,54 +1,84 @@
-console.log('[JOVEMPANO] Instando carregamento seguro (entry.js)...')
+console.log('[JovemPano] Iniciando bootstrap...')
 
 async function bootstrap() {
   const appDiv = document.getElementById('app')
   if (!appDiv) return
 
   try {
-    console.log('[JOVEMPANO] Carregando dependências...')
-    
-    // Carregamento dinâmico para evitar falhas silenciosas
-    const [{ createApp }, { createRouter, createWebHistory }, { createHead }] = await Promise.all([
+    const [
+      { createApp },
+      { createRouter, createWebHistory },
+      { createHead },
+    ] = await Promise.all([
       import('vue'),
       import('vue-router'),
-      import('@unhead/vue')
+      import('@unhead/vue'),
     ])
-    
-    const App = (await import('./App.vue')).default
-    const Home = (await import('./views/Home.vue')).default
-    const Admin = (await import('./views/Admin.vue')).default
-    
+
+    // Import global styles
+    await import('./style.css')
+
+    const [App, Home, Admin, NewsDetail, CategoryView] = await Promise.all([
+      import('./App.vue').then(m => m.default),
+      import('./views/Home.vue').then(m => m.default),
+      import('./views/Admin.vue').then(m => m.default),
+      import('./views/NewsDetail.vue').then(m => m.default),
+      import('./views/CategoryView.vue').then(m => m.default),
+    ])
+
     const routes = [
       { path: '/', component: Home },
       { path: '/admin', component: Admin },
-      { path: '/politica', component: Home }, // Categorias temporariamente roteadas para Home
-      { path: '/economia', component: Home },
-      { path: '/esportes', component: Home }
+      { path: '/news/:id', component: NewsDetail },
+      {
+        path: '/politica',
+        component: CategoryView,
+        props: { category: 'Política', slug: 'politica', emoji: '🏛️', catColor: 'var(--cat-politica)' },
+      },
+      {
+        path: '/economia',
+        component: CategoryView,
+        props: { category: 'Economia', slug: 'economia', emoji: '📈', catColor: 'var(--cat-economia)' },
+      },
+      {
+        path: '/esportes',
+        component: CategoryView,
+        props: { category: 'Esportes', slug: 'esportes', emoji: '⚽', catColor: 'var(--cat-esportes)' },
+      },
+      {
+        path: '/tecnologia',
+        component: CategoryView,
+        props: { category: 'Tecnologia', slug: 'tecnologia', emoji: '💻', catColor: 'var(--cat-tecnologia)' },
+      },
+      {
+        path: '/mundo',
+        component: CategoryView,
+        props: { category: 'Mundo', slug: 'mundo', emoji: '🌐', catColor: 'var(--cat-mundo)' },
+      },
     ]
 
-    const router = createRouter({
-      history: createWebHistory(),
-      routes
-    })
-
+    const router = createRouter({ history: createWebHistory(), routes })
     const head = createHead()
 
     const app = createApp(App)
     app.use(router)
     app.use(head)
-    
-    console.log('[JOVEMPANO] Montando App...')
     app.mount('#app')
-    console.log('[JOVEMPANO] Sucesso na restauração.')
-    
+
+    console.log('[JovemPano] Pronto.')
   } catch (err) {
-    console.error('[JOVEMPANO] Falha crítica:', err)
+    console.error('[JovemPano] Falha crítica:', err)
     appDiv.innerHTML = `
-      <div style="background: white; padding: 40px; border: 4px solid #e11d48; border-radius: 20px; color: #e11d48; font-family: sans-serif;">
-        <h1 style="font-size: 24px;">Falha na Restauração</h1>
-        <p>Ocorreu um erro ao carregar os módulos da plataforma pós-restauração.</p>
-        <pre style="background: #fff1f2; padding: 15px; border-radius: 10px; font-size: 12px; overflow: auto;">${err.message}</pre>
-        <button onclick="location.reload()" style="background: #e11d48; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">Tentar Novamente</button>
+      <div style="background:#06060e;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;padding:2rem;">
+        <div style="max-width:480px;text-align:center;">
+          <div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>
+          <h1 style="color:#e11d48;font-size:1.5rem;margin-bottom:.5rem;">Erro ao carregar</h1>
+          <p style="color:#94a3b8;margin-bottom:1rem;">Houve uma falha ao inicializar a plataforma.</p>
+          <pre style="background:#0d0d18;padding:12px;border-radius:8px;font-size:11px;color:#475569;text-align:left;overflow:auto;border:1px solid rgba(255,255,255,0.06);">${err.message}</pre>
+          <button onclick="location.reload()" style="background:#e11d48;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-weight:700;margin-top:1rem;">
+            Recarregar
+          </button>
+        </div>
       </div>
     `
   }
