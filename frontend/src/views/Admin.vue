@@ -342,8 +342,8 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import Quill from 'quill'
-import 'quill/dist/quill.snow.css'
+
+// Quill is loaded dynamically to avoid polluting the main bundle
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -380,24 +380,33 @@ const bannerPosting = ref(false)
 // ── Quill editor ──────────────────────────────────────────────────────────────
 let quill = null
 
-const initEditor = () => {
+const initEditor = async () => {
   if (quill) return
-  setTimeout(() => {
-    const container = document.getElementById('editor-container')
-    if (!container) return
-    quill = new Quill('#editor-container', {
-      theme: 'snow',
-      placeholder: 'Escreva o conteúdo da notícia aqui...',
-      modules: {
-        toolbar: [
-          [{ header: [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline'],
-          ['link', 'image'],
-          ['clean'],
-        ],
-      },
-    })
-  }, 120)
+  try {
+    // Dynamic import: Quill only loads when admin navigates to the post tab
+    const [{ default: Quill }, _css] = await Promise.all([
+      import('quill'),
+      import('quill/dist/quill.snow.css'),
+    ])
+    setTimeout(() => {
+      const container = document.getElementById('editor-container')
+      if (!container) return
+      quill = new Quill('#editor-container', {
+        theme: 'snow',
+        placeholder: 'Escreva o conteúdo da notícia aqui...',
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline'],
+            ['link', 'image'],
+            ['clean'],
+          ],
+        },
+      })
+    }, 120)
+  } catch (e) {
+    console.error('[Admin] Quill load failed:', e)
+  }
 }
 
 // ── Watchers ──────────────────────────────────────────────────────────────────

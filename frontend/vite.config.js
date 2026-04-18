@@ -7,4 +7,17 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
+  optimizeDeps: {
+    include: ['quill'],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        // Separate Quill into its own chunk so it doesn't pollute the main bundle
+        manualChunks: {
+          quill: ['quill'],
+        },
+      },
+    },
+  },
 })
