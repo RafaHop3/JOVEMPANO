@@ -7,17 +7,10 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
-  optimizeDeps: {
-    include: ['quill'],
-  },
+  // Simplified build without manualChunks to prevent Rollup binding errors
   build: {
-    rollupOptions: {
-      output: {
-        // Separate Quill into its own chunk so it doesn't pollute the main bundle
-        manualChunks: {
-          quill: ['quill'],
-        },
-      },
-    },
-  },
+    target: 'esnext',
+    minify: 'terser',
+    sourcemap: false,
+  }
 })
