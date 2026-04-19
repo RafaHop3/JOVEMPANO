@@ -74,6 +74,3 @@ try {
       </div>
     `
   }
-}
-
-bootstrap()
