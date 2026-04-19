@@ -384,10 +384,9 @@ const initEditor = async () => {
   if (quill) return
   try {
     // Dynamic import: Quill only loads when admin navigates to the post tab
-    const [{ default: Quill }, _css] = await Promise.all([
-      import('quill'),
-      import('quill/dist/quill.snow.css'),
-    ])
+    const QuillModule = await import('quill')
+    await import('quill/dist/quill.snow.css')
+    const Quill = QuillModule.default
     setTimeout(() => {
       const container = document.getElementById('editor-container')
       if (!container) return

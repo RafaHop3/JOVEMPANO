@@ -7,12 +7,8 @@ export default defineConfig({
   ],
   build: {
     target: 'es2015',
-    minify: 'terser',
+    minify: false,      // Disabling minification for debugging production crash
+    sourcemap: true,   // Enabling sourcemaps to see the real stack trace
     cssCodeSplit: true,
-    rollupOptions: {
-      output: {
-        manualChunks: undefined
-      }
-    }
   }
 })
