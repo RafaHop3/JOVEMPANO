@@ -92,7 +92,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useHead } from '@unhead/vue'
+// import { useHead } from '@unhead/vue'
 
 const route   = useRoute()
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
@@ -101,6 +101,7 @@ const article = ref(null)
 const loading = ref(true)
 
 // ── SEO ───────────────────────────────────────────────────────────────────────
+/*
 useHead(
   computed(() => ({
     title: article.value
@@ -111,6 +112,7 @@ useHead(
       : [],
   }))
 )
+*/
 
 // ── Category colors ────────────────────────────────────────────────────────────
 const CAT_COLORS = {

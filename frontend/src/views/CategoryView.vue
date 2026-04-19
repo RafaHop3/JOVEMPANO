@@ -68,7 +68,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useHead } from '@unhead/vue'
+// import { useHead } from '@unhead/vue'
 import FeedCard from '../components/FeedCard.vue'
 
 const props = defineProps({
@@ -79,6 +79,7 @@ const props = defineProps({
 })
 
 // ── SEO ───────────────────────────────────────────────────────────────────────
+/*
 useHead(
   computed(() => ({
     title: `${props.category} — JovemPano`,
@@ -87,6 +88,7 @@ useHead(
     ],
   }))
 )
+*/
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 

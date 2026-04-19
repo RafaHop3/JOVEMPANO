@@ -129,20 +129,20 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useHead } from '@unhead/vue'
+// import { useHead } from '@unhead/vue'
 import NewsCard from '../components/NewsCard.vue'
 import FeedCard from '../components/FeedCard.vue'
 import BreakingTicker from '../components/BreakingTicker.vue'
 
-useHead({
-  title: 'JovemPano — Notícias em Tempo Real',
-  meta: [
-    {
-      name: 'description',
-      content: 'Acompanhe as notícias mais importantes do Brasil e do mundo, em tempo real.',
-    },
-  ],
-})
+// useHead({
+//   title: 'JovemPano — Notícias em Tempo Real',
+//   meta: [
+//     {
+//       name: 'description',
+//       content: 'Acompanhe as notícias mais importantes do Brasil e do mundo, em tempo real.',
+//     },
+//   ],
+// })
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 

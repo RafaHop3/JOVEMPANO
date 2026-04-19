@@ -1,7 +1,6 @@
 import './style.css'
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { createHead } from '@unhead/vue'
 import App from './App.vue'
 
 // Import views
@@ -46,19 +45,10 @@ const router = createRouter({
   routes,
 })
 
-const head = createHead()
 const app = createApp(App)
-
 app.use(router)
-app.use(head)
 
-// Ensure DOM is ready before mounting
-window.addEventListener('DOMContentLoaded', () => {
-  const mountPoint = document.getElementById('app')
-  if (mountPoint) {
-    app.mount('#app')
-    console.log('[JovemPano] Aplicativo montado com sucesso.')
-  } else {
-    console.warn('[JovemPano] Erro: Elemento #app não encontrado no DOM.')
-  }
+// Mount app when DOM is ready
+window.addEventListener('load', () => {
+  app.mount('#app')
 })
