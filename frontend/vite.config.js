@@ -6,9 +6,9 @@ export default defineConfig({
     vue(),
   ],
   build: {
-    target: 'es2015',
-    minify: false,      // Disabling minification for debugging production crash
-    sourcemap: true,   // Enabling sourcemaps to see the real stack trace
+    target: 'esnext',
+    minify: 'terser',    // Using terser for more robust minification
+    sourcemap: true,    // Keeping sourcemaps for now to help in case of production issues
     cssCodeSplit: true,
   }
 })
