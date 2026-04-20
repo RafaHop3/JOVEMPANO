@@ -95,7 +95,7 @@ import { useRoute } from 'vue-router'
 // import { useHead } from '@unhead/vue'
 
 const route   = useRoute()
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:8000'
 
 const article = ref(null)
 const loading = ref(true)

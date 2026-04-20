@@ -90,7 +90,7 @@ useHead(
 )
 */
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:8000'
 
 const articles = ref([])
 const loading  = ref(true)

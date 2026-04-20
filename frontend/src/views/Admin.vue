@@ -345,7 +345,7 @@ import { ref, onMounted, watch } from 'vue'
 
 // Quill is loaded dynamically to avoid polluting the main bundle
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:8000'
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 const token        = ref('')
