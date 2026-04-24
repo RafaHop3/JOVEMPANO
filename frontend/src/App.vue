@@ -6,15 +6,15 @@
 
     <!-- ═══════ HEADER ═══════ -->
     <header class="sticky top-0 z-50 transition-all duration-300" style="background: rgba(9,9,11,0.9); border-bottom: 1px solid var(--border); backdrop-filter: blur(16px);">
-      <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
         
         <!-- Left: Live indicator + Date -->
-        <div class="flex-1 flex flex-col justify-center">
+        <div class="flex-1 flex flex-col justify-center min-w-0">
           <div class="flex items-center gap-2">
             <span class="pulse-live w-2 h-2 rounded-full" style="background: var(--brand);"></span>
             <span class="font-mono-jp text-[10px] font-bold tracking-widest uppercase" style="color: var(--brand);">Ao Vivo</span>
           </div>
-          <span class="font-mono-jp text-[10px] uppercase tracking-widest" style="color: var(--text-muted); line-height: 1;">{{ formattedDate }}</span>
+          <span class="font-mono-jp text-[10px] uppercase tracking-widest truncate pr-2" style="color: var(--text-muted); line-height: 1;">{{ formattedDate }}</span>
         </div>
 
         <!-- Center: Logo -->
@@ -23,14 +23,14 @@
             <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black text-sm shadow-lg shadow-violet-500/20" style="background: linear-gradient(135deg, var(--brand), #ec4899);">
               JP
             </div>
-            <h1 class="text-2xl font-black tracking-tight leading-none pt-0.5">
+            <h1 class="text-xl sm:text-2xl font-black tracking-tight leading-none pt-0.5">
               <span style="color: var(--text-primary);">Jovem</span><span style="color: var(--brand);">Pano</span>
             </h1>
           </router-link>
         </div>
 
         <!-- Right: Spacer for perfect centering -->
-        <div class="flex-1 hidden md:block"></div>
+        <div class="flex-1"></div>
         
       </div>
     </header>
@@ -40,8 +40,8 @@
       class="sticky z-40 transition-all duration-300"
       style="top: 64px; background: rgba(9,9,11,0.9); border-bottom: 1px solid var(--border); backdrop-filter: blur(16px);"
     >
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="flex overflow-x-auto scrollbar-hide justify-center gap-2 py-1">
+      <div class="max-w-7xl mx-auto px-3 sm:px-4">
+        <div class="flex overflow-x-auto scrollbar-hide justify-start md:justify-center gap-2 py-1">
           <router-link
             v-for="btn in navButtons"
             :key="btn.path"

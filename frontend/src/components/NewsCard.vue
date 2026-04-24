@@ -12,6 +12,9 @@
       :src="article.image_url"
       :alt="article.title"
       class="hero-card-img"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
     />
     <div v-else class="absolute inset-0 flex items-center justify-center" style="background: var(--bg-surface);">
       <span class="text-8xl opacity-10">🗞️</span>
@@ -48,6 +51,8 @@
         :src="article.image_url"
         :alt="article.title"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        decoding="async"
       />
       <div v-else class="w-full h-full flex items-center justify-center" style="background: var(--bg-surface);">
         <span class="text-3xl opacity-15">🗞️</span>
@@ -80,6 +85,7 @@
         :alt="article.title"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         loading="lazy"
+        decoding="async"
       />
     </div>
     <div class="p-4 flex flex-col gap-2">

@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════
    DESIGN TOKENS — JovemPano Dark Theme
@@ -49,6 +51,7 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   --border: #27272a;
   
   /* Orbe Systems Cyberpunk/Terminal Tokens */

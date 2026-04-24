@@ -13,6 +13,7 @@
         :alt="article.title"
         class="feed-card-img"
         loading="lazy"
+        decoding="async"
       />
       <div v-else class="w-full h-full flex items-center justify-center">
         <span class="text-5xl" style="opacity: 0.08;">📰</span>

@@ -202,8 +202,10 @@ async function fetchAdminNews() {
 async function fetchFeed(slug) {
   if (feedCache.value[slug]) return  // already cached
   feedLoading.value = true
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 9000)
   try {
-    const res = await fetch(`${API_BASE}/feeds/${slug}`)
+    const res = await fetch(`${API_BASE}/feeds/${slug}`, { signal: controller.signal })
     if (res.ok) {
       feedCache.value[slug] = await res.json()
       // Populate ticker from geral feed
@@ -219,6 +221,7 @@ async function fetchFeed(slug) {
     console.warn(`[Home] feed "${slug}" fetch failed`, e)
     feedCache.value[slug] = []
   } finally {
+    clearTimeout(timeout)
     feedLoading.value = false
   }
 }
@@ -241,5 +244,9 @@ function refreshFeed() {
 onMounted(async () => {
   // Fetch both simultaneously on load
   await Promise.all([fetchAdminNews(), fetchFeed('geral')])
+  // Preload most-accessed tabs in background to make tab switching feel instant
+  ;['politica', 'economia'].forEach((slug) => {
+    if (!feedCache.value[slug]) fetchFeed(slug)
+  })
 })
 </script>

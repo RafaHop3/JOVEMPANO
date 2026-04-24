@@ -12,45 +12,113 @@ import CategoryView from './views/CategoryView.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: Home, meta: { title: 'JovemPano — Início' } },
-    { path: '/admin', component: Admin, meta: { title: 'Painel Editorial — JovemPano' } },
-    { path: '/news/:id', component: NewsDetail, meta: { title: 'Lendo Notícia — JovemPano' } },
+    {
+      path: '/',
+      component: Home,
+      meta: {
+        title: 'JovemPano — Início',
+        description: 'Últimas notícias em tempo real sobre política, economia, esportes, tecnologia e mundo.',
+      }
+    },
+    {
+      path: '/admin',
+      component: Admin,
+      meta: {
+        title: 'Painel Editorial — JovemPano',
+        description: 'Área administrativa para publicação e curadoria de notícias do JovemPano.',
+      }
+    },
+    {
+      path: '/news/:id',
+      component: NewsDetail,
+      meta: {
+        title: 'Lendo Notícia — JovemPano',
+        description: 'Leia a notícia completa com atualização em tempo real no portal JovemPano.',
+      }
+    },
     {
       path: '/politica',
       component: CategoryView,
       props: { category: 'Politica', slug: 'politica', emoji: '🏛️' },
-      meta: { title: 'Política — JovemPano' }
+      meta: {
+        title: 'Política — JovemPano',
+        description: 'Cobertura de política com atualização contínua e curadoria editorial.',
+      }
     },
     {
       path: '/economia',
       component: CategoryView,
       props: { category: 'Economia', slug: 'economia', emoji: '📈' },
-      meta: { title: 'Economia — JovemPano' }
+      meta: {
+        title: 'Economia — JovemPano',
+        description: 'Notícias de economia, mercado e finanças com atualização em tempo real.',
+      }
     },
     {
       path: '/esportes',
       component: CategoryView,
       props: { category: 'Esportes', slug: 'esportes', emoji: '⚽' },
-      meta: { title: 'Esportes — JovemPano' }
+      meta: {
+        title: 'Esportes — JovemPano',
+        description: 'Acompanhe os principais destaques esportivos nacionais e internacionais.',
+      }
     },
     {
       path: '/tecnologia',
       component: CategoryView,
       props: { category: 'Tecnologia', slug: 'tecnologia', emoji: '💻' },
-      meta: { title: 'Tecnologia — JovemPano' }
+      meta: {
+        title: 'Tecnologia — JovemPano',
+        description: 'Atualizações sobre tecnologia, inovação, IA e tendências digitais.',
+      }
     },
     {
       path: '/mundo',
       component: CategoryView,
       props: { category: 'Mundo', slug: 'mundo', emoji: '🌐' },
-      meta: { title: 'Mundo — JovemPano' }
+      meta: {
+        title: 'Mundo — JovemPano',
+        description: 'Notícias internacionais e os fatos mais relevantes do mundo em tempo real.',
+      }
     }
   ]
 })
 
 router.afterEach((to) => {
   const baseTitle = 'JovemPano — Portal de Notícias'
-  document.title = to.meta.title || baseTitle
+  const baseDescription = 'Portal de notícias em tempo real com curadoria editorial.'
+  const title = to.meta.title || baseTitle
+  const description = to.meta.description || baseDescription
+  const canonical = `${window.location.origin}${to.fullPath}`
+
+  document.title = title
+
+  const setMeta = (name, content, isProperty = false) => {
+    const selector = isProperty ? `meta[property="${name}"]` : `meta[name="${name}"]`
+    let tag = document.head.querySelector(selector)
+    if (!tag) {
+      tag = document.createElement('meta')
+      if (isProperty) tag.setAttribute('property', name)
+      else tag.setAttribute('name', name)
+      document.head.appendChild(tag)
+    }
+    tag.setAttribute('content', content)
+  }
+
+  setMeta('description', description)
+  setMeta('og:title', title, true)
+  setMeta('og:description', description, true)
+  setMeta('og:url', canonical, true)
+  setMeta('twitter:title', title)
+  setMeta('twitter:description', description)
+
+  let canonicalTag = document.head.querySelector('link[rel="canonical"]')
+  if (!canonicalTag) {
+    canonicalTag = document.createElement('link')
+    canonicalTag.setAttribute('rel', 'canonical')
+    document.head.appendChild(canonicalTag)
+  }
+  canonicalTag.setAttribute('href', canonical)
 })
 
 const app = createApp(App)
