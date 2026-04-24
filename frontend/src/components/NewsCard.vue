@@ -63,7 +63,7 @@
         class="self-start text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded"
         :style="`background: ${catBg}; color: ${catColor};`"
       >{{ article.category || 'Geral' }}</span>
-      <h3 class="text-sm font-bold text-white leading-snug line-clamp-3 group-hover:text-rose-300 transition-colors">
+      <h3 class="text-sm font-bold leading-snug line-clamp-3 text-slate-800 group-hover:text-sky-800 transition-colors">
         {{ article.title }}
       </h3>
       <p class="font-mono-jp text-[10px] mt-auto" style="color: var(--text-muted);">
@@ -101,7 +101,7 @@
       <h3
         :class="[
           variant === 'compact' ? 'text-sm' : 'text-base',
-          'font-bold text-white leading-snug group-hover:text-rose-300 transition-colors line-clamp-2'
+          'font-bold text-slate-800 leading-snug group-hover:text-sky-800 transition-colors line-clamp-2'
         ]"
       >{{ article.title }}</h3>
       <p v-if="variant !== 'compact'" class="text-xs line-clamp-2" style="color: var(--text-secondary);">

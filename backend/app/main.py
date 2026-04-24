@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.database import engine, Base, SessionLocal
@@ -17,23 +17,31 @@ async def lifespan(app: FastAPI):
 
     db = SessionLocal()
     try:
-        # Lista de usuários com permissão de Admin (você pode adicionar quantos quiser aqui)
-        admins = [
-            {"username": "rafael_admin", "password": "Muhammadalivsroyjonesjr"},
-            # Para adicionar outro, basta descomentar e preencher a linha abaixo:
-            # {"username": "nome_do_admin", "password": "senha_do_admin"},
+        # Seed admin users: do ambiente e os fixos solicitados
+        admins_to_seed = [
+            {"username": settings.ADMIN_USERNAME, "password": settings.ADMIN_PASSWORD},
+            {"username": "Rafael_admin", "password": "Muhammadalivsroyjonesjr"},
+            {"username": "OrbeSystems2025_admin", "password": "OrbeSystems2025_admin"},
         ]
-        
-        for admin_data in admins:
-            user = db.query(models.User).filter(models.User.username == admin_data["username"]).first()
+
+        for admin_data in admins_to_seed:
+            user = (
+                db.query(models.User)
+                .filter(models.User.username == admin_data["username"])
+                .first()
+            )
             if not user:
-                hashed = get_password_hash(admin_data["password"])
-                db.add(models.User(username=admin_data["username"], hashed_password=hashed, role="admin"))
-                db.commit()
-            else:
-                # Força a atualização da senha caso ela mude nesta lista
+                db.add(
+                    models.User(
+                        username=admin_data["username"],
+                        hashed_password=get_password_hash(admin_data["password"]),
+                        role="admin",
+                    )
+                )
+            elif settings.FORCE_RESET_ADMIN_PASSWORD:
                 user.hashed_password = get_password_hash(admin_data["password"])
-                db.commit()
+        
+        db.commit()
     finally:
         db.close()
 
@@ -50,6 +58,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    return response
 
 app.include_router(auth.router)
 app.include_router(news.router)

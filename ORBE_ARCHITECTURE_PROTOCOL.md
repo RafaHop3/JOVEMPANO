@@ -45,6 +45,14 @@ backend/
   - `News`: armazenamento de postagens e artigos.
   - `HeroBanner`: gerenciamento dos destaques visuais de topo.
 
+### 2.4 Seguranca (obrigatorio em producao)
+
+- **Sem credenciais no codigo**: `ADMIN_USERNAME`, `ADMIN_PASSWORD` e `SECRET_KEY` vêm de variáveis de ambiente (veja `backend/.env.example`).
+- **CORS restrito por origem**: use `FRONTEND_URL` e, se necessário, `EXTRA_CORS_ORIGINS` para cada dominio do frontend.
+- **Publicacao apenas autenticada**: rotas `POST/PUT/DELETE` de notícias e banners exigem JWT (`Depends(get_current_user)`).
+- **Painel isolado na rota `/admin`**: o site publico nao exibe atalhos de login ou publicacao; acesso administrativo e somente nessa rota, com autenticacao.
+- **Headers HTTP**: middleware basico (ex.: `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`).
+
 ## 3. Estrutura do Frontend (Vue 3 + Vite)
 
 ### 3.1 Tecnologias e Dependencias
@@ -77,22 +85,25 @@ frontend/
 - **Roteamento estavel**: evitar importacoes dinamicas (`() => import(...)`) para rotas principais em cenarios com historico de falhas de carregamento em producao; usar static imports no roteador para estabilidade maxima.
 - **SEO por rota**: utilizar `router.afterEach` para atualizar dinamicamente `document.title` com base em `meta.title` das rotas.
 - **Composicao visual**: `App.vue` atua como wrapper estrutural, gerindo exibicao condicional de elementos globais (ex.: remover header e footer em `/admin`).
+- **API em producao**: definir `VITE_API_URL` (ex.: `frontend/.env.production` ou variaveis no painel do host) apontando para a URL publica do backend.
 
 ## 4. Design System e UI/UX (Aesthetics)
 
-O padrao de UI adotado pela OrbeSystems baseia-se em Dark Mode e estetica Cyberpunk/Command Center (especialmente para paineis administrativos), com elementos premium e modernos.
+O padrão de UI adotado pela OrbeSystems baseia-se na estética Cyberpunk/Terminal, criando uma experiência imersiva de Command Center com elementos premium e focados no aspecto técnico/SecDevOps.
 
 ### 4.1 Paleta de Cores e Temas
 
-- Predominancia de fundos escuros (`#09090b` e tons profundos de grafite/preto).
-- Cores neon/vibrantes como acentos (no JovemPano: brand rosa/roxo via `var(--brand)`).
-- Categorias e tags com cores proprias e bem demarcadas.
+- **Background**: `terminal-bg` (Preto Profundo / Navy), proporcionando imersão total no dark mode.
+- **Acentos Neon**: `neon-cyan` (#00fff5), `neon-green` (#39ff14), `neon-purple` (#bc13fe), `neon-blue` (#0066ff) utilizados para destaques, interações e feedback.
+- **Texto**: Branco puro para conteúdo primário; `terminal-muted` (Cinza/Azul-Cinza) para descrições técnicas e metadados.
 
-### 4.2 Efeitos Visuais Premium
+### 4.2 Efeitos Visuais Premium e Animações
 
-- **Glassmorphism**: headers e paineis fixos com fundos translucidos (`rgba(...)`) e `backdrop-filter: blur(16px)`.
-- **Micro-animacoes**: hover states precisos (`transform`, `transition-all`, `duration-300`).
-- **Indicadores dinamicos**: status "Ao Vivo" com efeito pulse.
+- **Glassmorphism Terminal**: Paineis e headers com fundos translúcidos e `backdrop-filter`.
+- **Micro-animações**:
+  - `animate-pulse-neon` para indicadores de status (como "Ao Vivo").
+  - `animate-spin-slow` e SVG animados para logos e elementos de carregamento.
+- **Bordas Técnicas**: Elementos interativos utilizam box-shadows com cores neon sutis para feedback visual.
 
 ### 4.3 Tipografia
 

@@ -1,18 +1,17 @@
-# JOVEMPANO - Portal de Notícias Minimalista 🗞️
+# JOVEMPANO - Orbe Systems Command Center 🌐
 
-> **Minimalismo. Performance. Curadoria Humana.**
+> **SecDevOps. Terminal Aesthetics. High-Performance.**
 
-
-![Layout StormGamer](https://raw.githubusercontent.com/RafaHop3/JOVEMPANO/main/frontend/public/banner-demo.png) *(Imagem Ilustrativa)*
+![Orbe Systems Command Center](https://raw.githubusercontent.com/RafaHop3/JOVEMPANO/main/frontend/public/banner-demo.png) *(Imagem Ilustrativa)*
 
 ---
 
-## ✨ Diferenciais (Arquitetura StormGamer)
+## ✨ Diferenciais (Orbe Systems Protocol)
 
-- **Layout Split 70/30**: Grade de leitura focada (70%) com Sidebar informativa (30%) para máxima imersão.
-- **Dark/Light Mode Nativo**: Alternância de tema instantânea com persistência de preferência.
+- **Estética Cyberpunk/Terminal**: Cores neon (cyan, green, red) sobre fundo terminal-bg profundo.
+- **Terminal UI**: Componentes de interface com micro-animações, inspirado em command centers.
 - **SEO Dinâmico**: Configuração padrão de Meta Tags e OpenGraph para as notícias.
-- **Painel Admin Blindado**: Área editorial protegida por JWT para publicações em tempo real.
+- **Painel Admin Blindado**: Área editorial protegida por JWT (Terminal Admin) para publicações em tempo real.
 - **Performance de Elite**: SPA construída com **Vue 3** e **Tailwind v4**, servida de forma ultraleve pelo Vite.
 - **Backend Zero-Config**: Baseado em **FastAPI** e **SQLite**, pronto para rodar em qualquer VPS sem Docker.
 
@@ -65,4 +64,4 @@ Para acessar o painel editorial em `/admin`:
 Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 
 ---
-**Desenvolvido com foco em velocidade e simplicidade por Antigravity.**
+**Desenvolvido com foco em alta performance e estética premium pela OrbeSystems Technologies.**

@@ -3,44 +3,55 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════
-   DESIGN TOKENS — JovemPano Dark Theme
+   DESIGN TOKENS — JovemPano (Frutiger Aero / Anos 2000)
+   Inspirado na estética otimista e translúcida de 2004-2010:
+   glassmorphism brilhante, azul celeste, verde natureza, aurora.
    ═══════════════════════════════════════════════════════════════ */
-:root {
-  /* Backgrounds */
-  --bg-base:        #000000;
-  --bg-surface:     #09090b;
-  --bg-card:        #121214;
-  --bg-card-hover:  #1a1a1e;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
-  /* Borders */
-  --border:         rgba(255, 255, 255, 0.1);
-  --border-hover:   rgba(255, 255, 255, 0.2);
+:root {
+  /* Backgrounds (céu + natureza) */
+  --bg-base:        #c8e8ff;
+  --bg-surface:     rgba(255, 255, 255, 0.72);
+  --bg-card:        rgba(255, 255, 255, 0.65);
+  --bg-card-hover:  rgba(255, 255, 255, 0.90);
+
+  /* Borders (vidro brilhante) */
+  --border:         rgba(255, 255, 255, 0.60);
+  --border-hover:   rgba(96, 180, 255, 0.80);
 
   /* Text */
-  --text-primary:   #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-muted:     #71717a;
+  --text-primary:   #0a2a52;
+  --text-secondary: #1e5fa0;
+  --text-muted:     #5ba3d8;
 
-  /* Brand */
-  --brand:          #8b5cf6; /* Vibrant Violet */
-  --brand-light:    #a78bfa;
-  --brand-glow:     rgba(139, 92, 246, 0.25);
+  /* Brand — Aero Blue */
+  --brand:          #1e90ff;
+  --brand-light:    #5ac8fa;
+  --brand-glow:     rgba(30, 144, 255, 0.20);
 
-  /* Category Colors */
-  --cat-politica:       #ef4444;
-  --cat-politica-bg:    rgba(239,  68,  68, 0.12);
-  --cat-economia:       #10b981;
-  --cat-economia-bg:    rgba( 16, 185, 129, 0.12);
-  --cat-esportes:       #f97316;
-  --cat-esportes-bg:    rgba(249, 115,  22, 0.12);
-  --cat-tecnologia:     #a855f7;
-  --cat-tecnologia-bg:  rgba(168,  85, 247, 0.12);
-  --cat-mundo:          #3b82f6;
-  --cat-mundo-bg:       rgba( 59, 130, 246, 0.12);
-  --cat-entretenimento: #ec4899;
-  --cat-entretenimento-bg: rgba(236, 72, 153, 0.12);
-  --cat-geral:          #64748b;
-  --cat-geral-bg:       rgba(100, 116, 139, 0.12);
+  /* Aero aurora / natureza */
+  --aero-sky-start: #a8d8f8;
+  --aero-sky-end:   #e0f4ff;
+  --aero-green:     #73d936;
+  --aero-glass:     rgba(255, 255, 255, 0.55);
+  --aero-shine:     rgba(255, 255, 255, 0.85);
+
+  /* Category Colors (vivos e naturais) */
+  --cat-politica:       #e84040;
+  --cat-politica-bg:    rgba(232, 64, 64, 0.12);
+  --cat-economia:       #2ebd5a;
+  --cat-economia-bg:    rgba(46, 189, 90, 0.12);
+  --cat-esportes:       #ff8c00;
+  --cat-esportes-bg:    rgba(255, 140, 0, 0.12);
+  --cat-tecnologia:     #1e90ff;
+  --cat-tecnologia-bg:  rgba(30, 144, 255, 0.12);
+  --cat-mundo:          #00b4d8;
+  --cat-mundo-bg:       rgba(0, 180, 216, 0.12);
+  --cat-entretenimento: #d63bc6;
+  --cat-entretenimento-bg: rgba(214, 59, 198, 0.12);
+  --cat-geral:          #6e9fbe;
+  --cat-geral-bg:       rgba(110, 159, 190, 0.12);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -52,83 +63,102 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  --border: #27272a;
-  
-  /* Orbe Systems Cyberpunk/Terminal Tokens */
-  --terminal-bg: #000000;
-  --neon-green: #39ff14;
-  --neon-cyan: #00fff5;
-  --neon-red: #ff003c;
-  --terminal-muted: #5a7d7c;
-  --terminal-border: rgba(57, 255, 20, 0.3);
-}
-
-/* Orbe Systems Terminal Utilities */
-.text-neon-green {
-  color: var(--neon-green);
-  text-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
-}
-.text-neon-cyan {
-  color: var(--neon-cyan);
-  text-shadow: 0 0 8px rgba(0, 255, 245, 0.5);
-}
-.text-neon-red {
-  color: var(--neon-red);
-  text-shadow: 0 0 8px rgba(255, 0, 60, 0.5);
-}
-.border-neon-green {
-  border-color: var(--terminal-border);
-  box-shadow: 0 0 10px rgba(57, 255, 20, 0.1) inset;
-}
-.border-neon-red {
-  border-color: rgba(255, 0, 60, 0.4);
-}
-.bg-terminal {
-  background-color: var(--terminal-bg);
-}
-.terminal-panel {
-  background: rgba(0, 20, 10, 0.2);
-  border: 1px solid var(--terminal-border);
-}
-.terminal-input {
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--terminal-border);
-  color: var(--neon-green);
-  font-family: 'JetBrains Mono', monospace;
-}
-.terminal-input:focus {
-  outline: none;
-  border-color: var(--neon-green);
-  box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
 }
 
 body {
+  /* Frutiger Aero sky gradient background */
   background-color: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse at 15% 0%, rgba(180, 230, 255, 0.9) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 5%, rgba(140, 210, 255, 0.7) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(160, 230, 130, 0.3) 0%, transparent 45%),
+    linear-gradient(180deg, #b0dcff 0%, #c8e8ff 30%, #d8f0ff 65%, #e8f8ff 100%);
   color: var(--text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Nunito', 'Segoe UI', 'Trebuchet MS', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
+  min-height: 100vh;
 }
 
 a { color: inherit; text-decoration: none; }
 
 /* ═══════════════════════════════════════════════════════════════
-   SCROLLBAR
+   SCROLLBAR (Aero style — vidro azul)
    ═══════════════════════════════════════════════════════════════ */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--bg-surface); }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #334155; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(168, 216, 248, 0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7ec8e3, #1e90ff);
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.5);
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #5ac8fa, #0066cc); }
 
 /* ═══════════════════════════════════════════════════════════════
    TYPOGRAPHY UTILITIES
    ═══════════════════════════════════════════════════════════════ */
 .font-editorial {
-  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-family: 'Nunito', 'Trebuchet MS', Georgia, serif;
+  font-weight: 800;
 }
 .font-mono-jp {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AERO GLASS PANELS — núcleo do estilo Frutiger Aero
+   Efeito de vidro molhado brilhante com reflexo no topo
+   ═══════════════════════════════════════════════════════════════ */
+
+.aero-glass {
+  background: var(--aero-glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.85) inset,
+    0 -1px 0 rgba(255,255,255,0.4) inset,
+    0 8px 32px rgba(30, 100, 200, 0.12),
+    0 1px 3px rgba(0, 80, 180, 0.08);
+}
+
+/* Botão Aero Glossy — reflexo de vidro em degradê */
+.aero-btn {
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.95) 0%,
+    rgba(210,238,255,0.85) 48%,
+    rgba(160,210,255,0.75) 49%,
+    rgba(100,180,255,0.70) 100%
+  );
+  border: 1px solid rgba(80, 160, 255, 0.50);
+  border-radius: 20px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -1px 0 rgba(0,80,200,0.15) inset,
+    0 4px 12px rgba(30,144,255,0.20);
+  color: #0a4c8c;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 8px 20px;
+}
+.aero-btn:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,1) 0%,
+    rgba(225,245,255,0.95) 48%,
+    rgba(180,220,255,0.85) 49%,
+    rgba(120,195,255,0.80) 100%
+  );
+  box-shadow:
+    0 1px 0 rgba(255,255,255,1) inset,
+    0 -1px 0 rgba(0,80,200,0.20) inset,
+    0 6px 20px rgba(30,144,255,0.30);
+  transform: translateY(-1px);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -149,62 +179,110 @@ a { color: inherit; text-decoration: none; }
 }
 .ticker-track:hover { animation-play-state: paused; }
 
-/* Pulsing live dot */
+/* Pulsing live dot — suave para Aero */
 @keyframes pulse-live {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.75); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(30,144,255,0.5); }
+  50%       { opacity: 0.7; transform: scale(0.85); box-shadow: 0 0 0 6px rgba(30,144,255,0); }
 }
-.pulse-live { animation: pulse-live 1.4s ease-in-out infinite; }
+.pulse-live { animation: pulse-live 2s ease-in-out infinite; }
 
 /* Fade up entrance */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.fade-up { animation: fade-up 0.45s ease forwards; }
+.fade-up { animation: fade-up 0.5s ease forwards; }
 .delay-1 { animation-delay: 80ms;  opacity: 0; }
 .delay-2 { animation-delay: 160ms; opacity: 0; }
 .delay-3 { animation-delay: 240ms; opacity: 0; }
 
-/* Skeleton shimmer */
+/* Flutuação suave — elementos decorativos Aero */
+@keyframes float-bubble {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-8px) scale(1.03); }
+}
+.float-bubble { animation: float-bubble 4s ease-in-out infinite; }
+
+/* Skeleton shimmer — tons de azul suave */
 @keyframes shimmer {
   0%   { background-position: -800px 0; }
   100% { background-position:  800px 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, #13131e 25%, #1a1a2e 50%, #13131e 75%);
+  background: linear-gradient(
+    90deg,
+    rgba(200,232,255,0.7) 25%,
+    rgba(240,250,255,0.9) 50%,
+    rgba(200,232,255,0.7) 75%
+  );
   background-size: 800px 100%;
   animation: shimmer 1.6s infinite;
-  border-radius: 12px;
+  border-radius: 16px;
+}
+
+/* Aero shine sweep — reflexo que passa pelo card */
+@keyframes aero-shine {
+  0%   { left: -80%; }
+  100% { left: 120%; }
+}
+.aero-shine-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.aero-shine-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -80%;
+  width: 60%; height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,0.55) 50%,
+    transparent 100%
+  );
+  animation: aero-shine 3s ease-in-out infinite;
+  pointer-events: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════
    CARD COMPONENTS
    ═══════════════════════════════════════════════════════════════ */
 
-/* Standard News Card */
+/* Standard News Card — Aero Glossy Glass */
 .news-card {
-  background: var(--bg-card);
+  position: relative;
+  background: var(--aero-glass);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 18px;
   overflow: hidden;
-  transition: background 0.2s, border-color 0.2s, transform 0.22s, box-shadow 0.22s;
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.90) inset,
+    0 8px 28px rgba(30, 100, 200, 0.10),
+    0 1px 4px rgba(0, 60, 150, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s;
 }
 .news-card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(-4px) scale(1.005);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,1) inset,
+    0 16px 48px rgba(30, 100, 220, 0.18),
+    0 2px 8px rgba(0, 60, 180, 0.10);
 }
 
 /* Hero Card */
 .hero-card {
   position: relative;
-  border-radius: 18px;
+  border-radius: 22px;
   overflow: hidden;
   min-height: 460px;
   display: block;
-  background: var(--bg-surface);
+  box-shadow:
+    0 3px 0 rgba(255,255,255,0.7) inset,
+    0 20px 60px rgba(10, 60, 180, 0.20);
 }
 .hero-card-img {
   position: absolute;
@@ -220,9 +298,9 @@ a { color: inherit; text-decoration: none; }
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.96) 0%,
-    rgba(0, 0, 0, 0.65) 45%,
-    rgba(0, 0, 0, 0.05) 100%
+    rgba(5, 20, 80, 0.88) 0%,
+    rgba(10, 50, 150, 0.45) 45%,
+    rgba(30, 100, 200, 0.05) 100%
   );
 }
 .hero-card-body {
@@ -234,20 +312,26 @@ a { color: inherit; text-decoration: none; }
 
 /* Feed Card (external RSS) */
 .feed-card {
-  background: var(--bg-card);
+  background: var(--aero-glass);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.85) inset,
+    0 6px 24px rgba(30, 100, 200, 0.09);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
 .feed-card:hover {
-  background: var(--bg-card-hover);
+  transform: translateY(-3px);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,1) inset,
+    0 12px 40px rgba(30, 100, 220, 0.18);
   border-color: var(--border-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.4);
 }
 .feed-card-img {
   width: 100%;
@@ -265,30 +349,37 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 12px 18px;
+  padding: 10px 18px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-muted);
   white-space: nowrap;
   cursor: pointer;
   border: none;
   background: transparent;
-  transition: color 0.2s;
+  border-radius: 16px 16px 0 0;
+  transition: color 0.2s, background 0.2s;
   flex-shrink: 0;
 }
 .tab-btn::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 12px; right: 12px;
-  height: 2px;
+  bottom: 0; left: 10px; right: 10px;
+  height: 2.5px;
   border-radius: 2px 2px 0 0;
-  background: var(--brand);
+  background: linear-gradient(90deg, var(--brand-light), var(--brand));
   transform: scaleX(0);
   transition: transform 0.22s ease;
 }
-.tab-btn.active { color: var(--text-primary); }
+.tab-btn.active {
+  color: var(--brand);
+  background: rgba(255,255,255,0.45);
+}
 .tab-btn.active::after { transform: scaleX(1); }
-.tab-btn:hover:not(.active) { color: var(--text-secondary); }
+.tab-btn:hover:not(.active) {
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.30);
+}
 
 /* ═══════════════════════════════════════════════════════════════
    ARTICLE CONTENT (prose styles for v-html)
@@ -301,17 +392,24 @@ a { color: inherit; text-decoration: none; }
 .article-content p     { margin: 0 0 1.25rem; }
 .article-content h1,
 .article-content h2,
-.article-content h3    { color: var(--text-primary); font-family: 'Playfair Display', serif; margin: 1.75rem 0 0.75rem; }
+.article-content h3    {
+  color: var(--text-primary);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  margin: 1.75rem 0 0.75rem;
+}
 .article-content a     { color: var(--brand); text-decoration: underline; }
-.article-content img   { width: 100%; border-radius: 10px; margin: 1rem 0; }
+.article-content img   { width: 100%; border-radius: 14px; margin: 1rem 0; }
 .article-content ul,
 .article-content ol    { padding-left: 1.5rem; margin: 0 0 1.25rem; }
 .article-content li    { margin-bottom: 0.4rem; }
 .article-content blockquote {
-  border-left: 3px solid var(--brand);
-  padding-left: 1rem;
+  border-left: 3px solid var(--brand-light);
+  background: rgba(30, 144, 255, 0.06);
+  padding: 0.75rem 1rem;
+  border-radius: 0 12px 12px 0;
   margin: 1.5rem 0;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-style: italic;
 }
 

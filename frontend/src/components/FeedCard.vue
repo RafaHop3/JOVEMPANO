@@ -34,8 +34,7 @@
       </div>
 
       <!-- Title -->
-      <h3 class="text-sm font-bold leading-snug line-clamp-3 group-hover:text-rose-300 transition-colors duration-200"
-          style="color: var(--text-primary);">
+      <h3 class="text-sm font-bold leading-snug line-clamp-3 text-slate-800 group-hover:text-sky-800 transition-colors duration-200">
         {{ article.title }}
       </h3>
 

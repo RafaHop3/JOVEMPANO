@@ -12,7 +12,7 @@
           {{ category }}
         </h1>
         <p class="text-sm mt-1" style="color: var(--text-muted);">
-          Notícias ao vivo · Fonte: G1 Globo
+          Notícias ao vivo · Fontes RSS diversas (agregadas e deduplicadas)
         </p>
       </div>
       <!-- Live badge -->

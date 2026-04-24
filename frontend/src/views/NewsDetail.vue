@@ -1,7 +1,10 @@
 <template>
   <div class="max-w-3xl mx-auto pb-12">
     <!-- ── Progress Bar ──────────────────────────────────────────────────────── -->
-    <div class="fixed top-0 left-0 h-1 bg-rose-600 z-50 transition-all duration-150 ease-out" :style="{ width: `${scrollProgress}%` }"></div>
+    <div
+      class="fixed top-0 left-0 h-1 z-50 transition-all duration-150 ease-out"
+      :style="{ width: `${scrollProgress}%`, background: 'var(--brand)' }"
+    ></div>
 
 
     <!-- ── Loading ──────────────────────────────────────────────────────────── -->

@@ -38,13 +38,11 @@
         </div>
       </div>
 
-      <!-- Empty hero -->
-      <div v-else class="flex flex-col items-center justify-center py-20" style="color: var(--text-muted);">
+      <!-- Empty hero (sem link público para publicação; edição apenas em /admin) -->
+      <div v-else class="flex flex-col items-center justify-center py-20 px-4 text-center" style="color: var(--text-muted);">
         <span class="text-5xl mb-4">📭</span>
-        <p>Nenhum destaque publicado ainda.</p>
-        <router-link to="/admin" class="mt-3 text-sm underline" style="color: var(--brand);">
-          Publicar uma notícia →
-        </router-link>
+        <p class="max-w-md">Nenhum destaque editorial ainda. Quando a equipe publicar matérias, elas aparecerão aqui.</p>
+        <p class="mt-2 text-sm max-w-md">Enquanto isso, use as abas abaixo para acompanhar o feed ao vivo (RSS) atualizado continuamente.</p>
       </div>
     </section>
 
@@ -104,14 +102,12 @@
       <!-- No results for admin tab -->
       <div
         v-else-if="activeTab === 'admin' && adminNews.length === 0"
-        class="text-center py-16"
+        class="text-center py-16 px-4"
         style="color: var(--text-muted);"
       >
         <span class="text-5xl block mb-4">📭</span>
-        <p class="mb-3">Nenhuma notícia publicada ainda.</p>
-        <router-link to="/admin" class="text-sm underline" style="color: var(--brand);">
-          Ir para o painel →
-        </router-link>
+        <p class="mb-2 max-w-md mx-auto">Nenhuma notícia editorial publicada ainda. O painel de publicação é acessado apenas pela URL <span class="font-mono text-xs" style="color: var(--text-secondary);">/admin</span> (acesso autenticado).</p>
+        <p class="text-sm">Confira as outras abas para o feed RSS contínuo.</p>
       </div>
 
       <!-- Feed empty state -->
@@ -128,7 +124,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 // import { useHead } from '@unhead/vue'
 import NewsCard from '../components/NewsCard.vue'
 import FeedCard from '../components/FeedCard.vue'
@@ -145,6 +141,10 @@ import BreakingTicker from '../components/BreakingTicker.vue'
 // })
 
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:8000'
+
+/** Atualização automática do feed (alinhado ao cache curto do backend; não exige ação do visitante) */
+const FEED_POLL_MS = 3 * 60 * 1000
+let feedPollId = null
 
 // ── State ─────────────────────────────────────────────────────────────────────
 const adminNews   = ref([])
@@ -240,6 +240,17 @@ function refreshFeed() {
   }
 }
 
+function pollFeeds() {
+  fetchAdminNews()
+  delete feedCache.value.geral
+  fetchFeed('geral')
+  const cur = activeTab.value
+  if (cur !== 'admin' && cur !== 'geral') {
+    delete feedCache.value[cur]
+    fetchFeed(cur)
+  }
+}
+
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(async () => {
   // Fetch both simultaneously on load
@@ -248,5 +259,10 @@ onMounted(async () => {
   ;['politica', 'economia'].forEach((slug) => {
     if (!feedCache.value[slug]) fetchFeed(slug)
   })
+  feedPollId = setInterval(pollFeeds, FEED_POLL_MS)
+})
+
+onUnmounted(() => {
+  if (feedPollId) clearInterval(feedPollId)
 })
 </script>

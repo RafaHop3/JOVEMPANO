@@ -1,33 +1,29 @@
 <template>
-  <div class="font-mono-jp bg-[#06060e] min-h-screen text-slate-300 relative z-0 flex flex-col">
-    <!-- Background Elements -->
-    <div class="fixed inset-0 bg-[url('/images/grid-bg.png')] bg-cover bg-center bg-fixed opacity-20 pointer-events-none z-[-2]"></div>
-    <div class="fixed inset-0 bg-gradient-to-br from-black via-black/95 to-black/90 pointer-events-none z-[-1]"></div>
-
+  <div class="min-h-screen flex flex-col text-slate-800 bg-gradient-to-b from-sky-50/90 via-slate-100 to-slate-200/70">
     <!-- ═══════ TOAST NOTIFICATIONS ═══════ -->
-    <div class="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none">
+    <div class="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none max-w-md">
       <transition-group name="toast">
         <div
           v-for="toast in toasts"
           :key="toast.id"
-          class="pointer-events-auto flex items-center gap-4 px-6 py-4 min-w-[320px] rounded-lg border bg-black/80 shadow-2xl backdrop-blur-md"
+          class="pointer-events-auto flex items-center gap-4 px-5 py-4 min-w-[280px] rounded-2xl border bg-white/95 shadow-lg backdrop-blur-sm"
           :class="{
-            'border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.1)]': toast.type === 'success',
-            'border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]': toast.type === 'error',
-            'border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.1)]': toast.type === 'info'
+            'border-emerald-200': toast.type === 'success',
+            'border-red-200': toast.type === 'error',
+            'border-sky-200': toast.type === 'info'
           }"
         >
-          <svg v-if="toast.type === 'error'" class="w-6 h-6 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          <svg v-if="toast.type === 'success'" class="w-6 h-6 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          <svg v-if="toast.type === 'info'" class="w-6 h-6 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          
-          <div class="flex flex-col">
-            <span class="text-sm font-bold uppercase tracking-wide" :class="{
-              'text-green-400': toast.type === 'success',
-              'text-red-400': toast.type === 'error',
-              'text-cyan-400': toast.type === 'info'
+          <svg v-if="toast.type === 'error'" class="w-6 h-6 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <svg v-if="toast.type === 'success'" class="w-6 h-6 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <svg v-if="toast.type === 'info'" class="w-6 h-6 text-sky-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+          <div class="flex flex-col min-w-0">
+            <span class="text-sm font-bold" :class="{
+              'text-emerald-700': toast.type === 'success',
+              'text-red-600': toast.type === 'error',
+              'text-sky-700': toast.type === 'info'
             }">{{ toast.title }}</span>
-            <span class="text-xs text-slate-300 mt-1">{{ toast.message }}</span>
+            <span class="text-xs text-slate-600 mt-1 break-words">{{ toast.message }}</span>
           </div>
         </div>
       </transition-group>
@@ -38,42 +34,47 @@
       v-if="!token"
       class="flex flex-1 items-center justify-center p-6"
     >
-      <div class="w-full max-w-lg p-10 bg-black/60 rounded-xl border border-white/10 backdrop-blur-md shadow-2xl flex flex-col gap-8">
-        <div class="flex flex-col items-center gap-3 text-center">
-          <div class="w-16 h-16 rounded-full bg-indigo-500/20 border border-indigo-500/50 flex items-center justify-center mb-2">
-            <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+      <div class="w-full max-w-md p-10 bg-white rounded-2xl border border-slate-200/90 shadow-xl flex flex-col gap-8">
+        <div class="flex flex-col items-center gap-2 text-center">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-100 to-violet-100 border border-slate-200 flex items-center justify-center shadow-inner">
+            <svg class="w-8 h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
           </div>
-          <h2 class="text-3xl font-black text-white tracking-wide">ÁREA RESTRITA</h2>
-          <p class="text-sm text-indigo-300/80 uppercase tracking-widest">Painel Administrativo JovemPano</p>
+          <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Painel administrativo</h2>
+          <p class="text-sm text-slate-500">Acesso autenticado — apenas pela rota <span class="font-mono text-xs text-sky-700 bg-sky-50 px-1.5 py-0.5 rounded">/admin</span></p>
         </div>
 
-        <form @submit.prevent="login" class="flex flex-col gap-6">
-          <div class="flex flex-col gap-2">
-            <label class="text-xs font-bold uppercase tracking-widest text-slate-400">Usuário</label>
+        <form @submit.prevent="login" class="flex flex-col gap-5">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Usuário</label>
             <input
               v-model="username"
               type="text"
+              autocomplete="username"
               required
-              class="w-full px-5 py-4 text-base bg-black/50 border border-white/10 rounded-lg focus:border-indigo-500 outline-none transition-all text-white"
+              class="w-full px-4 py-3.5 text-base bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 outline-none transition-all text-slate-900"
             />
           </div>
-          <div class="flex flex-col gap-2">
-            <label class="text-xs font-bold uppercase tracking-widest text-slate-400">Senha</label>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Senha</label>
             <input
               v-model="password"
               type="password"
+              autocomplete="current-password"
               required
-              class="w-full px-5 py-4 text-base bg-black/50 border border-white/10 rounded-lg focus:border-indigo-500 outline-none transition-all text-white"
+              class="w-full px-4 py-3.5 text-base bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 outline-none transition-all text-slate-900"
             />
           </div>
+          <p v-if="loginHint" class="text-xs text-slate-500 leading-relaxed bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+            {{ loginHint }}
+          </p>
           <button
             type="submit"
             :disabled="loginLoading"
-            class="mt-4 w-full py-4 rounded-lg font-bold text-sm uppercase tracking-widest transition-all bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg active:scale-[0.98] disabled:opacity-50"
+            class="mt-1 w-full py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white shadow-md active:scale-[0.99] disabled:opacity-50"
           >
-            <span class="flex items-center justify-center gap-3">
+            <span class="flex items-center justify-center gap-2">
               <svg v-if="loginLoading" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-              {{ loginLoading ? 'AUTENTICANDO...' : 'ENTRAR' }}
+              {{ loginLoading ? 'Entrando…' : 'Entrar' }}
             </span>
           </button>
         </form>
@@ -81,29 +82,29 @@
     </div>
 
     <!-- ═══════ DASHBOARD ═══════ -->
-    <div v-else class="flex flex-col flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-8 gap-8">
+    <div v-else class="flex flex-col flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-8 gap-8 text-slate-800">
       
       <!-- Top Header -->
-      <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-white/10">
+      <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-slate-200">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg text-white font-black text-xl">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center shadow-md text-white font-black text-xl">
             JP
           </div>
           <div class="flex flex-col">
-            <h1 class="text-2xl font-black text-white tracking-wide">
-              ADMINISTRAÇÃO
+            <h1 class="text-2xl font-extrabold text-slate-800 tracking-tight">
+              Administração
             </h1>
-            <p class="text-sm text-indigo-400 mt-1">
-              Gerenciamento de Conteúdo
+            <p class="text-sm text-sky-600 mt-0.5">
+              Conteúdo e banners
             </p>
           </div>
         </div>
         <button
           @click="logout"
-          class="px-5 py-3 rounded-lg text-sm font-bold uppercase tracking-widest transition-all border border-red-500/30 text-red-400 hover:bg-red-500/10 active:scale-95 flex items-center gap-3"
+          class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all border border-red-200 text-red-600 bg-white hover:bg-red-50 active:scale-[0.98] flex items-center gap-2 shadow-sm"
         >
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-          Sair do Sistema
+          Sair
         </button>
       </header>
 
@@ -112,19 +113,19 @@
         
         <!-- Sidebar Navigation -->
         <aside class="w-full lg:w-72 flex flex-col gap-4 flex-shrink-0">
-          <div class="bg-black/40 rounded-xl border border-white/5 p-4 flex flex-col gap-2">
+          <div class="bg-white rounded-2xl border border-slate-200 p-3 flex flex-col gap-1 shadow-sm">
             <button
               @click="activeTab = 'manage'"
-              class="w-full text-left px-5 py-4 rounded-lg transition-all duration-200 text-sm font-bold uppercase tracking-widest flex items-center gap-4"
-              :class="activeTab === 'manage' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-white border border-transparent'"
+              class="w-full text-left px-4 py-3.5 rounded-xl transition-all duration-200 text-sm font-bold flex items-center gap-3"
+              :class="activeTab === 'manage' ? 'bg-sky-50 text-sky-800 border border-sky-200 shadow-sm' : 'text-slate-600 hover:bg-slate-50 border border-transparent'"
             >
               <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
               Gerenciar Notícias
             </button>
             <button
               @click="activeTab = 'news'"
-              class="w-full text-left px-5 py-4 rounded-lg transition-all duration-200 text-sm font-bold uppercase tracking-widest flex items-center gap-4"
-              :class="activeTab === 'news' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-white border border-transparent'"
+              class="w-full text-left px-4 py-3.5 rounded-xl transition-all duration-200 text-sm font-bold flex items-center gap-3"
+              :class="activeTab === 'news' ? 'bg-sky-50 text-sky-800 border border-sky-200 shadow-sm' : 'text-slate-600 hover:bg-slate-50 border border-transparent'"
             >
               <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
               Postar Nova Notícia
@@ -309,6 +310,8 @@ const token        = ref('')
 const username     = ref('')
 const password     = ref('')
 const loginLoading = ref(false)
+/** Dica após falha (ex.: usuário padrão do backend) */
+const loginHint    = ref('')
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
 const activeTab = ref('manage') // Default to manage
@@ -375,24 +378,44 @@ onMounted(() => {
 // ── Auth handlers ─────────────────────────────────────────────────────────────
 const login = async () => {
   loginLoading.value = true
+  loginHint.value = ''
+  const user = username.value.trim()
+  const pass = password.value.trim()
   try {
     const form = new URLSearchParams()
-    form.append('username', username.value)
-    form.append('password', password.value)
+    form.append('username', user)
+    form.append('password', pass)
 
     const res = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: form,
     })
-    if (!res.ok) throw new Error('Credenciais inválidas.')
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) {
+      let msg = 'Usuário ou senha incorretos.'
+      if (data.detail) {
+        msg = typeof data.detail === 'string' ? data.detail : 'Não foi possível autenticar. Verifique usuário e senha.'
+      }
+      loginHint.value =
+        'Confirme o usuário e a senha definidos no backend (variáveis ADMIN_USERNAME e ADMIN_PASSWORD). O padrão local costuma ser usuário "admin" e a senha do .env. Espaços extras no início/fim são removidos automaticamente.'
+      throw new Error(msg)
+    }
+    if (!data.access_token) {
+      throw new Error('Resposta inválida da API: sem token.')
+    }
     token.value = data.access_token
     localStorage.setItem('token', token.value)
-    addToast('Acesso Permitido', 'Bem-vindo ao painel administrativo.', 'success')
+    password.value = ''
+    addToast('Acesso permitido', 'Bem-vindo ao painel.', 'success')
     fetchAllNews()
   } catch (err) {
-    addToast('Falha na Autenticação', err.message, 'error')
+    const isNetwork = err instanceof TypeError && String(err.message || '').toLowerCase().includes('fetch')
+    if (isNetwork) {
+      addToast('Sem conexão', 'Não foi possível acessar a API. Verifique VITE_API_URL, se o backend está no ar e CORS.', 'error')
+    } else {
+      addToast('Falha na autenticação', err.message || 'Tente novamente.', 'error')
+    }
   } finally {
     loginLoading.value = false
   }
