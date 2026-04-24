@@ -17,11 +17,23 @@ async def lifespan(app: FastAPI):
 
     db = SessionLocal()
     try:
-        admin = db.query(models.User).filter(models.User.username == "admin").first()
-        if not admin:
-            hashed = get_password_hash(settings.ADMIN_PASSWORD)
-            db.add(models.User(username="admin", hashed_password=hashed, role="admin"))
-            db.commit()
+        # Lista de usuários com permissão de Admin (você pode adicionar quantos quiser aqui)
+        admins = [
+            {"username": "rafael_admin", "password": "Muhammadalivsroyjonesjr"},
+            # Para adicionar outro, basta descomentar e preencher a linha abaixo:
+            # {"username": "nome_do_admin", "password": "senha_do_admin"},
+        ]
+        
+        for admin_data in admins:
+            user = db.query(models.User).filter(models.User.username == admin_data["username"]).first()
+            if not user:
+                hashed = get_password_hash(admin_data["password"])
+                db.add(models.User(username=admin_data["username"], hashed_password=hashed, role="admin"))
+                db.commit()
+            else:
+                # Força a atualização da senha caso ela mude nesta lista
+                user.hashed_password = get_password_hash(admin_data["password"])
+                db.commit()
     finally:
         db.close()
 
@@ -50,6 +62,16 @@ def root():
     return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
 
 
+from sqlalchemy.sql import text
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from app.database import get_db
+
 @app.get("/ping")
-def ping():
-    return {"status": "ok", "message": "pong"}
+def ping(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("SELECT 1"))
+        return {"status": "ok", "message": "pong", "database": "connected"}
+    except Exception as e:
+        # In a real app we might log the exception `e`
+        return {"status": "error", "message": "pong", "database": "disconnected"}

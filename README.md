@@ -11,7 +11,7 @@
 
 - **Layout Split 70/30**: Grade de leitura focada (70%) com Sidebar informativa (30%) para máxima imersão.
 - **Dark/Light Mode Nativo**: Alternância de tema instantânea com persistência de preferência.
-- **SEO Dinâmico**: Integração com `@unhead/vue` para Meta Tags e OpenGraph perfeitos em cada notícia.
+- **SEO Dinâmico**: Configuração padrão de Meta Tags e OpenGraph para as notícias.
 - **Painel Admin Blindado**: Área editorial protegida por JWT para publicações em tempo real.
 - **Performance de Elite**: SPA construída com **Vue 3** e **Tailwind v4**, servida de forma ultraleve pelo Vite.
 - **Backend Zero-Config**: Baseado em **FastAPI** e **SQLite**, pronto para rodar em qualquer VPS sem Docker.
@@ -26,7 +26,6 @@
 | **Backend** | Python 3.10+, FastAPI, SQLAlchemy |
 | **Banco de Dados** | SQLite (Arquivo local `jovempano.db`) |
 | **Segurança** | JWT (JSON Web Tokens), Bcrypt Hashing |
-| **SEO** | @unhead/vue |
 
 ---
 

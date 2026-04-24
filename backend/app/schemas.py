@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import Optional
 
@@ -15,8 +15,7 @@ class NewsOut(NewsBase):
     id: int
     created_at: datetime
     
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class HeroBannerBase(BaseModel):
     title: str
@@ -32,5 +31,4 @@ class HeroBannerOut(HeroBannerBase):
     id: int
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

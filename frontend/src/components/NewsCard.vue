@@ -5,7 +5,7 @@
     :is="linkTag"
     v-bind="linkProps"
     class="hero-card group"
-    :style="{ minHeight: '460px' }"
+    :style="{ minHeight: '320px' }"
   >
     <img
       v-if="article.image_url"

@@ -15,6 +15,12 @@ def get_news(db: Session = Depends(get_db)):
     return db.query(News).order_by(News.id.desc()).all()
 
 
+@router.get("/trending", response_model=List[NewsOut])
+def get_trending_news(db: Session = Depends(get_db)):
+    # For now, simply return the 5 most recent news articles
+    return db.query(News).order_by(News.id.desc()).limit(5).all()
+
+
 @router.get("/{news_id}", response_model=NewsOut)
 def get_news_by_id(news_id: int, db: Session = Depends(get_db)):
     item = db.query(News).filter(News.id == news_id).first()

@@ -8,7 +8,7 @@
     <section>
       <!-- Loading skeletons -->
       <div v-if="heroLoading" class="grid gap-4" style="grid-template-columns: 3fr 2fr;">
-        <div class="skeleton" style="min-height: 460px;"></div>
+        <div class="skeleton" style="min-height: 320px;"></div>
         <div class="flex flex-col gap-4">
           <div class="skeleton flex-1"></div>
           <div class="skeleton flex-1"></div>
