@@ -42,8 +42,8 @@
                 border: 1px solid rgba(100,180,255,0.5);
               "
             >JP</div>
-            <h1 class="text-xl sm:text-2xl font-black tracking-tight leading-none pt-0.5">
-              <span style="color: var(--text-primary);">Jovem</span><span style="color: var(--brand);">Pano</span>
+            <h1 class="logo-aero text-xl sm:text-2xl font-black tracking-tight leading-none pt-0.5">
+              JovemPano
             </h1>
           </router-link>
         </div>
@@ -135,6 +135,7 @@ const navButtons = [
   { path: '/esportes',   label: 'Esportes',   emoji: '⚽', color: 'var(--cat-esportes)' },
   { path: '/tecnologia', label: 'Tecnologia', emoji: '💻', color: 'var(--cat-tecnologia)' },
   { path: '/mundo',      label: 'Mundo',      emoji: '🌐', color: 'var(--cat-mundo)' },
+  { path: '/positivas',  label: 'Positivas',  emoji: '🌱', color: '#73b500' },
 ]
 
 const isActive = (path) => {

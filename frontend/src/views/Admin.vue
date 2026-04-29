@@ -142,52 +142,52 @@
         </aside>
 
         <!-- Right Content Area -->
-        <main class="flex-1 bg-black/40 rounded-xl border border-white/5 p-6 lg:p-10 shadow-2xl overflow-y-auto min-h-[600px]">
+        <main class="flex-1 rounded-xl p-2 lg:p-6 overflow-y-auto min-h-[600px]">
           
           <!-- ── TAB: GERENCIAR NOTÍCIAS ── -->
-          <section v-if="activeTab === 'manage'" class="flex flex-col gap-8">
-            <div class="flex justify-between items-center border-b border-white/10 pb-6">
-              <h3 class="text-xl font-bold text-white flex items-center gap-3">
-                <svg class="w-6 h-6 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+          <section v-if="activeTab === 'manage'" class="admin-modal flex flex-col mb-8">
+            <div class="modal-header flex justify-between items-center">
+              <h3 class="text-xl flex items-center gap-3">
+                <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
                 Notícias Publicadas
               </h3>
-              <span class="text-xs font-bold px-4 py-2 bg-indigo-500/10 text-indigo-300 rounded-full border border-indigo-500/20">
+              <span class="text-xs font-bold px-3 py-1 bg-sky-100 text-sky-800 rounded-full border border-sky-200 shadow-inner">
                 {{ allNews.length }} Registros
               </span>
             </div>
 
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col p-6 gap-4">
               <div v-if="newsLoading" class="flex flex-col gap-4">
-                <div v-for="i in 3" :key="i" class="h-24 bg-white/5 rounded-lg animate-pulse"></div>
+                <div v-for="i in 3" :key="i" class="h-24 bg-white/40 rounded-lg animate-pulse"></div>
               </div>
-              <div v-else-if="allNews.length === 0" class="p-12 text-center border border-dashed border-white/10 rounded-lg text-slate-500 text-sm">
+              <div v-else-if="allNews.length === 0" class="p-12 text-center border border-dashed border-slate-300 rounded-lg text-slate-500 text-sm">
                 Nenhuma notícia encontrada no banco de dados.
               </div>
               <div
                 v-else
                 v-for="item in allNews"
                 :key="item.id"
-                class="group p-6 bg-white/5 rounded-lg border border-transparent hover:border-indigo-500/30 hover:bg-indigo-500/5 transition-all flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6"
+                class="group p-5 bg-white/60 rounded-xl border border-slate-200 hover:border-sky-300 hover:bg-white/90 shadow-sm hover:shadow-md transition-all flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6"
               >
-                <div class="flex flex-col gap-3 flex-1">
-                  <h4 class="text-white font-bold text-lg leading-snug">{{ item.title }}</h4>
-                  <div class="flex flex-wrap items-center gap-4">
-                    <span class="text-xs px-3 py-1 bg-white/10 text-white rounded uppercase tracking-wider">
+                <div class="flex flex-col gap-2 flex-1">
+                  <h4 class="text-slate-800 font-extrabold text-lg leading-snug">{{ item.title }}</h4>
+                  <div class="flex flex-wrap items-center gap-3">
+                    <span class="text-[10px] font-bold px-2 py-0.5 bg-sky-100 text-sky-800 rounded uppercase tracking-wider shadow-inner">
                       {{ (item.category || 'GERAL') }}
                     </span>
-                    <span class="text-xs text-slate-400 flex items-center gap-1.5">
+                    <span class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                       {{ new Date(item.created_at).toLocaleDateString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }}
                     </span>
                   </div>
                 </div>
                 
-                <div class="flex gap-3">
-                  <button @click="prepareEdit(item)" class="px-5 py-2.5 rounded-lg text-xs uppercase font-bold border border-indigo-500/50 text-indigo-300 hover:bg-indigo-500/10 transition-colors flex items-center gap-2">
+                <div class="flex gap-2">
+                  <button @click="prepareEdit(item)" class="px-4 py-2 rounded-lg text-xs uppercase font-bold border border-sky-300 text-sky-700 bg-sky-50 hover:bg-sky-100 shadow-sm transition-colors flex items-center gap-1.5">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     Editar
                   </button>
-                  <button @click="deleteNews(item.id)" class="px-5 py-2.5 rounded-lg text-xs uppercase font-bold border border-red-500/50 text-red-400 hover:bg-red-500/10 transition-colors flex items-center gap-2">
+                  <button @click="deleteNews(item.id)" class="px-4 py-2 rounded-lg text-xs uppercase font-bold border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 shadow-sm transition-colors flex items-center gap-1.5">
                     <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     Excluir
                   </button>
@@ -197,38 +197,40 @@
           </section>
 
           <!-- ── TAB: POSTAR NOTÍCIA ── -->
-          <section v-if="activeTab === 'news'" class="flex flex-col gap-8">
-            <div class="flex justify-between items-center border-b border-white/10 pb-6">
-              <h3 class="text-xl font-bold text-white flex items-center gap-3">
-                <svg class="w-6 h-6 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          <section v-if="activeTab === 'news'" class="admin-modal flex flex-col mb-8">
+            <div class="modal-header flex justify-between items-center">
+              <h3 class="text-xl flex items-center gap-3">
+                <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 {{ isEditing ? 'Editar Notícia' : 'Publicar Nova Notícia' }}
               </h3>
-              <button v-if="isEditing" @click="resetForm" class="text-xs font-bold uppercase text-slate-400 hover:text-white transition-colors">
+              <button v-if="isEditing" @click="resetForm" class="text-xs font-bold uppercase text-slate-500 hover:text-slate-800 transition-colors">
                 Cancelar Edição
               </button>
             </div>
 
-            <form @submit.prevent="createNews" class="flex flex-col gap-6 max-w-4xl">
+            <form @submit.prevent="createNews" class="flex flex-col gap-5 p-6">
               
-              <div class="flex flex-col gap-2">
-                <label class="text-sm font-bold text-slate-300">Título da Notícia*</label>
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-bold text-slate-700">Título da Notícia*</label>
                 <input
                   v-model="newsForm.title"
                   type="text"
                   required
                   placeholder="Digite o título principal..."
-                  class="w-full px-5 py-4 text-base bg-black/50 border border-white/10 rounded-lg focus:border-indigo-500 outline-none transition-all text-white"
+                  class="aero-input w-full"
                 />
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex flex-col gap-2">
-                  <label class="text-sm font-bold text-slate-300">URL da Imagem de Capa</label>
-                  <input v-model="newsForm.image_url" type="url" placeholder="https://exemplo.com/imagem.jpg" class="w-full px-5 py-4 text-base bg-black/50 border border-white/10 rounded-lg focus:border-indigo-500 outline-none transition-all text-white" />
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-sm font-bold text-slate-700">Imagem de Capa (URL ou Arquivo)</label>
+                  <input v-model="newsForm.image_url" :disabled="uploadingNewsImage" type="url" placeholder="https://exemplo.com/imagem.jpg" class="aero-input w-full mb-2 disabled:opacity-50" />
+                  <!-- Upload preparado para o próximo passo -->
+                  <input @change="uploadImage($event, 'news')" :disabled="uploadingNewsImage" type="file" accept="image/*" class="text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 transition-colors cursor-pointer disabled:opacity-50" />
                 </div>
-                <div class="flex flex-col gap-2">
-                  <label class="text-sm font-bold text-slate-300">Categoria*</label>
-                  <select v-model="newsForm.category" required class="w-full px-5 py-4 text-base bg-black/50 border border-white/10 rounded-lg focus:border-indigo-500 outline-none transition-all text-white appearance-none">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-sm font-bold text-slate-700">Categoria*</label>
+                  <select v-model="newsForm.category" required class="aero-input w-full cursor-pointer">
                     <option value="Geral">Geral</option>
                     <option value="Política">Política</option>
                     <option value="Economia">Economia</option>
@@ -240,13 +242,13 @@
                 </div>
               </div>
 
-              <div class="flex flex-col gap-2">
-                <label class="text-sm font-bold text-slate-300">Conteúdo*</label>
-                <div id="editor-container" class="bg-black/50 border border-white/10 rounded-lg overflow-hidden custom-quill-theme" style="min-height: 400px; color: white;"></div>
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-bold text-slate-700">Conteúdo*</label>
+                <div id="editor-container" class="bg-white border border-slate-300 rounded-lg overflow-hidden" style="min-height: 400px; color: #333;"></div>
               </div>
 
-              <div class="pt-6 border-t border-white/10 mt-2">
-                <button type="submit" :disabled="newsPosting" class="font-bold py-4 px-10 rounded-lg text-sm uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 w-full md:w-auto">
+              <div class="pt-4 mt-2 border-t border-slate-200 flex justify-end">
+                <button type="submit" :disabled="newsPosting" class="aero-button-save w-full md:w-auto flex items-center justify-center gap-2">
                   <svg v-if="newsPosting" class="animate-spin h-5 w-5 text-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                   <svg v-else class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                   {{ newsPosting ? 'SALVANDO...' : (isEditing ? 'SALVAR ALTERAÇÕES' : 'PUBLICAR NOTÍCIA') }}
@@ -256,30 +258,33 @@
           </section>
 
           <!-- ── TAB: BANNERS ── -->
-          <section v-if="activeTab === 'banners'" class="flex flex-col gap-8">
-             <div class="flex justify-between items-center border-b border-white/10 pb-6">
-              <h3 class="text-xl font-bold text-white flex items-center gap-3">
-                <svg class="w-6 h-6 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          <section v-if="activeTab === 'banners'" class="admin-modal flex flex-col mb-8">
+             <div class="modal-header flex justify-between items-center">
+              <h3 class="text-xl flex items-center gap-3">
+                <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 Adicionar Novo Banner
               </h3>
             </div>
             
-            <form @submit.prevent="createBanner" class="flex flex-col gap-6 max-w-4xl bg-white/5 p-8 rounded-xl border border-white/10">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex flex-col gap-2">
-                  <label class="text-sm font-bold text-slate-300">Título do Banner*</label>
-                  <input v-model="bannerForm.title" type="text" required class="w-full px-5 py-4 text-base bg-black/50 border border-white/10 rounded-lg focus:border-indigo-500 outline-none transition-all text-white" />
+            <form @submit.prevent="createBanner" class="flex flex-col gap-5 p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-sm font-bold text-slate-700">Título do Banner*</label>
+                  <input v-model="bannerForm.title" type="text" required class="aero-input w-full" />
                 </div>
-                <div class="flex flex-col gap-2">
-                  <label class="text-sm font-bold text-slate-300">URL da Imagem*</label>
-                  <input v-model="bannerForm.image_url" type="url" required class="w-full px-5 py-4 text-base bg-black/50 border border-white/10 rounded-lg focus:border-indigo-500 outline-none transition-all text-white" />
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-sm font-bold text-slate-700">Imagem (URL ou Arquivo)*</label>
+                  <input v-model="bannerForm.image_url" :disabled="uploadingBannerImage" type="url" required class="aero-input w-full mb-2 disabled:opacity-50" />
+                  <input @change="uploadImage($event, 'banner')" :disabled="uploadingBannerImage" type="file" accept="image/*" class="text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 transition-colors cursor-pointer disabled:opacity-50" />
                 </div>
               </div>
-              <button type="submit" :disabled="bannerPosting" class="self-start font-bold py-4 px-10 rounded-lg text-sm uppercase tracking-widest bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 flex items-center gap-3">
-                <svg v-if="bannerPosting" class="animate-spin h-5 w-5 text-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                <svg v-else class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                {{ bannerPosting ? 'ENVIANDO...' : 'CADASTRAR BANNER' }}
-              </button>
+              <div class="pt-4 mt-2 border-t border-slate-200 flex justify-end">
+                <button type="submit" :disabled="bannerPosting" class="aero-button-save w-full md:w-auto flex items-center justify-center gap-2">
+                  <svg v-if="bannerPosting" class="animate-spin h-5 w-5 text-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                  <svg v-else class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                  {{ bannerPosting ? 'ENVIANDO...' : 'CADASTRAR BANNER' }}
+                </button>
+              </div>
             </form>
           </section>
 
@@ -325,9 +330,50 @@ const editingId  = ref(null)
 // ── Forms ─────────────────────────────────────────────────────────────────────
 const newsForm    = ref({ title: '', content: '', image_url: '', category: 'Geral' })
 const newsPosting = ref(false)
+const uploadingNewsImage = ref(false)
 
 const bannerForm    = ref({ title: '', subtitle: '', image_url: '', link_url: '', is_active: true })
 const bannerPosting = ref(false)
+const uploadingBannerImage = ref(false)
+
+// ── Upload ────────────────────────────────────────────────────────────────────
+const uploadImage = async (event, formType) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  if (formType === 'news') uploadingNewsImage.value = true
+  else uploadingBannerImage.value = true
+
+  const formData = new FormData()
+  formData.append('file', file)
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/upload/`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token.value}` },
+      body: formData,
+    })
+
+    const data = await res.json()
+    if (res.status === 401) { handleUnauthorized(); return }
+    if (!res.ok) throw new Error(data.detail || 'Falha no upload.')
+
+    if (formType === 'news') {
+      newsForm.value.image_url = data.secure_url
+      addToast('Upload Sucesso', 'Imagem de notícia anexada.', 'success')
+    } else {
+      bannerForm.value.image_url = data.secure_url
+      addToast('Upload Sucesso', 'Imagem de banner anexada.', 'success')
+    }
+  } catch (err) {
+    addToast('Erro no Upload', err.message, 'error')
+    // Limpar o input file
+    event.target.value = ''
+  } finally {
+    if (formType === 'news') uploadingNewsImage.value = false
+    else uploadingBannerImage.value = false
+  }
+}
 
 // ── Quill editor ──────────────────────────────────────────────────────────────
 let quill = null
@@ -558,29 +604,27 @@ const createBanner = async () => {
   transform: translateX(100%) scale(0.9);
 }
 
-/* Custom Dark Theme for Quill Editor */
 .custom-quill-theme .ql-toolbar {
-  background: rgba(255, 255, 255, 0.05);
-  border: none !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: #f8fafc;
+  border-bottom: 1px solid #cbd5e1 !important;
   padding: 12px;
 }
 .custom-quill-theme .ql-toolbar button {
-  color: #a1a1aa;
+  color: #475569;
   border-radius: 4px;
   transition: all 0.2s;
 }
 .custom-quill-theme .ql-toolbar button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #e2e8f0;
 }
 .custom-quill-theme .ql-toolbar .ql-stroke {
-  stroke: #a1a1aa !important;
+  stroke: #475569 !important;
 }
 .custom-quill-theme .ql-toolbar .ql-fill {
-  fill: #a1a1aa !important;
+  fill: #475569 !important;
 }
 .custom-quill-theme .ql-toolbar .ql-picker {
-  color: #a1a1aa;
+  color: #475569;
 }
 .custom-quill-theme .ql-container {
   border: none !important;
@@ -591,7 +635,65 @@ const createBanner = async () => {
   padding: 24px;
 }
 .custom-quill-theme .ql-editor.ql-blank::before {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(0, 0, 0, 0.4);
   font-style: normal;
+}
+
+/* Glass Dashboard CSS */
+.admin-modal {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+/* O brilho característico no topo do modal */
+.modal-header {
+  background: linear-gradient(
+    to bottom, 
+    rgba(255, 255, 255, 0.8) 0%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    transparent 100%
+  );
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+  color: #005a9e; /* Azul clássico Windows */
+}
+
+/* Inputs Skeuomórficos */
+.aero-input {
+  background: white;
+  border: 1px solid #a0a0a0;
+  border-radius: 5px;
+  padding: 10px 14px;
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+  transition: border-color 0.3s;
+  color: #333;
+}
+
+.aero-input:focus {
+  border-color: #0078d7;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 120, 215, 0.5), inset 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.aero-button-save {
+  background: linear-gradient(to bottom, #4fc3f7, #0288d1);
+  color: white;
+  border: 1px solid #01579b;
+  border-radius: 20px;
+  padding: 10px 24px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.aero-button-save:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 </style>

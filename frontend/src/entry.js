@@ -80,6 +80,15 @@ const router = createRouter({
         title: 'Mundo — JovemPano',
         description: 'Notícias internacionais e os fatos mais relevantes do mundo em tempo real.',
       }
+    },
+    {
+      path: '/positivas',
+      component: CategoryView,
+      props: { category: 'Boas Notícias', slug: 'positivas', emoji: '🌱' },
+      meta: {
+        title: 'Boas Notícias — JovemPano',
+        description: 'Notícias positivas e de impacto social filtradas para você.',
+      }
     }
   ]
 })

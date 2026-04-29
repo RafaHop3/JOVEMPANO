@@ -3,7 +3,7 @@
     :href="article.link"
     target="_blank"
     rel="noopener noreferrer"
-    class="feed-card group"
+    :class="['feed-card', 'group', article.is_positive ? 'positive-highlight' : '']"
   >
     <!-- Image -->
     <div class="overflow-hidden" style="height: 160px; background: var(--bg-surface);">
@@ -34,6 +34,9 @@
       </div>
 
       <!-- Title -->
+      <div v-if="article.is_positive" class="aero-badge">
+        🌱 Social Interest
+      </div>
       <h3 class="text-sm font-bold leading-snug line-clamp-3 text-slate-800 group-hover:text-sky-800 transition-colors duration-200">
         {{ article.title }}
       </h3>
@@ -77,3 +80,24 @@ const formatDate = (d) => {
   } catch { return '' }
 }
 </script>
+
+<style scoped>
+.aero-badge {
+  background: linear-gradient(180deg, #b7e500 0%, #73b500 100%);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.8);
+  display: inline-block;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.positive-highlight {
+  border: 2px solid rgba(183, 229, 0, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(183, 229, 0, 0.15) !important;
+}
+</style>

@@ -107,6 +107,10 @@ def extract_image(entry) -> str | None:
     return None
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def fetch_feed(url: str) -> object | None:
     """Fetch and parse an RSS feed, with simple in-memory cache."""
     now = time.time()
@@ -126,7 +130,7 @@ def fetch_feed(url: str) -> object | None:
         _cache[url] = (now, feed)
         return feed
     except Exception as exc:
-        print(f"[feeds] Error fetching {url}: {exc}")
+        logger.error(f"[feeds] Error fetching {url}: {exc}")
         # Return stale cache if available
         if url in _cache:
             return _cache[url][1]
@@ -140,6 +144,18 @@ def get_sort_key(entry):
         return time.mktime(parsed)
     return 0
 
+# Lista de termos para o "Social Interest"
+POSITIVE_KEYWORDS = [
+    "sustentabilidade", "avanço", "descoberta", "cura", "solidariedade", 
+    "educação", "tecnologia", "meio ambiente", "direitos", "inclusão",
+    "voluntariado", "recuperação", "crescimento", "ciência", "positivo",
+    "esperança", "inovação"
+]
+
+def is_social_interest(title: str, summary: str) -> bool:
+    text = (title + " " + summary).lower()
+    return any(key in text for key in POSITIVE_KEYWORDS)
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Routes
@@ -148,8 +164,14 @@ def get_sort_key(entry):
 def get_category_feed(category: str, limit: int = 15):
     """Return parsed RSS articles for the given category slug, merged from multiple sources."""
     key = category.lower()
-    urls = FEED_SOURCES.get(key, FEED_SOURCES["geral"])
-    cat_display = CATEGORY_LABELS.get(key, "Geral")
+    is_positive = key in ["positive", "positivas"]
+    
+    if is_positive:
+        urls = FEED_SOURCES["geral"]
+        cat_display = "Boas Notícias"
+    else:
+        urls = FEED_SOURCES.get(key, FEED_SOURCES["geral"])
+        cat_display = CATEGORY_LABELS.get(key, "Geral")
 
     # Fetch feeds concurrently
     feeds_data = []
@@ -197,18 +219,25 @@ def get_category_feed(category: str, limit: int = 15):
         if not title or title in seen_titles:
             continue
             
+        summary_clean = clean_html(entry.get("summary", ""))
+        
+        # Apply Social Interest filter if category is positive
+        if is_positive and not is_social_interest(title, summary_clean):
+            continue
+            
         seen_titles.add(title)
 
         articles.append(
             {
                 "id": entry.get("id") or entry.get("link", ""),
                 "title": title,
-                "summary": clean_html(entry.get("summary", "")),
+                "summary": summary_clean,
                 "image_url": extract_image(entry),
                 "link": entry.get("link", ""),
                 "published_at": entry.get("published") or entry.get("updated", ""),
                 "source": entry.get("_custom_source", "Notícias"),
                 "category": cat_display,
+                "is_positive": is_positive, # Flag for frontend styling
             }
         )
 

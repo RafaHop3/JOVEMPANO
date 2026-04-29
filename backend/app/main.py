@@ -5,7 +5,7 @@ from app.core.config import settings
 from app.database import engine, Base, SessionLocal
 from app import models
 from app.core.security import get_password_hash
-from app.routers import auth, news, feeds
+from app.routers import auth, news, feeds, upload
 from app.routers.news import banner_router
 
 
@@ -73,6 +73,7 @@ app.include_router(auth.router)
 app.include_router(news.router)
 app.include_router(banner_router)
 app.include_router(feeds.router)
+app.include_router(upload.router, prefix="/admin/upload", tags=["upload"])
 
 
 @app.get("/")

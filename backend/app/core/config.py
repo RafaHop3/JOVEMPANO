@@ -16,6 +16,7 @@ class Settings(BaseSettings):
         "true",
         "yes",
     )
+    CLOUDINARY_URL: str = os.getenv("CLOUDINARY_URL", "")
 
     # Base origins
     CORS_ORIGINS: list[str] = [
