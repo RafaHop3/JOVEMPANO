@@ -10,5 +10,5 @@ bcrypt<=4.0.1
 feedparser
 beautifulsoup4
 requests
-python-magic-bin
+python-magic
 cloudinary==1.36.0
