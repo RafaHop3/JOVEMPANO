@@ -66,15 +66,11 @@ html {
 }
 
 body {
-  /* Frutiger Aero sky gradient background */
-  background-color: var(--bg-base);
-  background-image:
-    radial-gradient(ellipse at 15% 0%, rgba(180, 230, 255, 0.9) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 5%, rgba(140, 210, 255, 0.7) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, rgba(160, 230, 130, 0.3) 0%, transparent 45%),
-    linear-gradient(180deg, #b0dcff 0%, #c8e8ff 30%, #d8f0ff 65%, #e8f8ff 100%);
+  /* Gradiente linear suave que remete a céu/água */
+  background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 50%, #81d4fa 100%);
+  background-attachment: fixed;
   color: var(--text-primary);
-  font-family: 'Nunito', 'Segoe UI', 'Trebuchet MS', system-ui, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
@@ -250,27 +246,51 @@ a { color: inherit; text-decoration: none; }
 
 /* Standard News Card — Aero Glossy Glass */
 .news-card {
-  position: relative;
-  background: var(--aero-glass);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  overflow: hidden;
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-  box-shadow:
-    0 2px 0 rgba(255,255,255,0.90) inset,
-    0 8px 28px rgba(30, 100, 200, 0.10),
-    0 1px 4px rgba(0, 60, 150, 0.06);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.8), 
+              0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .news-card:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-hover);
-  transform: translateY(-4px) scale(1.005);
-  box-shadow:
-    0 2px 0 rgba(255,255,255,1) inset,
-    0 16px 48px rgba(30, 100, 220, 0.18),
-    0 2px 8px rgba(0, 60, 180, 0.10);
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 12px 40px rgba(0, 120, 215, 0.2);
+}
+
+@keyframes shine {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.logo-aero {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(to bottom, #0078d7 0%, #00aaff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  filter: drop-shadow(2px 2px 2px rgba(255,255,255,0.5));
+}
+
+.logo-aero::after {
+  content: "JovemPano";
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.8) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  animation: shine 4s infinite;
 }
 
 /* Hero Card */

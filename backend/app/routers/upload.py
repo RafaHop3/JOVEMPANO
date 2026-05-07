@@ -4,7 +4,7 @@ import cloudinary.uploader
 import logging
 from app.core.config import settings
 from app.utils.security import validate_image_upload
-from app.routers.auth import get_current_user
+from app.core.security import get_current_user
 
 # O SDK do Cloudinary já configura automaticamente se a env CLOUDINARY_URL existir
 cloudinary.config(secure=True)

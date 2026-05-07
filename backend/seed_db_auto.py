@@ -1,7 +1,6 @@
 import os
 import sys
 from sqlalchemy.orm import Session
-from sqlalchemy import create_all
 
 # Adiciona o diretório atual ao path para importar a app
 sys.path.append(os.getcwd())
