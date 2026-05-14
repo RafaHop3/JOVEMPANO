@@ -249,13 +249,18 @@ def get_category_feed(category: str, limit: int = 15, page: int = 1):
         summary_clean = clean_html(entry.get("summary", ""))
         if is_positive and not is_social_interest(title, summary_clean):
             continue
+        
+        # Filtro de Imagem: Pula a notícia se não houver imagem
+        image_url = extract_image(entry)
+        if not image_url:
+            continue
             
         seen_titles.add(title)
         articles.append({
             "id": entry.get("id") or entry.get("link", ""),
             "title": title,
             "summary": summary_clean,
-            "image_url": extract_image(entry),
+            "image_url": image_url,
             "link": entry.get("link", ""),
             "published_at": entry.get("published") or entry.get("updated", ""),
             "source": entry.get("_custom_source", "Notícias"),
