@@ -12,3 +12,4 @@ beautifulsoup4
 requests
 python-magic
 cloudinary==1.36.0
+psycopg2-binary
