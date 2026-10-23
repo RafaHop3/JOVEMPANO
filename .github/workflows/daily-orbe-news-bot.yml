@@ -1,0 +1,35 @@
+name: Daily Orbe Systems Tech News Bot
+
+on:
+  schedule:
+    # Roda diariamente às 12:00 UTC (09:00 BRT)
+    - cron: '0 12 * * *'
+  workflow_dispatch: # Permite disparo manual
+
+jobs:
+  post-orbe-news:
+    name: Run Orbe Systems Tech Radar Bot
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Daily Tech News Bot
+        working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          python -m app.orbe_news_bot --force

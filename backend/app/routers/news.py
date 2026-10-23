@@ -17,7 +17,7 @@ def get_news(db: Session = Depends(get_db)):
 
 @router.get("/trending", response_model=List[NewsOut])
 def get_trending_news(db: Session = Depends(get_db)):
-    # For now, simply return the 5 most recent news articles
+    # Retorna as 5 notícias mais recentes
     return db.query(News).order_by(News.id.desc()).limit(5).all()
 
 
@@ -81,6 +81,13 @@ def delete_news(
     db.commit()
 
 
+@router.post("/bot/daily-post")
+def trigger_daily_orbe_bot(db: Session = Depends(get_db)):
+    """Aciona a publicação diária automatizada de novidades tecnológicas da Orbe Systems."""
+    from app.orbe_news_bot import post_daily_orbe_news
+    return post_daily_orbe_news(db, force=False)
+
+
 # ── Hero Banners ──────────────────────────────────────────────────────────────
 banner_router = APIRouter(prefix="/banners", tags=["Banners"])
 
@@ -96,7 +103,7 @@ def create_banner(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_banner = HeroBanner(**banner.model_dump())  # Fixed: .dict() is deprecated in Pydantic v2
+    db_banner = HeroBanner(**banner.model_dump())
     db.add(db_banner)
     db.commit()
     db.refresh(db_banner)

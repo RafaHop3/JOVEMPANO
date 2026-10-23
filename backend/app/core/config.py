@@ -2,7 +2,7 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "JovemPano Minimal"
+    PROJECT_NAME: str = "Orbe News — JovemPano"
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./jovempano.db")
     SECRET_KEY: str = os.getenv("SECRET_KEY", "minimal-secret-key-change-later")
     ALGORITHM: str = "HS256"
@@ -17,14 +17,19 @@ class Settings(BaseSettings):
         "yes",
     )
     CLOUDINARY_URL: str = os.getenv("CLOUDINARY_URL", "")
-    FRONTEND_URL: str = "" # Adicionado para evitar erro de 'extra inputs'
+    FRONTEND_URL: str = ""
 
-    # Base origins
+    # Base origins incluindo domínios oficiais orbesystems.com.br
     CORS_ORIGINS: list[str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:5174",
         "http://localhost:5175",
+        "https://news.orbesystems.com.br",
+        "https://jovempano.orbesystems.com.br",
+        "https://orbesystems.com.br",
+        "https://www.orbesystems.com.br",
+        "https://inho.orbesystems.com.br",
         "https://jovempano.vercel.app",
         "https://jovempanonews.vercel.app",
         "https://frontend-lac-rho-43.vercel.app",
@@ -33,12 +38,10 @@ class Settings(BaseSettings):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Permite adicionar origens extras via ENV
         extra = os.getenv("EXTRA_CORS_ORIGINS", "")
         if extra:
             self.CORS_ORIGINS.extend([o.strip() for o in extra.split(",") if o.strip()])
         
-        # Garante que a URL do frontend esteja presente
         front = os.getenv("FRONTEND_URL", "")
         if front and front not in self.CORS_ORIGINS:
             self.CORS_ORIGINS.append(front)

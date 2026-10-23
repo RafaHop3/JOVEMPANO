@@ -16,89 +16,89 @@ const router = createRouter({
       path: '/',
       component: Home,
       meta: {
-        title: 'JovemPano — Início',
-        description: 'Últimas notícias em tempo real sobre política, economia, esportes, tecnologia e mundo.',
+        title: 'Orbe News — JovemPano | Central de Notícias Orbe Systems',
+        description: 'Últimas notícias e radar tecnológico em tempo real sobre política, economia, esportes, tecnologia e mundo.',
       }
     },
     {
       path: '/admin',
       component: Admin,
       meta: {
-        title: 'Painel Editorial — JovemPano',
-        description: 'Área administrativa para publicação e curadoria de notícias do JovemPano.',
+        title: 'Terminal Editorial — Orbe Systems News',
+        description: 'Área administrativa para publicação e curadoria de notícias do ecossistema Orbe Systems.',
       }
     },
     {
       path: '/news/:id',
       component: NewsDetail,
       meta: {
-        title: 'Lendo Notícia — JovemPano',
-        description: 'Leia a notícia completa com atualização em tempo real no portal JovemPano.',
+        title: 'Radar Editorial — Orbe Systems News',
+        description: 'Leia a notícia completa com atualização em tempo real no portal Orbe News.',
       }
     },
     {
       path: '/politica',
       component: CategoryView,
-      props: { category: 'Politica', slug: 'politica', emoji: '🏛️' },
+      props: { category: 'Política', slug: 'politica', voidShape: 'shield', catColor: '#f43f5e' },
       meta: {
-        title: 'Política — JovemPano',
+        title: 'Política — Orbe News',
         description: 'Cobertura de política com atualização contínua e curadoria editorial.',
       }
     },
     {
       path: '/economia',
       component: CategoryView,
-      props: { category: 'Economia', slug: 'economia', emoji: '📈' },
+      props: { category: 'Economia', slug: 'economia', voidShape: 'pix-dre', catColor: '#10b981' },
       meta: {
-        title: 'Economia — JovemPano',
-        description: 'Notícias de economia, mercado e finanças com atualização em tempo real.',
+        title: 'Economia & Negócios — Orbe News',
+        description: 'Notícias de economia, mercado, INHO Business e finanças em tempo real.',
       }
     },
     {
       path: '/esportes',
       component: CategoryView,
-      props: { category: 'Esportes', slug: 'esportes', emoji: '⚽' },
+      props: { category: 'Esportes', slug: 'esportes', voidShape: 'daw', catColor: '#f59e0b' },
       meta: {
-        title: 'Esportes — JovemPano',
+        title: 'Esportes — Orbe News',
         description: 'Acompanhe os principais destaques esportivos nacionais e internacionais.',
       }
     },
     {
       path: '/tecnologia',
       component: CategoryView,
-      props: { category: 'Tecnologia', slug: 'tecnologia', emoji: '💻' },
+      props: { category: 'Tecnologia', slug: 'tecnologia', voidShape: 'nvme', catColor: '#00fff5' },
       meta: {
-        title: 'Tecnologia — JovemPano',
-        description: 'Atualizações sobre tecnologia, inovação, IA e tendências digitais.',
+        title: 'Tecnologia & Orbe Systems — Orbe News',
+        description: 'Inovações em cibersegurança, Voids 3D WebGL, IA, INHO Business e arquitetura de software.',
       }
     },
     {
       path: '/mundo',
       component: CategoryView,
-      props: { category: 'Mundo', slug: 'mundo', emoji: '🌐' },
+      props: { category: 'Mundo', slug: 'mundo', voidShape: 'globe', catColor: '#3b82f6' },
       meta: {
-        title: 'Mundo — JovemPano',
-        description: 'Notícias internacionais e os fatos mais relevantes do mundo em tempo real.',
+        title: 'Mundo — Orbe News',
+        description: 'Notícias internacionais e os fatos mais relevantes do planeta em tempo real.',
       }
     },
     {
       path: '/positivas',
       component: CategoryView,
-      props: { category: 'Boas Notícias', slug: 'positivas', emoji: '🌱' },
+      props: { category: 'Boas Notícias', slug: 'positivas', voidShape: 'positive', catColor: '#10b981' },
       meta: {
-        title: 'Boas Notícias — JovemPano',
-        description: 'Notícias positivas e de impacto social filtradas para você.',
+        title: 'Boas Notícias — Orbe News',
+        description: 'Notícias positivas e de impacto social filtradas pelo algoritmo de curadoria.',
       }
     }
   ]
 })
 
 router.afterEach((to) => {
-  const baseTitle = 'JovemPano — Portal de Notícias'
-  const baseDescription = 'Portal de notícias em tempo real com curadoria editorial.'
+  const baseTitle = 'Orbe News — JovemPano | Central de Notícias Orbe Systems'
+  const baseDescription = 'Portal oficial de notícias em tempo real e radar de inovação tecnológica do ecossistema Orbe Systems.'
   const title = to.meta.title || baseTitle
   const description = to.meta.description || baseDescription
-  const canonical = `${window.location.origin}${to.fullPath}`
+  const canonical = `https://news.orbesystems.com.br${to.fullPath}`
 
   document.title = title
 
@@ -132,8 +132,6 @@ router.afterEach((to) => {
 
 const app = createApp(App)
 app.use(router)
-
-// Mount directly for maximum stability
 app.mount('#app')
 
-console.log('[JovemPano] Boot sequence completed with static imports and SEO title management.')
+console.log('[Orbe News] Boot sequence completed with Cyber Terminal identity and Void engine.')

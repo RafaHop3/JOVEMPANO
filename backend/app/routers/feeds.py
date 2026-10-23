@@ -98,55 +98,47 @@ def extract_image(entry) -> str | None:
     thumb = getattr(entry, "media_thumbnail", None)
     if thumb and isinstance(thumb, list) and thumb[0].get("url"):
         return thumb[0]["url"]
-    enc = getattr(entry, "enclosures", None)
-    if enc and enc[0].get("href"):
-        if "image" in enc[0].get("type", "") or enc[0]["href"].endswith((".jpg", ".png", ".webp")):
-            return enc[0]["href"]
-    content = getattr(entry, "content", None)
-    if content and isinstance(content, list) and content[0].get("value"):
-        soup = BeautifulSoup(content[0]["value"], "html.parser")
-        img = soup.find("img")
-        if img and img.get("src"):
-            return img["src"]
-    summary = entry.get("summary", "")
-    if "<img" in summary:
-        soup = BeautifulSoup(summary, "html.parser")
-        img = soup.find("img")
-        if img and img.get("src"):
-            return img["src"]
+    enclosures = getattr(entry, "enclosures", None)
+    if enclosures and isinstance(enclosures, list) and enclosures[0].get("href"):
+        return enclosures[0]["href"]
+    # Look for <img> tags in summary or content
+    for field in ("summary", "content"):
+        val = getattr(entry, field, "")
+        if isinstance(val, list) and val:
+            val = val[0].get("value", "")
+        if isinstance(val, str) and "<img" in val:
+            soup = BeautifulSoup(val, "html.parser")
+            tag = soup.find("img")
+            if tag and tag.get("src"):
+                return tag["src"]
     return None
 
 
-import logging
-logger = logging.getLogger(__name__)
-
-def fetch_feed(url: str) -> object | None:
-    """Fetch and parse an RSS feed, with simple in-memory cache."""
+def fetch_single_feed(url: str):
+    """Fetch and parse one feed with in-memory caching."""
     now = time.time()
     if url in _cache:
-        cached_ts, cached_feed = _cache[url]
-        if now - cached_ts < CACHE_TTL:
-            return cached_feed
+        ts, data = _cache[url]
+        if now - ts < CACHE_TTL:
+            return data
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/122.0.0.0 Safari/537.36 (JovemPano/2.1 RSS Reader)"
+        ),
+        "Accept": "application/rss+xml, application/xml, text/xml, */*",
+    }
 
     try:
-        response = requests.get(
-            url,
-            timeout=10,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                "Accept": "application/rss+xml, application/xml;q=0.9, */*;q=0.8"
-            },
-        )
-        response.raise_for_status()
-        feed = feedparser.parse(response.content)
-        if not feed.entries:
-             logger.warning(f"[feeds] No entries found for {url}")
-        _cache[url] = (now, feed)
-        return feed
+        resp = requests.get(url, headers=headers, timeout=6)
+        resp.raise_for_status()
+        parsed = feedparser.parse(resp.content)
+        _cache[url] = (now, parsed)
+        return parsed
     except Exception as exc:
-        logger.error(f"[feeds] Error fetching {url}: {str(exc)}")
-        if url in _cache:
-            return _cache[url][1]
+        print(f"[Feeds] Error fetching {url}: {exc}")
         return None
 
 def get_sort_key(entry):
@@ -188,45 +180,33 @@ def get_category_feed(category: str, limit: int = 15, page: int = 1):
 
     # Fetch feeds concurrently
     feeds_data = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
-        future_to_url = {executor.submit(fetch_feed, url): url for url in urls}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(len(urls), 6)) as executor:
+        future_to_url = {executor.submit(fetch_single_feed, u): u for u in urls}
         for future in concurrent.futures.as_completed(future_to_url):
-            feed = future.result()
-            if feed and hasattr(feed, "entries"):
-                feeds_data.append(feed)
+            data = future.result()
+            if data:
+                feeds_data.append(data)
 
-    if not feeds_data:
-        return JSONResponse(content=[], headers={"Cache-Control": "public, max-age=60"})
-
-    # 1. Group entries by source
-    entries_by_source: dict[str, list] = {}
+    # 1. Group valid entries by their source/feed title
+    entries_by_source = {}
     for feed in feeds_data:
-        source_title = getattr(feed.feed, "title", "Notícias")
-        if "G1" in source_title: source_title = "G1"
-        elif "CNN" in source_title: source_title = "CNN Brasil"
-        elif "UOL" in source_title: source_title = "UOL"
-        elif "BBC" in source_title: source_title = "BBC News"
-        elif "InfoMoney" in source_title: source_title = "InfoMoney"
-        elif "Olhar Digital" in source_title: source_title = "Olhar Digital"
-        elif "Folha" in source_title: source_title = "Folha de S.Paulo"
-        elif "Poder360" in source_title: source_title = "Poder360"
-        elif "Estadão" in source_title: source_title = "Estadão"
-        elif "Valor" in source_title: source_title = "Valor Econômico"
-        elif "R7" in source_title: source_title = "R7 Notícias"
-        elif "Gizmodo" in source_title: source_title = "Gizmodo"
-        elif "Canaltech" in source_title: source_title = "Canaltech"
-        elif "Gazeta" in source_title: source_title = "Gazeta Esportiva"
+        source_title = clean_html(feed.feed.get("title", "Fonte Externa"))
+        if not source_title or source_title == "Fonte Externa":
+            source_title = "Notícias"
+            
+        entries = getattr(feed, "entries", [])
+        if entries:
+            # Sort entries within the same feed by date
+            entries.sort(key=get_sort_key, reverse=True)
+            for e in entries:
+                e["_custom_source"] = source_title
+            entries_by_source[source_title] = entries
 
-        source_entries = sorted(feed.entries[:30], key=get_sort_key, reverse=True)
-        for e in source_entries:
-            e["_custom_source"] = source_title
-        entries_by_source[source_title] = source_entries
-
-    # 2. Interleaving Algorithm (The Balance Engine)
+    # 2. Interleave: Take 1st from each, then 2nd from each, etc.
     balanced_entries = []
-    max_per_source = 40
-    sources_list = sorted(list(entries_by_source.keys()))
-    
+    sources_list = list(entries_by_source.keys())
+    max_per_source = max([len(el) for el in entries_by_source.values()]) if entries_by_source else 0
+
     for i in range(max_per_source):
         batch = []
         for s in sources_list:
@@ -267,6 +247,30 @@ def get_category_feed(category: str, limit: int = 15, page: int = 1):
             "category": cat_display,
             "is_positive": is_positive,
         })
+
+    # Injeção das novidades da Orbe Systems no topo da categoria Tecnologia
+    if key == "tecnologia" and page == 1:
+        try:
+            from app.database import SessionLocal
+            from app.models import News
+            with SessionLocal() as db_session:
+                orbe_news = db_session.query(News).filter(News.category.ilike("%tecnologia%")).order_by(News.id.desc()).limit(3).all()
+                orbe_articles = []
+                for on in orbe_news:
+                    orbe_articles.append({
+                        "id": f"orbe-{on.id}",
+                        "title": f"[ORBE SYSTEMS] {on.title}",
+                        "summary": clean_html(on.content)[:280],
+                        "image_url": on.image_url or "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
+                        "link": f"/news/{on.id}",
+                        "published_at": on.created_at.isoformat() if on.created_at else "",
+                        "source": "Orbe Systems Tech Radar",
+                        "category": "Tecnologia",
+                        "is_positive": False,
+                    })
+                articles = orbe_articles + articles
+        except Exception as e:
+            print(f"[Feeds] Erro ao injetar noticias Orbe Systems: {e}")
 
     # Pagination slice
     start_idx = (page - 1) * limit

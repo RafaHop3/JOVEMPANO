@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "quill": "^2.0.2",
+    "three": "^0.186.1",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
   }

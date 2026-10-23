@@ -6,7 +6,7 @@
     :class="['feed-card', 'group', article.is_positive ? 'positive-highlight' : '']"
   >
     <!-- Image -->
-    <div class="overflow-hidden" style="height: 160px; background: var(--bg-surface);">
+    <div class="overflow-hidden relative" style="height: 160px; background: #050811;">
       <img
         v-if="article.image_url"
         :src="article.image_url"
@@ -15,8 +15,8 @@
         loading="lazy"
         decoding="async"
       />
-      <div v-else class="w-full h-full flex items-center justify-center">
-        <span class="text-5xl" style="opacity: 0.08;">📰</span>
+      <div v-else class="w-full h-full flex items-center justify-center bg-slate-950/80">
+        <VoidGlyph shape="cluster" size="40" color="#00fff5" class="opacity-25" />
       </div>
     </div>
 
@@ -25,27 +25,26 @@
       <!-- Meta row -->
       <div class="flex items-center justify-between gap-2">
         <span
-          class="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded flex-shrink-0"
+          class="text-[9px] font-mono font-black uppercase tracking-widest px-2 py-0.5 rounded flex-shrink-0 border border-cyan-500/20"
           :style="`background: ${catBg}; color: ${catColor};`"
         >{{ article.category }}</span>
-        <span class="font-mono-jp text-[9px] truncate" style="color: var(--text-muted);">
+        <span class="font-mono text-[9px] text-slate-400 truncate">
           {{ article.source }}
         </span>
       </div>
 
       <!-- Title -->
-      <div v-if="article.is_positive" class="aero-badge">
-        🌱 Social Interest
+      <div v-if="article.is_positive" class="cyber-badge-positive">
+        [ IMPACTO POSITIVO ]
       </div>
-      <h3 class="text-sm font-bold leading-snug line-clamp-3 text-slate-800 group-hover:text-sky-800 transition-colors duration-200">
+      <h3 class="text-sm font-bold leading-snug line-clamp-3 text-white group-hover:text-neon-cyan transition-colors duration-200">
         {{ article.title }}
       </h3>
 
       <!-- Date + external indicator -->
-      <p class="font-mono-jp text-[10px] mt-auto flex items-center justify-between"
-         style="color: var(--text-muted);">
+      <p class="font-mono text-[10px] mt-auto flex items-center justify-between text-slate-400">
         <span>{{ formatDate(article.published_at) }}</span>
-        <span style="color: var(--brand);" class="text-[9px] font-bold">↗ externo</span>
+        <span class="text-neon-cyan text-[9px] font-mono font-bold tracking-wider">↗ EXTERNO</span>
       </p>
     </div>
   </a>
@@ -53,23 +52,25 @@
 
 <script setup>
 import { computed } from 'vue'
+import VoidGlyph from './VoidGlyph.vue'
 
 const props = defineProps({
   article: { type: Object, required: true },
 })
 
 const CAT_COLORS = {
-  'Política':       { color: 'var(--cat-politica)',       bg: 'var(--cat-politica-bg)' },
-  'Economia':       { color: 'var(--cat-economia)',       bg: 'var(--cat-economia-bg)' },
-  'Esportes':       { color: 'var(--cat-esportes)',       bg: 'var(--cat-esportes-bg)' },
-  'Tecnologia':     { color: 'var(--cat-tecnologia)',     bg: 'var(--cat-tecnologia-bg)' },
-  'Mundo':          { color: 'var(--cat-mundo)',          bg: 'var(--cat-mundo-bg)' },
-  'Entretenimento': { color: 'var(--cat-entretenimento)', bg: 'var(--cat-entretenimento-bg)' },
-  'Geral':          { color: 'var(--cat-geral)',          bg: 'var(--cat-geral-bg)' },
+  'Política':       { color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.15)' },
+  'Politica':       { color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.15)' },
+  'Economia':       { color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)' },
+  'Esportes':       { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)' },
+  'Tecnologia':     { color: '#00fff5', bg: 'rgba(0, 255, 245, 0.15)' },
+  'Mundo':          { color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)' },
+  'Entretenimento': { color: '#a855f7', bg: 'rgba(168, 85, 247, 0.15)' },
+  'Geral':          { color: '#7eb8e0', bg: 'rgba(126, 184, 224, 0.15)' },
 }
 
-const catColor = computed(() => CAT_COLORS[props.article?.category]?.color || 'var(--cat-geral)')
-const catBg    = computed(() => CAT_COLORS[props.article?.category]?.bg    || 'var(--cat-geral-bg)')
+const catColor = computed(() => CAT_COLORS[props.article?.category]?.color || '#00fff5')
+const catBg    = computed(() => CAT_COLORS[props.article?.category]?.bg    || 'rgba(0, 255, 245, 0.15)')
 
 const formatDate = (d) => {
   if (!d) return ''
@@ -82,22 +83,22 @@ const formatDate = (d) => {
 </script>
 
 <style scoped>
-.aero-badge {
-  background: linear-gradient(180deg, #b7e500 0%, #73b500 100%);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  box-shadow: inset 0 1px 2px rgba(255,255,255,0.8);
+.cyber-badge-positive {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
   display: inline-block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .positive-highlight {
-  border: 2px solid rgba(183, 229, 0, 0.6) !important;
-  box-shadow: 0 4px 20px rgba(183, 229, 0, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
 }
 </style>

@@ -7,35 +7,59 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // Frutiger Aero: fontes arredondadas e amigáveis dos anos 2000
-        sans:      ['Nunito', 'Segoe UI', 'Trebuchet MS', 'system-ui', 'sans-serif'],
-        nunito:    ['Nunito', 'sans-serif'],
-        editorial: ['Nunito', 'Trebuchet MS', 'Georgia', 'serif'],
-        mono:      ['Segoe UI', 'Trebuchet MS', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'Consolas', 'monospace'],
+        sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        grotesk: ['"Space Grotesk"', 'sans-serif'],
+        tilt: ['"Tilt Neon"', 'sans-serif'],
+        editorial: ['"Space Grotesk"', '"Inter"', 'sans-serif'],
       },
       colors: {
-        // Paleta Frutiger Aero
-        aeroBlue:    '#1e90ff',
-        aeroSky:     '#a8d8f8',
-        aeroCyan:    '#5ac8fa',
-        aeroGreen:   '#73d936',
-        aeroGlass:   'rgba(255,255,255,0.55)',
-        glossyWhite: 'rgba(255,255,255,0.90)',
-        deepBlue:    '#0a2a52',
-        midBlue:     '#1e5fa0',
-        softBlue:    '#5ba3d8',
-      },
-      borderRadius: {
-        'aero': '18px',
-        'aero-lg': '22px',
+        neon: {
+          cyan: '#00fff5',
+          glowCyan: '#7eb8e0',
+          blue: '#3b82f6',
+          purple: '#a855f7',
+          green: '#10b981',
+          lime: '#39ff14',
+          amber: '#f59e0b',
+          rose: '#f43f5e',
+        },
+        terminal: {
+          bg: '#030508',
+          deep: '#050811',
+          surface: '#0a1628',
+          card: 'rgba(10, 22, 40, 0.75)',
+          border: 'rgba(0, 255, 245, 0.18)',
+          borderHover: 'rgba(0, 255, 245, 0.45)',
+          muted: '#8fa8bc',
+          text: '#c8d6e3',
+          bright: '#f1f5f9',
+        },
       },
       boxShadow: {
-        'aero-sm': '0 2px 0 rgba(255,255,255,0.85) inset, 0 4px 16px rgba(30,100,200,0.10)',
-        'aero':    '0 2px 0 rgba(255,255,255,0.90) inset, 0 8px 32px rgba(30,100,200,0.14)',
-        'aero-lg': '0 3px 0 rgba(255,255,255,0.95) inset, 0 16px 48px rgba(30,100,220,0.20)',
+        'neon-cyan': '0 0 20px rgba(0, 255, 245, 0.25)',
+        'neon-cyan-lg': '0 0 35px rgba(0, 255, 245, 0.35)',
+        'card-cyber': '0 8px 32px 0 rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(0, 255, 245, 0.12)',
+        'glass-magnetic': '0 12px 40px 0 rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
       },
-      backdropBlur: {
-        'aero': '16px',
+      animation: {
+        'pulse-neon': 'pulse-neon 2.5s ease-in-out infinite',
+        'float-slow': 'float-slow 6s ease-in-out infinite',
+        'scanline': 'scanline 8s linear infinite',
+      },
+      keyframes: {
+        'pulse-neon': {
+          '0%, 100%': { opacity: '1', filter: 'drop-shadow(0 0 8px rgba(0, 255, 245, 0.6))' },
+          '50%': { opacity: '0.7', filter: 'drop-shadow(0 0 2px rgba(0, 255, 245, 0.2))' },
+        },
+        'float-slow': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        'scanline': {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(1000%)' },
+        },
       },
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col text-slate-800 bg-gradient-to-b from-sky-50/90 via-slate-100 to-slate-200/70">
+  <div class="min-h-screen flex flex-col text-slate-800 bg-[#030508]">
     <!-- ═══════ TOAST NOTIFICATIONS ═══════ -->
     <div class="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none max-w-md">
       <transition-group name="toast">

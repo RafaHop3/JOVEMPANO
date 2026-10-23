@@ -1,10 +1,15 @@
 <template>
   <div class="flex flex-col gap-10">
 
-    <!-- ═══════ BREAKING TICKER ═══════ -->
+    <!-- ═══════ BREAKING TICKER (Orbe Systems Cyber Ticker) ═══════ -->
     <BreakingTicker :headlines="tickerHeadlines" />
 
-    <!-- ═══════ HERO SECTION ═══════ -->
+    <!-- ═══════ DESTAQUE DE PROPAGANDA PRIMÁRIA: INHO BUSINESS ENGINE ═══════ -->
+    <section class="fade-up">
+      <InhoPromoBanner />
+    </section>
+
+    <!-- ═══════ HERO SECTION (Destaques Editoriais) ═══════ -->
     <section>
       <!-- Loading skeletons -->
       <div v-if="heroLoading" class="grid gap-4" style="grid-template-columns: 3fr 2fr;">
@@ -37,54 +42,56 @@
         </div>
       </div>
 
-      <!-- Empty hero -->
-      <div v-else class="flex flex-col items-center justify-center py-20 px-4 text-center" style="color: var(--text-muted);">
-        <span class="text-5xl mb-4">📭</span>
-        <p class="max-w-md">Nenhum destaque editorial ainda. Quando a equipe publicar matérias, elas aparecerão aqui.</p>
-        <p class="mt-2 text-sm max-w-md">Enquanto isso, use as abas abaixo para acompanhar o feed ao vivo (RSS) atualizado continuamente.</p>
+      <!-- Empty hero com Void Scanner -->
+      <div v-else class="flex flex-col items-center justify-center py-16 px-4 text-center rounded-2xl border border-cyan-500/20 bg-slate-950/40 text-slate-400">
+        <VoidGlyph shape="scanner" size="52" color="#00fff5" class="mb-4" />
+        <p class="max-w-md font-medium text-slate-200">Radar editorial aguardando novas publicações.</p>
+        <p class="mt-2 text-xs text-slate-400 max-w-md">Utilize o feed ao vivo em tempo real abaixo com monitoramento contínuo.</p>
       </div>
     </section>
 
-    <!-- ═══════ LIVE NEWS — RSS BY CATEGORY ═══════ -->
+    <!-- ═══════ LIVE NEWS — RSS POR CATEGORIA COM VOIDS ═══════ -->
     <section>
       <!-- Section header -->
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
-          <span class="pulse-live w-2.5 h-2.5 rounded-full" style="background: var(--brand); display: inline-block;"></span>
-          <h2 class="text-xl font-bold" style="color: var(--text-primary);">Notícias ao Vivo</h2>
-          <span class="font-mono-jp text-xs px-2 py-0.5 rounded" style="background: var(--brand-glow); color: var(--brand);">
-            RSS
+          <span class="pulse-live w-2.5 h-2.5 rounded-full bg-neon-cyan inline-block"></span>
+          <h2 class="text-xl font-bold font-editorial text-white tracking-wide">
+            Radar em Tempo Real
+          </h2>
+          <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-cyan-950/80 text-neon-cyan border border-cyan-500/30">
+            FEED DINÂMICO
           </span>
         </div>
         <button
           id="btn-refresh-feed"
           @click="refreshFeed"
           :disabled="feedLoading"
-          class="text-xs px-3 py-1.5 rounded-full border transition-all hover:border-white/20 disabled:opacity-40"
-          style="color: var(--text-muted); border-color: var(--border);"
+          class="text-xs font-mono px-3.5 py-1.5 rounded-lg border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 bg-cyan-950/40 transition-all disabled:opacity-40"
         >
-          {{ feedLoading ? '...' : '↻ Atualizar' }}
+          {{ feedLoading ? 'Sincronizando...' : '↻ Atualizar' }}
         </button>
       </div>
 
-      <!-- Category tabs -->
-      <div style="border-bottom: 1px solid var(--border);" class="flex overflow-x-auto scrollbar-hide mb-6">
+      <!-- Category tabs com VOID GLYPHS -->
+      <div class="flex overflow-x-auto scrollbar-hide gap-2 pb-2 mb-6 border-b border-cyan-500/20">
         <button
           v-for="tab in feedTabs"
           :key="tab.id"
           :id="`tab-${tab.id}`"
           @click="switchTab(tab.id)"
           :class="['tab-btn', activeTab === tab.id ? 'active' : '']"
-          :style="activeTab === tab.id ? `color: ${tab.color};` : ''"
+          :style="activeTab === tab.id ? `color: ${tab.color}; border-color: ${tab.color}50;` : ''"
         >
-          {{ tab.emoji }} {{ tab.label }}
+          <VoidGlyph :shape="tab.voidShape" :color="tab.color" :size="16" />
+          <span>{{ tab.label }}</span>
         </button>
       </div>
 
       <!-- Feed grid -->
       <div
         v-if="currentFeed.length > 0"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 fade-up"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 fade-up"
       >
         <FeedCard
           v-for="item in currentFeed"
@@ -94,36 +101,39 @@
       </div>
 
       <!-- Initial Loading -->
-      <div v-if="feedLoading && currentFeed.length === 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div v-if="feedLoading && currentFeed.length === 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <div v-for="i in 6" :key="i" class="skeleton" style="height: 280px;"></div>
       </div>
 
-      <!-- Empty states -->
+      <!-- Empty states com Void Scanner no lugar de emojis -->
       <div
         v-else-if="activeTab === 'admin' && adminNews.length === 0"
-        class="text-center py-16 px-4"
-        style="color: var(--text-muted);"
+        class="text-center py-16 px-4 rounded-2xl border border-cyan-500/20 bg-slate-950/40 text-slate-400"
       >
-        <span class="text-5xl block mb-4">📭</span>
-        <p class="mb-2 max-w-md mx-auto">Nenhuma notícia editorial publicada ainda. O painel de publicação é acessado apenas pela URL <span class="font-mono text-xs" style="color: var(--text-secondary);">/admin</span>.</p>
+        <VoidGlyph shape="shield" size="52" color="#00fff5" class="mb-4" />
+        <p class="mb-2 max-w-md mx-auto text-slate-200">Nenhuma notícia editorial publicada ainda.</p>
+        <p class="text-xs text-slate-400">Acesse o terminal editorial autenticado em <span class="font-mono text-cyan-400">/admin</span>.</p>
       </div>
 
-      <div v-else-if="currentFeed.length === 0 && !feedLoading" class="text-center py-16" style="color: var(--text-muted);">
-        <span class="text-5xl block mb-4">📡</span>
-        <p>Não foi possível carregar as notícias agora. Tente novamente.</p>
-        <button @click="refreshFeed" class="mt-4 text-sm underline" style="color: var(--brand);">
-          Tentar novamente
+      <div
+        v-else-if="currentFeed.length === 0 && !feedLoading"
+        class="text-center py-16 rounded-2xl border border-cyan-500/20 bg-slate-950/40 text-slate-400"
+      >
+        <VoidGlyph shape="scanner" size="52" color="#00fff5" class="mb-4" />
+        <p class="text-slate-200">Não foi possível sincronizar o feed no momento.</p>
+        <button @click="refreshFeed" class="mt-4 text-xs font-mono text-neon-cyan hover:underline">
+          ↻ Tentar nova sincronização
         </button>
       </div>
 
       <!-- INFINITE SCROLL SENTINEL & LOADING -->
       <div ref="sentinel" class="py-10 flex flex-col items-center justify-center">
-        <div v-if="feedLoading && currentFeed.length > 0" class="flex items-center gap-2" style="color: var(--text-muted);">
-          <div class="w-4 h-4 rounded-full border-2 border-t-transparent animate-spin" style="border-color: var(--brand); border-top-color: transparent;"></div>
-          <span class="text-sm">Descobrindo mais notícias...</span>
+        <div v-if="feedLoading && currentFeed.length > 0" class="flex items-center gap-3 text-cyan-400 font-mono text-xs">
+          <div class="w-4 h-4 rounded-full border-2 border-t-transparent border-cyan-400 animate-spin"></div>
+          <span>Sincronizando mais notícias pelo radar...</span>
         </div>
-        <div v-else-if="!hasMore && currentFeed.length > 0" class="text-xs italic" style="color: var(--text-muted);">
-          Você chegou ao fim do feed.
+        <div v-else-if="!hasMore && currentFeed.length > 0" class="text-xs font-mono text-slate-500 italic">
+          [ FIM DA LINHA DO RADAR ]
         </div>
       </div>
     </section>
@@ -136,6 +146,8 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import NewsCard from '../components/NewsCard.vue'
 import FeedCard from '../components/FeedCard.vue'
 import BreakingTicker from '../components/BreakingTicker.vue'
+import InhoPromoBanner from '../components/InhoPromoBanner.vue'
+import VoidGlyph from '../components/VoidGlyph.vue'
 
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:8000'
 
@@ -144,23 +156,23 @@ const adminNews   = ref([])
 const heroLoading = ref(true)
 const feedLoading = ref(false)
 const activeTab   = ref('geral')
-const feedCache   = ref({})       // { tabId: article[] }
-const feedPages   = ref({})       // { tabId: currentPage }
-const hasMoreMap  = ref({})       // { tabId: boolean }
+const feedCache   = ref({})
+const feedPages   = ref({})
+const hasMoreMap  = ref({})
 const tickerHeadlines = ref([])
 const sentinel    = ref(null)
 
 let observer = null
 
-// ── Tab definitions ────────────────────────────────────────────────────────────
+// ── Tab definitions com VOIDS no lugar de emotions ────────────────────────────
 const feedTabs = [
-  { id: 'admin',     label: 'Publicados',  emoji: '📌', color: 'var(--brand)' },
-  { id: 'geral',     label: 'Últimas',     emoji: '🔥', color: 'var(--cat-esportes)' },
-  { id: 'politica',  label: 'Política',    emoji: '🏛️', color: 'var(--cat-politica)' },
-  { id: 'economia',  label: 'Economia',    emoji: '📈', color: 'var(--cat-economia)' },
-  { id: 'esportes',  label: 'Esportes',    emoji: '⚽', color: 'var(--cat-esportes)' },
-  { id: 'tecnologia',label: 'Tecnologia',  emoji: '💻', color: 'var(--cat-tecnologia)' },
-  { id: 'mundo',     label: 'Mundo',       emoji: '🌐', color: 'var(--cat-mundo)' },
+  { id: 'admin',     label: 'Editoriais',  voidShape: 'shield',   color: '#00fff5' },
+  { id: 'geral',     label: 'Últimas',     voidShape: 'cluster',  color: '#7eb8e0' },
+  { id: 'politica',  label: 'Política',    voidShape: 'shield',   color: '#f43f5e' },
+  { id: 'economia',  label: 'Economia',    voidShape: 'pix-dre',  color: '#10b981' },
+  { id: 'esportes',  label: 'Esportes',    voidShape: 'daw',      color: '#f59e0b' },
+  { id: 'tecnologia',label: 'Tecnologia',  voidShape: 'nvme',     color: '#00fff5' },
+  { id: 'mundo',     label: 'Mundo',       voidShape: 'globe',    color: '#3b82f6' },
 ]
 
 // ── Computed ──────────────────────────────────────────────────────────────────
@@ -223,14 +235,12 @@ async function fetchFeed(slug, isLoadMore = false) {
         feedPages.value[slug] = 1
       }
       
-      // If we got fewer items than the limit, assume no more items
       if (data.length < 12) {
         hasMoreMap.value[slug] = false
       } else {
         hasMoreMap.value[slug] = true
       }
 
-      // Ticker from geral
       if (slug === 'geral' && !isLoadMore) {
         tickerHeadlines.value = data.map(a => a.title).slice(0, 20)
       }
@@ -249,62 +259,35 @@ async function switchTab(tabId) {
   }
 }
 
-function refreshFeed() {
+async function refreshFeed() {
   if (activeTab.value === 'admin') {
-    fetchAdminNews()
+    heroLoading.value = true
+    await fetchAdminNews()
   } else {
-    feedCache.value[activeTab.value] = []
-    hasMoreMap.value[activeTab.value] = true
-    fetchFeed(activeTab.value)
+    await fetchFeed(activeTab.value, false)
   }
 }
 
-// ── Infinite Scroll Observer ──────────────────────────────────────────────────
-function setupObserver() {
-  if (observer) observer.disconnect()
-  
+onMounted(async () => {
+  await Promise.all([
+    fetchAdminNews(),
+    fetchFeed('geral')
+  ])
+
+  // Infinite scroll
   observer = new IntersectionObserver((entries) => {
-    const entry = entries[0]
-    if (entry.isIntersecting && hasMore.value && !feedLoading.value) {
+    const [entry] = entries
+    if (entry.isIntersecting && !feedLoading.value && hasMore.value && activeTab.value !== 'admin') {
       fetchFeed(activeTab.value, true)
     }
   }, { threshold: 0.1 })
-  
-  if (sentinel.value) observer.observe(sentinel.value)
-}
 
-// ── Lifecycle ─────────────────────────────────────────────────────────────────
-onMounted(async () => {
-  await Promise.all([fetchAdminNews(), fetchFeed('geral')])
-  setupObserver()
+  if (sentinel.value) {
+    observer.observe(sentinel.value)
+  }
 })
 
 onUnmounted(() => {
   if (observer) observer.disconnect()
 })
-
-watch(activeTab, () => {
-  // Reset observer or re-check sentinel on tab change
-  setTimeout(setupObserver, 100)
-})
 </script>
-
-<style scoped>
-.tab-btn {
-  @apply px-4 py-3 text-sm font-medium transition-all whitespace-nowrap border-b-2 border-transparent;
-  color: var(--text-muted);
-}
-.tab-btn:hover {
-  color: var(--text-primary);
-}
-.tab-btn.active {
-  border-color: currentColor;
-}
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-</style>

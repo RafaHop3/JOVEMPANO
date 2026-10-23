@@ -2,10 +2,9 @@
   <div class="max-w-3xl mx-auto pb-12">
     <!-- ── Progress Bar ──────────────────────────────────────────────────────── -->
     <div
-      class="fixed top-0 left-0 h-1 z-50 transition-all duration-150 ease-out"
-      :style="{ width: `${scrollProgress}%`, background: 'var(--brand)' }"
+      class="fixed top-0 left-0 h-1 z-50 transition-all duration-150 ease-out bg-neon-cyan shadow-[0_0_10px_#00fff5]"
+      :style="{ width: `${scrollProgress}%` }"
     ></div>
-
 
     <!-- ── Loading ──────────────────────────────────────────────────────────── -->
     <div v-if="loading" class="flex flex-col gap-6">
@@ -24,31 +23,29 @@
       <button
         id="btn-back"
         @click="$router.back()"
-        class="flex items-center gap-2 text-sm mb-8 transition-colors hover:opacity-100"
-        style="color: var(--text-muted);"
+        class="flex items-center gap-2 text-xs font-mono mb-8 text-slate-400 hover:text-neon-cyan transition-colors"
       >
-        ← Voltar
+        ← Voltar ao radar
       </button>
 
       <!-- Category + Date -->
       <div class="flex items-center gap-3 flex-wrap mb-4">
         <span
-          class="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
+          class="text-[10px] font-mono font-black uppercase tracking-widest px-3 py-1 rounded-md border border-cyan-500/30"
           :style="`background: ${catBg}; color: ${catColor};`"
         >{{ article.category || 'Geral' }}</span>
-        <time class="font-mono-jp text-xs" style="color: var(--text-muted);">
+        <time class="font-mono text-xs text-slate-400">
           {{ formatDate(article.created_at) }}
         </time>
       </div>
 
       <!-- Title -->
-      <h1 class="font-editorial text-3xl md:text-4xl font-bold leading-tight mb-8"
-          style="color: var(--text-primary);">
+      <h1 class="font-editorial text-3xl md:text-4xl font-bold leading-tight mb-8 text-white">
         {{ article.title }}
       </h1>
 
       <!-- Hero Image -->
-      <div v-if="article.image_url" class="w-full rounded-2xl overflow-hidden mb-8" style="max-height: 420px;">
+      <div v-if="article.image_url" class="w-full rounded-2xl overflow-hidden mb-8 border border-cyan-500/20 bg-slate-950" style="max-height: 420px;">
         <img
           :src="article.image_url"
           :alt="article.title"
@@ -58,49 +55,40 @@
       </div>
 
       <!-- Divider -->
-      <hr style="border-color: var(--border); margin-bottom: 2rem;" />
+      <div class="w-full h-px bg-cyan-500/20 mb-8"></div>
 
-      <!-- Content (HTML from Quill editor) -->
-      <div class="article-content" v-html="article.content"></div>
+      <!-- Content -->
+      <div class="article-content leading-relaxed" v-html="sanitizedContent"></div>
 
-      <!-- Share Buttons -->
-      <div class="flex items-center gap-3 mt-10">
-        <span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Compartilhar:</span>
-        <button @click="shareNative" v-if="canShare" class="p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-900/30 text-rose-600 transition-colors" title="Compartilhar">
-          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-        </button>
-        <button @click="copyLink" class="p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="Copiar link">
-          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-        </button>
-        <span v-if="copied" class="text-xs text-emerald-500 font-bold ml-2 fade-up">Link copiado!</span>
-      </div>
-
-      <!-- Footer bar -->
-      <div
-        class="mt-12 pt-6 flex items-center justify-between flex-wrap gap-4"
-        style="border-top: 1px solid var(--border);"
-      >
-        <router-link to="/" class="text-sm font-semibold transition-colors hover:opacity-80" style="color: var(--brand);">
-          ← Voltar ao Início
-        </router-link>
-        <span class="font-mono-jp text-xs" style="color: var(--text-muted);">
-          Publicado em {{ formatDate(article.created_at) }}
-        </span>
+      <!-- Bottom link to Orbe Systems -->
+      <div class="mt-12 p-6 rounded-2xl border border-cyan-500/20 bg-slate-950/60 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-neon-cyan text-black font-black flex items-center justify-center text-xs">
+            JP
+          </div>
+          <div>
+            <div class="text-sm font-bold text-white font-editorial">Central Orbe Systems</div>
+            <p class="text-xs text-slate-400 font-mono">Tecnologia, inovação contábil e cibersegurança.</p>
+          </div>
+        </div>
+        <a
+          href="https://orbesystems.com.br"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-4 py-2 rounded-lg font-mono text-xs font-bold text-black bg-neon-cyan hover:brightness-110 shadow-neon-cyan transition-all"
+        >
+          Explorar Soluções ↗
+        </a>
       </div>
 
     </article>
 
-    <!-- ── Not Found ─────────────────────────────────────────────────────────── -->
-    <div v-else class="text-center py-24" style="color: var(--text-muted);">
-      <span class="text-6xl block mb-6">🔍</span>
-      <h1 class="text-2xl font-bold mb-3" style="color: var(--text-primary);">Notícia não encontrada</h1>
-      <p class="mb-6">Esta matéria pode ter sido removida ou o link está incorreto.</p>
-      <router-link
-        to="/"
-        class="inline-block px-6 py-3 rounded-xl font-bold text-sm transition-colors"
-        style="background: var(--brand); color: white;"
-      >
-        ← Voltar ao Início
+    <!-- ── Error ─────────────────────────────────────────────────────────────── -->
+    <div v-else class="text-center py-24 text-slate-400 rounded-2xl border border-cyan-500/20 bg-slate-950/40">
+      <p class="text-base font-semibold text-white mb-2">Matéria não encontrada</p>
+      <p class="text-xs text-slate-400 mb-6">A publicação pode ter sido arquivada ou removida.</p>
+      <router-link to="/" class="text-xs font-mono text-neon-cyan hover:underline">
+        ← Voltar ao início
       </router-link>
     </div>
 
@@ -110,105 +98,63 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-// import { useHead } from '@unhead/vue'
 
-const route   = useRoute()
+const route = useRoute()
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:8000'
 
 const article = ref(null)
 const loading = ref(true)
-
 const scrollProgress = ref(0)
-const copied = ref(false)
-const canShare = ref(false)
 
-// ── SEO ───────────────────────────────────────────────────────────────────────
-/*
-useHead(
-  computed(() => ({
-    title: article.value
-      ? `${article.value.title} — JovemPano`
-      : 'Matéria — JovemPano',
-    meta: article.value
-      ? [{ name: 'description', content: article.value.content?.replace(/<[^>]*>/g, '').slice(0, 155) }]
-      : [],
-  }))
-)
-*/
-
-// ── Category colors ────────────────────────────────────────────────────────────
 const CAT_COLORS = {
-  'Política':       { color: 'var(--cat-politica)',       bg: 'var(--cat-politica-bg)' },
-  'Economia':       { color: 'var(--cat-economia)',       bg: 'var(--cat-economia-bg)' },
-  'Esportes':       { color: 'var(--cat-esportes)',       bg: 'var(--cat-esportes-bg)' },
-  'Tecnologia':     { color: 'var(--cat-tecnologia)',     bg: 'var(--cat-tecnologia-bg)' },
-  'Mundo':          { color: 'var(--cat-mundo)',          bg: 'var(--cat-mundo-bg)' },
-  'Entretenimento': { color: 'var(--cat-entretenimento)', bg: 'var(--cat-entretenimento-bg)' },
-  'Geral':          { color: 'var(--cat-geral)',          bg: 'var(--cat-geral-bg)' },
+  'Política':       { color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.15)' },
+  'Politica':       { color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.15)' },
+  'Economia':       { color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)' },
+  'Esportes':       { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)' },
+  'Tecnologia':     { color: '#00fff5', bg: 'rgba(0, 255, 245, 0.15)' },
+  'Mundo':          { color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)' },
+  'Entretenimento': { color: '#a855f7', bg: 'rgba(168, 85, 247, 0.15)' },
+  'Geral':          { color: '#7eb8e0', bg: 'rgba(126, 184, 224, 0.15)' },
 }
-const catColor = computed(() => CAT_COLORS[article.value?.category]?.color || 'var(--cat-geral)')
-const catBg    = computed(() => CAT_COLORS[article.value?.category]?.bg    || 'var(--cat-geral-bg)')
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+const catColor = computed(() => CAT_COLORS[article.value?.category]?.color || '#00fff5')
+const catBg    = computed(() => CAT_COLORS[article.value?.category]?.bg    || 'rgba(0, 255, 245, 0.15)')
+
+const sanitizedContent = computed(() => {
+  return article.value?.content || ''
+})
+
 const formatDate = (d) => {
   if (!d) return ''
   try {
-    return new Date(d).toLocaleString('pt-BR', {
-      day: '2-digit', month: 'long', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
+    return new Date(d).toLocaleDateString('pt-BR', {
+      day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
     })
   } catch { return '' }
 }
 
-const updateScroll = () => {
-  const scrollPx = document.documentElement.scrollTop || document.body.scrollTop;
-  const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  if (winHeightPx > 0) {
-    scrollProgress.value = (scrollPx / winHeightPx) * 100;
-  } else {
-    scrollProgress.value = 0;
+const handleScroll = () => {
+  const total = document.documentElement.scrollHeight - window.innerHeight
+  if (total > 0) {
+    scrollProgress.value = (window.scrollY / total) * 100
   }
 }
 
-const copyLink = async () => {
-  try {
-    await navigator.clipboard.writeText(window.location.href)
-    copied.value = true
-    setTimeout(() => copied.value = false, 2500)
-  } catch (err) {
-    console.error('Falha ao copiar', err)
-  }
-}
-
-const shareNative = async () => {
-  try {
-    await navigator.share({
-      title: article.value?.title || 'JovemPano',
-      url: window.location.href,
-    })
-  } catch (err) {
-    console.warn('Compartilhamento cancelado ou falhou', err)
-  }
-}
-
-// ── Lifecycle ─────────────────────────────────────────────────────────────────
 onMounted(async () => {
-  canShare.value = !!navigator.share
-  window.addEventListener('scroll', updateScroll)
-
+  window.addEventListener('scroll', handleScroll, { passive: true })
   try {
     const res = await fetch(`${API_BASE}/news/${route.params.id}`)
     if (res.ok) {
       article.value = await res.json()
     }
   } catch (e) {
-    console.warn('[NewsDetail] fetch failed', e)
+    console.warn('[NewsDetail] error loading article', e)
   } finally {
     loading.value = false
   }
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', updateScroll)
+  window.removeEventListener('scroll', handleScroll)
 })
 </script>

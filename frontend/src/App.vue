@@ -2,118 +2,137 @@
   <div v-if="isAdminRoute" class="admin-layout">
     <router-view />
   </div>
-  <div v-else class="min-h-screen">
+  <div v-else class="min-h-screen bg-[#030508] text-[#c8d6e3] flex flex-col justify-between">
 
-    <!-- ═══════ HEADER (Aero Glass) ═══════ -->
+    <!-- ═══════ HEADER (Orbe Systems Cyber-Glass) ═══════ -->
     <header
-      class="sticky top-0 z-50 transition-all duration-300"
-      style="
-        background: rgba(255, 255, 255, 0.70);
-        border-bottom: 1px solid rgba(255,255,255,0.60);
-        backdrop-filter: blur(20px) saturate(200%);
-        -webkit-backdrop-filter: blur(20px) saturate(200%);
-        box-shadow: 0 2px 0 rgba(255,255,255,0.9) inset, 0 4px 20px rgba(30,100,200,0.10);
-      "
+      class="sticky top-0 z-50 transition-all duration-300 border-b border-cyan-500/20 bg-[#030508]/85 backdrop-blur-xl shadow-lg"
     >
-      <div class="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
+      <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
-        <!-- Left: Live indicator + Date -->
+        <!-- Left: Live terminal indicator + Date -->
         <div class="flex-1 flex flex-col justify-center min-w-0">
           <div class="flex items-center gap-2">
-            <span class="pulse-live w-2.5 h-2.5 rounded-full flex-shrink-0" style="background: var(--brand); display: inline-block;"></span>
-            <span class="text-[10px] font-extrabold tracking-widest uppercase" style="color: var(--brand);">Ao Vivo</span>
+            <span class="pulse-live w-2 h-2 rounded-full flex-shrink-0 bg-neon-cyan"></span>
+            <span class="text-[10px] font-mono font-extrabold tracking-widest uppercase text-neon-cyan">
+              AO VIVO // RADAR 24/7
+            </span>
           </div>
-          <span class="text-[10px] uppercase tracking-widest truncate pr-2" style="color: var(--text-muted); font-weight: 600; line-height: 1;">{{ formattedDate }}</span>
+          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 truncate">
+            {{ formattedDate }}
+          </span>
         </div>
 
-        <!-- Center: Logo Aero Glossy -->
+        <!-- Center: Logo Orbe Systems Cyber Aesthetic -->
         <div class="flex-shrink-0 flex justify-center">
-          <router-link to="/" class="flex items-center gap-2.5 group transition-transform hover:scale-105" aria-label="JovemPano">
+          <router-link to="/" class="flex items-center gap-3 group transition-transform hover:scale-105" aria-label="Orbe News JovemPano">
             <div
-              class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-sm"
-              style="
-                background: linear-gradient(180deg,
-                  rgba(100,180,255,0.95) 0%,
-                  rgba(30,144,255,0.90) 48%,
-                  rgba(0,100,220,0.95) 49%,
-                  rgba(0,80,200,1) 100%
-                );
-                box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 4px 14px rgba(30,144,255,0.40);
-                border: 1px solid rgba(100,180,255,0.5);
-              "
-            >JP</div>
-            <h1 class="logo-aero text-xl sm:text-2xl font-black tracking-tight leading-none pt-0.5">
-              JovemPano
-            </h1>
+              class="w-9 h-9 rounded-xl flex items-center justify-center text-black font-black text-sm bg-gradient-to-tr from-cyan-400 to-sky-400 shadow-neon-cyan border border-cyan-300"
+            >
+              JP
+            </div>
+            <div class="flex flex-col">
+              <span class="text-xl sm:text-2xl font-black font-editorial tracking-tight text-white leading-none">
+                Jovem<span class="text-neon-cyan">Pano</span>
+              </span>
+              <span class="text-[9px] font-mono text-cyan-400/80 tracking-widest uppercase mt-0.5">
+                Powered by Orbe Systems
+              </span>
+            </div>
           </router-link>
         </div>
 
-        <!-- Right: Spacer -->
-        <div class="flex-1"></div>
+        <!-- Right: Official Orbe Systems Hub Link -->
+        <div class="flex-1 flex justify-end items-center gap-3">
+          <a
+            href="https://orbesystems.com.br"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono text-cyan-300 hover:text-white border border-cyan-500/30 hover:border-cyan-400 bg-cyan-950/40 transition-all"
+          >
+            <span>Orbe Systems Hub</span>
+            <span class="text-neon-cyan font-bold">↗</span>
+          </a>
+        </div>
 
       </div>
     </header>
 
-    <!-- ═══════ CATEGORY NAV (Aero frosted) ═══════ -->
+    <!-- ═══════ CATEGORY NAV (Void Glyphs no lugar de emojis) ═══════ -->
     <nav
-      class="sticky z-40 transition-all duration-300"
-      style="
-        top: 64px;
-        background: rgba(255, 255, 255, 0.60);
-        border-bottom: 1px solid rgba(255,255,255,0.55);
-        backdrop-filter: blur(14px) saturate(180%);
-        -webkit-backdrop-filter: blur(14px) saturate(180%);
-        box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 2px 12px rgba(30,100,200,0.07);
-      "
+      class="sticky z-40 transition-all duration-300 border-b border-cyan-500/15 bg-[#050811]/90 backdrop-blur-md"
+      style="top: 64px;"
     >
       <div class="max-w-7xl mx-auto px-3 sm:px-4">
-        <div class="flex overflow-x-auto scrollbar-hide justify-start md:justify-center gap-2 py-1">
+        <div class="flex overflow-x-auto scrollbar-hide justify-start md:justify-center gap-2 py-1.5">
           <router-link
             v-for="btn in navButtons"
             :key="btn.path"
             :to="btn.path"
             :id="`nav-${btn.label.toLowerCase()}`"
             :class="['tab-btn', isActive(btn.path) ? 'active' : '']"
-            :style="isActive(btn.path) ? `color: ${btn.color};` : ''"
+            :style="isActive(btn.path) ? `color: ${btn.color}; border-color: ${btn.color}40;` : ''"
           >
-            <span>{{ btn.emoji }}</span>{{ btn.label }}
+            <!-- Void Glyph 3D/Canvas no lugar de emoji -->
+            <VoidGlyph :shape="btn.voidShape" :color="btn.color" :size="18" />
+            <span>{{ btn.label }}</span>
           </router-link>
         </div>
       </div>
     </nav>
 
-    <!-- ═══════ MAIN ═══════ -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- ═══════ MAIN VIEW ═══════ -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
       <router-view />
     </main>
 
-    <!-- ═══════ FOOTER (Aero glass) ═══════ -->
+    <!-- ═══════ FOOTER (Orbe Systems Style) ═══════ -->
     <footer
-      class="mt-20"
-      style="
-        background: rgba(255,255,255,0.65);
-        border-top: 1px solid rgba(255,255,255,0.60);
-        backdrop-filter: blur(16px);
-        box-shadow: 0 -4px 20px rgba(30,100,200,0.06);
-      "
+      class="mt-20 border-t border-cyan-500/20 bg-[#020306]/95 backdrop-blur-xl"
     >
-      <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-3">
-        <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded-lg flex items-center justify-center text-white text-[10px] font-black"
-            style="background: linear-gradient(180deg, #64b4ff 0%, #1e90ff 50%, #0050c8 100%);
-                   box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset;">JP</div>
-          <span class="font-black text-lg" style="color: var(--text-primary);">
-            Jovem<span style="color: var(--brand);">Pano</span>
-          </span>
-          <span class="text-xs" style="color: var(--text-muted);">— Notícias em Tempo Real</span>
+      <div class="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center text-black text-xs font-black bg-neon-cyan shadow-neon-cyan">
+            JP
+          </div>
+          <div>
+            <div class="font-bold text-base text-white font-editorial">
+              Jovem<span class="text-neon-cyan">Pano</span>
+              <span class="text-xs font-mono text-slate-400 font-normal ml-2">// Orbe Systems Protocol</span>
+            </div>
+            <p class="text-xs text-slate-400 font-mono mt-0.5">
+              Hub Tecnológico: notícias em tempo real, curadoria editorial e automação SecDevOps.
+            </p>
+          </div>
         </div>
-        <p class="text-xs text-center" style="color: var(--text-muted);">
-          © {{ year }} JovemPano · Conteúdo de terceiros via RSS · Desenvolvido por OrbeSystems
-        </p>
+
+        <!-- Badges & Links -->
+        <div class="flex flex-col items-center md:items-end gap-2 text-xs font-mono text-slate-400">
+          <div class="flex items-center gap-3 flex-wrap justify-center">
+            <a href="https://orbesystems.com.br" target="_blank" rel="noopener noreferrer" class="hover:text-neon-cyan transition-colors">
+              orbesystems.com.br
+            </a>
+            <span class="text-slate-600">·</span>
+            <a href="https://inho.orbesystems.com.br" target="_blank" rel="noopener noreferrer" class="hover:text-neon-cyan transition-colors">
+              inho.orbesystems.com.br
+            </a>
+            <span class="text-slate-600">·</span>
+            <a href="https://orbesystems.com.br/privacidade" target="_blank" rel="noopener noreferrer" class="hover:text-neon-cyan transition-colors">
+              Privacidade (LGPD)
+            </a>
+            <span class="text-slate-600">·</span>
+            <a href="https://orbesystems.com.br/termos" target="_blank" rel="noopener noreferrer" class="hover:text-neon-cyan transition-colors">
+              Termos
+            </a>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            © {{ year }} Orbe Systems Technologies · Todos os direitos reservados.
+          </p>
+        </div>
       </div>
     </footer>
 
-    <!-- Cookie Banner -->
+    <!-- Cookie Banner LGPD Art. 8º -->
     <CookieBanner />
   </div>
 </template>
@@ -122,20 +141,22 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import CookieBanner from './components/CookieBanner.vue'
+import VoidGlyph from './components/VoidGlyph.vue'
 
 const route = useRoute()
 const year = new Date().getFullYear()
 
 const isAdminRoute = computed(() => route?.path === '/admin')
 
+// Nav Buttons: todos usando formas geométricas de Voids no lugar de emotions
 const navButtons = [
-  { path: '/',           label: 'Início',     emoji: '🏠', color: 'var(--brand)' },
-  { path: '/politica',   label: 'Política',   emoji: '🏛️', color: 'var(--cat-politica)' },
-  { path: '/economia',   label: 'Economia',   emoji: '📈', color: 'var(--cat-economia)' },
-  { path: '/esportes',   label: 'Esportes',   emoji: '⚽', color: 'var(--cat-esportes)' },
-  { path: '/tecnologia', label: 'Tecnologia', emoji: '💻', color: 'var(--cat-tecnologia)' },
-  { path: '/mundo',      label: 'Mundo',      emoji: '🌐', color: 'var(--cat-mundo)' },
-  { path: '/positivas',  label: 'Positivas',  emoji: '🌱', color: '#73b500' },
+  { path: '/',           label: 'Início',     voidShape: 'cluster',  color: '#00fff5' },
+  { path: '/politica',   label: 'Política',   voidShape: 'shield',   color: '#f43f5e' },
+  { path: '/economia',   label: 'Economia',   voidShape: 'pix-dre',  color: '#10b981' },
+  { path: '/esportes',   label: 'Esportes',   voidShape: 'daw',      color: '#f59e0b' },
+  { path: '/tecnologia', label: 'Tecnologia', voidShape: 'nvme',     color: '#00fff5' },
+  { path: '/mundo',      label: 'Mundo',      voidShape: 'globe',    color: '#3b82f6' },
+  { path: '/positivas',  label: 'Positivas',  voidShape: 'positive', color: '#10b981' },
 ]
 
 const isActive = (path) => {
