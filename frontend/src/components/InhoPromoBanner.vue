@@ -79,20 +79,23 @@
       </div>
 
       <!-- Right side: Interactive 3D Void Canvas (PIX + DRE) -->
-      <div class="lg:col-span-5 h-64 sm:h-72 lg:h-80 rounded-xl relative border border-cyan-500/20 bg-slate-950/80 overflow-hidden flex flex-col justify-end p-4 group">
+      <div class="lg:col-span-5 h-80 sm:h-96 lg:h-[390px] rounded-xl relative border border-cyan-500/20 bg-slate-950/80 overflow-hidden flex flex-col justify-end p-4 group">
         <!-- 3D WebGL Three.js Void -->
         <div class="absolute inset-0 z-0">
-          <InhoVoidCanvas accent-color="#00fff5" secondary-color="#10b981" :particle-count="5000" />
+          <InhoVoidCanvas accent-color="#00fff5" secondary-color="#10b981" :particle-count="7000" />
         </div>
 
         <!-- Glass overlay badge -->
-        <div class="relative z-10 p-3 rounded-lg bg-black/75 border border-cyan-500/30 backdrop-blur-md">
+        <div class="relative z-10 py-2.5 px-3.5 rounded-lg bg-black/80 border border-cyan-500/30 backdrop-blur-md">
           <div class="flex items-center justify-between text-[10px] font-mono uppercase text-neon-cyan">
-            <span>Void 3D // inho-pix-dre</span>
-            <span class="text-emerald-400">Online 60 FPS</span>
+            <span class="flex items-center gap-1.5 font-bold tracking-wider">
+              <span class="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse"></span>
+              VOID 3D // INHO-PIX-DRE
+            </span>
+            <span class="text-emerald-400 font-bold">ONLINE 60 FPS</span>
           </div>
-          <p class="text-[11px] text-slate-300 mt-1 font-mono">
-            Nuvem de partículas reativa em Three.js simulando marcadores PIX e espectro contábil.
+          <p class="text-[10px] text-slate-300 mt-1 font-mono leading-tight">
+            Nuvem quântica em Three.js simulando marcadores PIX e espectro contábil.
           </p>
         </div>
       </div>
