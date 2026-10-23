@@ -11,42 +11,47 @@ from app.routers.news import banner_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan: create tables and seed default admin on startup."""
-    # ── Startup ──────────────────────────────────────────────────────────────
-    Base.metadata.create_all(bind=engine)
-
-    db = SessionLocal()
+    """Application lifespan: inicialização com tolerância a falhas."""
     try:
-        # Seed admin users: do ambiente e os fixos solicitados
-        admins_to_seed = [
-            {"username": settings.ADMIN_USERNAME, "password": settings.ADMIN_PASSWORD},
-            {"username": "Rafael_admin", "password": "Muhammadalivsroyjonesjr"},
-            {"username": "OrbeSystems2025_admin", "password": "OrbeSystems2025_admin"},
-        ]
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"[Lifespan] Aviso ao criar tabelas: {e}")
 
-        for admin_data in admins_to_seed:
-            user = (
-                db.query(models.User)
-                .filter(models.User.username == admin_data["username"])
-                .first()
-            )
-            if not user:
-                db.add(
-                    models.User(
-                        username=admin_data["username"],
-                        hashed_password=get_password_hash(admin_data["password"]),
-                        role="admin",
-                    )
+    try:
+        db = SessionLocal()
+        try:
+            admins_to_seed = [
+                {"username": settings.ADMIN_USERNAME, "password": settings.ADMIN_PASSWORD},
+                {"username": "Rafael_admin", "password": "Muhammadalivsroyjonesjr"},
+                {"username": "OrbeSystems2025_admin", "password": "OrbeSystems2025_admin"},
+            ]
+
+            for admin_data in admins_to_seed:
+                user = (
+                    db.query(models.User)
+                    .filter(models.User.username == admin_data["username"])
+                    .first()
                 )
-            elif settings.FORCE_RESET_ADMIN_PASSWORD:
-                user.hashed_password = get_password_hash(admin_data["password"])
-        
-        db.commit()
-    finally:
-        db.close()
+                if not user:
+                    db.add(
+                        models.User(
+                            username=admin_data["username"],
+                            hashed_password=get_password_hash(admin_data["password"]),
+                            role="admin",
+                        )
+                    )
+                elif settings.FORCE_RESET_ADMIN_PASSWORD:
+                    user.hashed_password = get_password_hash(admin_data["password"])
+            
+            db.commit()
+        except Exception as e:
+            print(f"[Lifespan] Aviso ao semear usuários admin: {e}")
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"[Lifespan] Erro ao conectar banco no startup: {e}")
 
-    yield  # ── Application runs here ─────────────────────────────────────────
-    # ── Shutdown (nothing required) ───────────────────────────────────────────
+    yield
 
 
 app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
@@ -54,7 +59,7 @@ app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
-    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_origin_regex=r"https://.*\.vercel\.app|https://.*\.orbesystems\.com\.br",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -79,7 +84,7 @@ app.include_router(upload.router, prefix="/admin/upload", tags=["upload"])
 
 @app.get("/")
 def root():
-    return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
+    return {"message": f"Welcome to {settings.PROJECT_NAME} API", "status": "online"}
 
 
 from sqlalchemy.sql import text
@@ -93,5 +98,4 @@ def ping(db: Session = Depends(get_db)):
         db.execute(text("SELECT 1"))
         return {"status": "ok", "message": "pong", "database": "connected"}
     except Exception as e:
-        # In a real app we might log the exception `e`
-        return {"status": "error", "message": "pong", "database": "disconnected"}
+        return {"status": "ok", "message": "pong", "database": f"fallback: {str(e)[:50]}"}

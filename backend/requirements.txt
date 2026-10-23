@@ -10,6 +10,8 @@ bcrypt<=4.0.1
 feedparser
 beautifulsoup4
 requests
-python-magic
+python-magic-bin; sys_platform == 'win32'
+python-magic; sys_platform != 'win32'
 cloudinary==1.36.0
 psycopg2-binary
+psycopg[binary]
